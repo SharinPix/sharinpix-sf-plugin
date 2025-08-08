@@ -60,7 +60,7 @@
     "link-check": "wireit",
     "lint": "wireit",
     "postpack": "sf-clean --ignore-signing-artifacts",
-    "postinstall": "yarn run build",
+    "postinstall": "npm install --dev && npm run build",
     "prepack": "sf-prepack",
     "test": "wireit",
     "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel",
