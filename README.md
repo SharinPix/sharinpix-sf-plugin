@@ -1,24 +1,8 @@
-# sharinpix-sf-cli
+# SharinPix Salesforce CLI Plugin
 
-[![NPM](https://img.shields.io/npm/v/sharinpix-sf-cli.svg?label=sharinpix-sf-cli)](https://www.npmjs.com/package/sharinpix-sf-cli) [![Downloads/week](https://img.shields.io/npm/dw/sharinpix-sf-cli.svg)](https://npmjs.org/package/sharinpix-sf-cli) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/salesforcecli/sharinpix-sf-cli/main/LICENSE.txt)
+[![NPM](https://img.shields.io/npm/v/@sharinpix/sharinpix-sf-cli.svg?label=@sharinpix/sharinpix-sf-cli)](https://www.npmjs.com/package/@sharinpix/sharinpix-sf-cli) [![Downloads/week](https://img.shields.io/npm/dw/@sharinpix/sharinpix-sf-cli.svg)](https://npmjs.org/package/@sharinpix/sharinpix-sf-cli) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/sharinpix/sharinpix-sf-cli/main/LICENSE.txt)
 
-## Using the template
-
-This repository provides a template for creating a plugin for the Salesforce CLI. To convert this template to a working plugin:
-
-1. Please get in touch with the Platform CLI team. We want to help you develop your plugin.
-2. Generate your plugin:
-
-   ```
-   sf plugins install dev
-   sf dev generate plugin
-
-   git init -b main
-   git add . && git commit -m "chore: initial commit"
-   ```
-
-3. Create your plugin's repo in the salesforcecli github org
-4. When you're ready, replace the contents of this README with the information you want.
+The SharinPix Salesforce CLI plugin provides tools to interact with SharinPix form templates in your Salesforce orgs. This plugin allows you to pull form templates from your Salesforce org and save them as local JSON files for version control and deployment management.
 
 ## Learn about `sf` plugins
 
@@ -53,12 +37,12 @@ We always recommend using the latest version of these commands bundled with the 
 ## Install
 
 ```bash
-sf plugins install sharinpix-sf-cli@x.y.z
+sf plugins install @sharinpix/sharinpix-sf-cli@x.y.z
 ```
 
 ## Issues
 
-Please report any issues at https://github.com/forcedotcom/cli/issues
+Please report any issues at https://github.com/sharinpix/sharinpix-sf-cli/issues
 
 ## Contributing
 
@@ -85,17 +69,17 @@ To build the plugin locally, make sure to have npm installed and run the followi
 
 ```bash
 # Clone the repository
-git clone git@github.com:salesforcecli/sharinpix-sf-cli
+git clone git@github.com:sharinpix/sharinpix-sf-cli
 
 # Install the dependencies and compile
-npm && npm run build
+npm install && npm run build
 ```
 
 To use your plugin, run using the local `./bin/dev` or `./bin/dev.cmd` file.
 
 ```bash
 # Run using local run file.
-./bin/dev hello world
+./bin/dev sharinpix form pull --target-org myorg@example.com
 ```
 
 There should be no differences when running via the Salesforce CLI or using the local run file. However, it can be useful to link the plugin to do some additional testing or run your commands from anywhere on your machine.
@@ -111,35 +95,33 @@ sf plugins
 
 <!-- commands -->
 
-- [`sf hello world`](#sf-hello-world)
+- [`sf sharinpix form pull`](#sf-sharinpix-form-pull)
 
-## `sf hello world`
+## `sf sharinpix form pull`
 
-Say hello either to the world or someone you know.
+Pull SharinPix form templates from Salesforce org.
 
 ```
 USAGE
-  $ sf hello world [--json] [-n <value>]
+  $ sf sharinpix form pull [--json] [-o <value>]
 
 FLAGS
-  -n, --name=<value>  [default: World] The name of the person you'd like to say hello to.
+  -o, --target-org=<value>  The Salesforce org to pull form templates from.
 
 GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Say hello either to the world or someone you know.
-
-  Say hello either to the world or someone you know.
+  Retrieves all SharinPix form templates from the connected Salesforce org and saves them as JSON files in the local sharinpix/forms directory. This command fetches the form template metadata and downloads the actual form definition files.
 
 EXAMPLES
-  Say hello to the world:
+  Pull all form templates from the default org:
 
-    $ sf hello world
+    $ sf sharinpix form pull
 
-  Say hello to someone you know:
+  Pull form templates from a specific org:
 
-    $ sf hello world --name Astro
+    $ sf sharinpix form pull --target-org myorg@example.com
 ```
 
 <!-- commandsstop -->
