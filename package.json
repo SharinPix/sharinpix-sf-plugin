@@ -15,8 +15,9 @@
     "husky": "^9.1.7",
     "oclif": "^4.14.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "semantic-release": "^24.2.7"
+    "typescript": "^5.9.2",
+    "semantic-release": "^24.2.7",
+    "@types/mocha": "^10.0.7"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -132,7 +133,8 @@
     "test:only": {
       "command": "nyc mocha \"test/**/*.test.ts\"",
       "env": {
-        "FORCE_COLOR": "2"
+        "FORCE_COLOR": "2",
+        "TS_NODE_PROJECT": "./test/tsconfig.json"
       },
       "files": [
         "test/**/*.ts",
@@ -185,5 +187,23 @@
   },
   "exports": "./lib/index.js",
   "type": "module",
-  "author": "SharinPix"
+  "author": "SharinPix",
+  "resolutions": {
+    "@types/node": "^20.5.1"
+  },
+  "overrides": {
+    "@types/node": "^20.5.1"
+  },
+  "devDependencies": {
+    "@oclif/plugin-command-snapshot": "^5.1.9",
+    "@salesforce/cli-plugins-testkit": "^5.3.10",
+    "@salesforce/dev-scripts": "^10",
+    "eslint-plugin-sf-plugin": "^1.18.6",
+    "husky": "^9.1.7",
+    "oclif": "^4.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2",
+    "semantic-release": "^24.2.7",
+    "@types/mocha": "^10.0.7"
+  }
 }
