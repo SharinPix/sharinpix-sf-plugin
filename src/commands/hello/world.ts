@@ -2,11 +2,10 @@ import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
-const messages = Messages.loadMessages('sharinpix-sf-cli', 'hello.world');
+const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'hello.world');
 
 export type HelloWorldResult = {
   name: string;
-  time: string;
 };
 
 export default class World extends SfCommand<HelloWorldResult> {
@@ -65,8 +64,7 @@ export default class World extends SfCommand<HelloWorldResult> {
     // this.log(messages.getMessage('info.hello', [exec.exceptionMessage, time]));
     // this.log(messages.getMessage('info.hello', [await connection.tooling.executeAnonymous('System.debug(\'Hello World\');'), time]));
     return {
-      name: result,
-      time: 'Tega',
+      name: 'OK',
     };
   }
 }

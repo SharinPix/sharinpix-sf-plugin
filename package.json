@@ -1,5 +1,5 @@
 {
-  "name": "sharinpix-sf-cli",
+  "name": "@sharinpix/sharinpix-sf-cli",
   "description": "SharinPix salesforce cli plugin",
   "version": "1.0.0",
   "dependencies": {
@@ -60,7 +60,6 @@
     "link-check": "wireit",
     "lint": "wireit",
     "postpack": "sf-clean --ignore-signing-artifacts",
-    "postinstall": "npm install --dev && npm run build",
     "prepack": "sf-prepack",
     "test": "wireit",
     "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel",
