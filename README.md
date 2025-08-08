@@ -81,14 +81,14 @@ Agreement. You can do so by going to https://cla.salesforce.com/sign-cla.
 
 ### Build
 
-To build the plugin locally, make sure to have yarn installed and run the following commands:
+To build the plugin locally, make sure to have npm installed and run the following commands:
 
 ```bash
 # Clone the repository
 git clone git@github.com:salesforcecli/sharinpix-sf-cli
 
 # Install the dependencies and compile
-yarn && yarn build
+npm && npm run build
 ```
 
 To use your plugin, run using the local `./bin/dev` or `./bin/dev.cmd` file.
