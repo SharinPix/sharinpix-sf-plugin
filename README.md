@@ -37,7 +37,7 @@ We always recommend using the latest version of these commands bundled with the 
 ## Install
 
 ```bash
-sf plugins install @sharinpix/sharinpix-sf-cli@x.y.z
+sf plugins install @sharinpix/sharinpix-sf-cli
 ```
 
 ## Issues
