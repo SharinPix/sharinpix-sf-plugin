@@ -18,15 +18,11 @@ describe('sharinpix form push', () => {
     expect(Push.summary).to.include('Push SharinPix form templates');
     expect(Push.description).to.include('Uploads SharinPix form templates');
     expect(Push.flags).to.have.property('org');
-    expect(Push.flags).to.have.property('dir');
-    expect(Push.flags).to.have.property('force');
   });
 
   it('should define the correct result type', () => {
     expect(Push).to.be.a('function');
     expect(Push.flags.org.required).to.be.true;
-    expect(Push.flags['dir'].default).to.equal('sharinpix/forms');
-    expect(Push.flags.force.default).to.be.false;
   });
 
   it('should require org flag', async () => {
@@ -39,8 +35,6 @@ describe('sharinpix form push', () => {
   });
 
   it('should have correct flag configurations', () => {
-    expect(Push.flags['dir'].char).to.equal('d');
-    expect(Push.flags.force.char).to.equal('f');
     expect(Push.flags.org.char).to.equal('o');
   });
 });

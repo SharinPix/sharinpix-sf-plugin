@@ -43,8 +43,6 @@ describe('sharinpix form push NUTs', () => {
 
     expect(result.shellOutput.stdout).to.include('Push SharinPix form templates to Salesforce org');
     expect(result.shellOutput.stdout).to.include('--target-org');
-    expect(result.shellOutput.stdout).to.include('--dir');
-    expect(result.shellOutput.stdout).to.include('--force');
   });
 
   it('should fail with invalid org', async () => {
@@ -54,19 +52,6 @@ describe('sharinpix form push NUTs', () => {
     });
 
     // Should fail because the org doesn't exist or is not authenticated
-    expect(result.jsonOutput?.name).to.be.oneOf(['NoDefaultEnvError', 'AuthError', 'ConnectionError']);
-  });
-
-  it('should fail when forms directory does not exist', async () => {
-    const result = execCmd<PushResult>(
-      'sharinpix form push --target-org testorg@example.com --dir nonexistent --json',
-      {
-        ensureExitCode: 1,
-        cwd: testSession.project.dir,
-      }
-    );
-
-    // Should fail because the directory doesn't exist
     expect(result.jsonOutput?.name).to.be.oneOf(['NoDefaultEnvError', 'AuthError', 'ConnectionError']);
   });
 });

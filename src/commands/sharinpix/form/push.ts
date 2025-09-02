@@ -33,34 +33,16 @@ export default class Push extends SfCommand<PushResult> {
       summary: messages.getMessage('flags.org.summary'),
       description: messages.getMessage('flags.org.description'),
     }),
-    dir: Flags.directory({
-      char: 'd',
-      summary: messages.getMessage('flags.dir.summary'),
-      description: messages.getMessage('flags.dir.description'),
-      default: 'sharinpix/forms',
-    }),
-    force: Flags.boolean({
-      char: 'f',
-      summary: messages.getMessage('flags.force.summary'),
-      description: messages.getMessage('flags.force.description'),
-      default: false,
-    }),
   };
 
   public async run(): Promise<PushResult> {
     const { flags } = await this.parse(Push);
     const connection = flags.org.getConnection('63.0');
 
-    if (!fs.existsSync(flags['dir'])) {
-      throw new Error(
-        `Forms directory '${flags['dir']}' does not exist. Please ensure you have form templates to push.`
-      );
-    }
-
     const formFiles = fs
-      .readdirSync(flags['dir'])
+      .readdirSync('sharinpix/forms')
       .filter((file) => file.endsWith('.json'))
-      .map((file) => path.join(flags['dir'], file));
+      .map((file) => path.join('sharinpix/forms', file));
 
     if (formFiles.length === 0) {
       this.log('No form template files found in the specified directory.');
