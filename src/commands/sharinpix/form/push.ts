@@ -51,14 +51,12 @@ export default class Push extends SfCommand<PushResult> {
     const { flags } = await this.parse(Push);
     const connection = flags.org.getConnection('63.0');
 
-    // Check if forms directory exists
     if (!fs.existsSync(flags['dir'])) {
       throw new Error(
         `Forms directory '${flags['dir']}' does not exist. Please ensure you have form templates to push.`
       );
     }
 
-    // Get all JSON files in the forms directory
     const formFiles = fs
       .readdirSync(flags['dir'])
       .filter((file) => file.endsWith('.json'))
@@ -74,7 +72,6 @@ export default class Push extends SfCommand<PushResult> {
       };
     }
 
-    // Get existing form templates from Salesforce
     const existingRecords = (
       await connection.query<FormTemplateRecord>(
         'SELECT Id, Name, sharinpix__FormUrl__c, sharinpix__Description__c FROM sharinpix__FormTemplate__c'
@@ -91,20 +88,15 @@ export default class Push extends SfCommand<PushResult> {
       try {
         const fileName = path.basename(formFile, '.json');
         const formContent = fs.readFileSync(formFile, 'utf8');
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-explicit-any
-        const formData = JSON.parse(formContent) as any;
+        const formData = JSON.parse(formContent) as unknown;
 
-        // Check if form already exists
         const existingForm = existingFormsMap.get(fileName);
 
-        // Use the Apex REST service for import
         const importData = {
           recordId: existingForm?.Id ?? null,
           name: fileName,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          description: formData.description,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          url: formData.url,
+          description: (formData as { description?: string })?.description,
+          url: (formData as { url?: string })?.url,
           formTemplateJson: formContent,
         };
 

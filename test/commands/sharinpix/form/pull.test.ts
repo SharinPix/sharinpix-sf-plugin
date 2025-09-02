@@ -21,7 +21,6 @@ describe('sharinpix form pull', () => {
   });
 
   it('should define the correct result type', () => {
-    // This test verifies the command structure and types
     expect(Pull).to.be.a('function');
     expect(Pull.flags.org.required).to.be.true;
   });

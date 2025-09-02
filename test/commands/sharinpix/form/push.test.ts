@@ -23,7 +23,6 @@ describe('sharinpix form push', () => {
   });
 
   it('should define the correct result type', () => {
-    // This test verifies the command structure and types
     expect(Push).to.be.a('function');
     expect(Push.flags.org.required).to.be.true;
     expect(Push.flags['dir'].default).to.equal('sharinpix/forms');
