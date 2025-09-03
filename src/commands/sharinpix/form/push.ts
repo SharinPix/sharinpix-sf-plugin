@@ -10,9 +10,9 @@ const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix
 
 export type PushResult = {
   name: string;
-  formsUploaded?: number;
-  formsFailed?: number;
-  formsSkipped?: number;
+  uploaded?: number;
+  failed?: number;
+  skipped?: number;
 };
 
 type FormTemplateRecord = {
@@ -39,18 +39,18 @@ export default class Push extends SfCommand<PushResult> {
     const { flags } = await this.parse(Push);
     const connection = flags.org.getConnection('63.0');
 
-    const formFiles = fs
+    const files = fs
       .readdirSync('sharinpix/forms')
       .filter((file) => file.endsWith('.json'))
       .map((file) => path.join('sharinpix/forms', file));
 
-    if (formFiles.length === 0) {
+    if (files.length === 0) {
       this.log('No form template files found in the specified directory.');
       return {
         name: 'OK',
-        formsUploaded: 0,
-        formsFailed: 0,
-        formsSkipped: 0,
+        uploaded: 0,
+        failed: 0,
+        skipped: 0,
       };
     }
 
@@ -60,53 +60,76 @@ export default class Push extends SfCommand<PushResult> {
       )
     ).records;
 
-    const existingFormsMap = new Map(existingRecords.map((record) => [record.Name, record]));
+    const existingMap = new Map(existingRecords.map((record) => [record.Name, record]));
 
-    let formsUploaded = 0;
-    let formsFailed = 0;
-    const formsSkipped = 0;
+    let uploaded = 0;
+    let failed = 0;
+    const skipped = 0;
 
-    for (const formFile of formFiles) {
+    for (const file of files) {
       try {
-        const fileName = path.basename(formFile, '.json');
-        const formContent = fs.readFileSync(formFile, 'utf8');
-        const formData = JSON.parse(formContent) as unknown;
+        const fileName = path.basename(file, '.json');
+        const fileContent = fs.readFileSync(file, 'utf8');
+        const json = JSON.parse(fileContent) as unknown;
+        const existingId = existingMap.get(fileName)?.Id ?? null;
 
-        const existingForm = existingFormsMap.get(fileName);
+        const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
+          // eslint-disable-next-line camelcase
+          form_template_create: true,
+        });
 
-        const importData = {
-          recordId: existingForm?.Id ?? null,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const responseData = await (
+          await fetch(`${responseToken.host}/api/v1/form/templates`, {
+            method: 'POST',
+            body: JSON.stringify({
+              sfid: existingId,
+              config: {
+                name: fileName,
+                ...(json as object),
+              },
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+              Authorization: `Bearer ${responseToken.token}`,
+            },
+          })
+        ).json();
+
+        await connection.apex.post('/sharinpix/FormTemplateImport', {
+          recordId: existingId,
           name: fileName,
-          description: (formData as { description?: string })?.description,
-          url: (formData as { url?: string })?.url,
-          formTemplateJson: formContent,
-        };
+          url: (responseData as { url: string }).url,
+          formTemplateJson: JSON.stringify({
+            ...(json as object),
+            url: (responseData as { url: string }).url,
+          }),
+        });
 
-        await connection.apex.post('/sharinpix/FormTemplateImport', importData);
-
-        if (existingForm) {
+        if (existingId) {
           this.log(messages.getMessage('info.updated', [fileName]));
         } else {
           this.log(messages.getMessage('info.created', [fileName]));
         }
 
-        formsUploaded++;
+        uploaded++;
       } catch (error) {
-        const fileName = path.basename(formFile, '.json');
+        const fileName = path.basename(file, '.json');
         this.warn(
           `Failed to push form template ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
         );
-        formsFailed++;
+        failed++;
       }
     }
 
-    this.log(messages.getMessage('info.summary', [formsUploaded, formsFailed, formsSkipped]));
+    this.log(messages.getMessage('info.summary', [uploaded, failed, skipped]));
 
     return {
       name: 'OK',
-      formsUploaded,
-      formsFailed,
-      formsSkipped,
+      uploaded,
+      failed,
+      skipped,
     };
   }
 }
