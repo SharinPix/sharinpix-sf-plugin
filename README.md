@@ -34,7 +34,7 @@ This plugin is bundled with the [Salesforce CLI](https://developer.salesforce.co
 
 We always recommend using the latest version of these commands bundled with the CLI, however, you can install a specific version or tag if needed.
 
-## Install
+## Usage
 
 ```bash
 sf org login web
