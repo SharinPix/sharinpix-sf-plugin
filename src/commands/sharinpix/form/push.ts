@@ -22,6 +22,10 @@ type FormTemplateRecord = {
   sharinpix__Description__c: string;
 };
 
+function isJsonEqual(obj1: unknown, obj2: unknown): boolean {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
+
 export default class Push extends SfCommand<PushResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
@@ -64,14 +68,40 @@ export default class Push extends SfCommand<PushResult> {
 
     let uploaded = 0;
     let failed = 0;
-    const skipped = 0;
+    let skipped = 0;
 
     for (const file of files) {
       try {
         const fileName = path.basename(file, '.json');
         const fileContent = fs.readFileSync(file, 'utf8');
         const json = JSON.parse(fileContent) as unknown;
-        const existingId = existingMap.get(fileName)?.Id ?? null;
+        const existingRecord = existingMap.get(fileName);
+        const existingId = existingRecord?.Id ?? null;
+
+        // Check if form has changed by comparing with stored JSON
+        const response = await fetch(existingRecord?.sharinpix__FormUrl__c + '.json', {
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const existingJson: unknown = await response.json();
+        if (existingJson) {
+          try {
+            if (isJsonEqual(json, existingJson)) {
+              this.log(messages.getMessage('info.skipped', [fileName]));
+              skipped++;
+              continue;
+            }
+          } catch (parseError) {
+            this.warn(`Failed to parse stored JSON for ${fileName}, proceeding with update`);
+            failed++;
+            continue;
+          }
+        }
 
         const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
           // eslint-disable-next-line camelcase
@@ -97,14 +127,16 @@ export default class Push extends SfCommand<PushResult> {
           })
         ).json();
 
+        const formTemplateJson = JSON.stringify({
+          ...(json as object),
+          url: (responseData as { url: string }).url,
+        });
+
         await connection.apex.post('/sharinpix/FormTemplateImport', {
           recordId: existingId,
           name: fileName,
           url: (responseData as { url: string }).url,
-          formTemplateJson: JSON.stringify({
-            ...(json as object),
-            url: (responseData as { url: string }).url,
-          }),
+          formTemplateJson,
         });
 
         if (existingId) {
@@ -120,6 +152,7 @@ export default class Push extends SfCommand<PushResult> {
           `Failed to push form template ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
         );
         failed++;
+        continue;
       }
     }
 

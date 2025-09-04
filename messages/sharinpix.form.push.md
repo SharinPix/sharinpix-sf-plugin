@@ -32,6 +32,10 @@ Created form template %s
 
 Updated form template %s
 
+# info.skipped
+
+Skipped form template %s (no changes detected)
+
 # info.summary
 
 Push completed: %d forms uploaded, %d forms failed, %d forms skipped
