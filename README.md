@@ -37,7 +37,9 @@ We always recommend using the latest version of these commands bundled with the 
 ## Install
 
 ```bash
+sf org login web
 sf plugins install @sharinpix/sharinpix-sf-cli
+sf sharinpix form pull -o yourusername@salesforce.com
 ```
 
 ## Issues
