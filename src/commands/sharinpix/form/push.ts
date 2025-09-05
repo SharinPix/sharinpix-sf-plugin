@@ -55,6 +55,11 @@ export default class Push extends SfCommand<PushResult> {
       };
     }
 
+    const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
+      // eslint-disable-next-line camelcase
+      form_template_create: true,
+    });
+
     const existingRecords = (
       await connection.query<FormTemplateRecord>(
         'SELECT Id, Name, sharinpix__FormUrl__c, sharinpix__Description__c FROM sharinpix__FormTemplate__c'
@@ -75,42 +80,39 @@ export default class Push extends SfCommand<PushResult> {
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
 
-        // Check if form has changed by comparing with stored JSON
-        const response = await fetch(existingRecord?.sharinpix__FormUrl__c + '.json', {
-          headers: {
-            Accept: 'application/json',
-          },
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+        if (existingRecord) {
+          // Check if form has changed by comparing with stored JSON
+          const response = await fetch(existingRecord?.sharinpix__FormUrl__c + '.json', {
+            headers: {
+              Accept: 'application/json',
+            },
+          });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
 
-        const existingJson: unknown = await response.json();
-        if (existingJson) {
-          try {
-            if (isJsonEqual(json, existingJson)) {
-              this.log(messages.getMessage('info.skipped', [fileName]));
-              skipped++;
+          const existingJson: unknown = await response.json();
+          if (existingJson) {
+            try {
+              if (isJsonEqual(json, existingJson)) {
+                this.log(messages.getMessage('info.skipped', [fileName]));
+                skipped++;
+                continue;
+              }
+            } catch (parseError) {
+              this.warn(`Failed to parse stored JSON for ${fileName}, proceeding with update`);
+              failed++;
               continue;
             }
-          } catch (parseError) {
-            this.warn(`Failed to parse stored JSON for ${fileName}, proceeding with update`);
-            failed++;
-            continue;
           }
         }
-
-        const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
-          // eslint-disable-next-line camelcase
-          form_template_create: true,
-        });
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const responseData = await (
           await fetch(`${responseToken.host}/api/v1/form/templates`, {
             method: 'POST',
             body: JSON.stringify({
-              sfid: existingId,
+              sfid: existingId ?? undefined,
               config: {
                 name: fileName,
                 ...(json as object),
@@ -130,7 +132,7 @@ export default class Push extends SfCommand<PushResult> {
         });
 
         await connection.apex.post('/sharinpix/FormTemplateImport', {
-          recordId: existingId,
+          recordId: existingId ?? undefined,
           name: fileName,
           url: (responseData as { url: string }).url,
           formTemplateJson,
