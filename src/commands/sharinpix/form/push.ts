@@ -55,6 +55,11 @@ export default class Push extends SfCommand<PushResult> {
       };
     }
 
+    const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
+      // eslint-disable-next-line camelcase
+      form_template_create: true,
+    });
+
     const existingRecords = (
       await connection.query<FormTemplateRecord>(
         'SELECT Id, Name, sharinpix__FormUrl__c, sharinpix__Description__c FROM sharinpix__FormTemplate__c'
@@ -101,11 +106,6 @@ export default class Push extends SfCommand<PushResult> {
             }
           }
         }
-
-        const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
-          // eslint-disable-next-line camelcase
-          form_template_create: true,
-        });
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const responseData = await (
