@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
+import { isJsonEqual } from '../../../helpers/json-utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.push');
@@ -21,10 +22,6 @@ type FormTemplateRecord = {
   sharinpix__FormUrl__c: string;
   sharinpix__Description__c: string;
 };
-
-function isJsonEqual(obj1: unknown, obj2: unknown): boolean {
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
-}
 
 export default class Push extends SfCommand<PushResult> {
   public static readonly summary = messages.getMessage('summary');
