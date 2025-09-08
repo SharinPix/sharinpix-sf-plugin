@@ -2,15 +2,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
-import { PullResult } from '../../../../src/commands/sharinpix/form/pull.js';
+import { PushResult } from '../../../../src/commands/sharinpix/form/push.js';
 
 let testSession: TestSession;
 
-describe('sharinpix form pull NUTs', () => {
+describe('sharinpix form push NUTs', () => {
   before('prepare session', async () => {
     testSession = await TestSession.create({
       project: {
-        name: 'sharinpix-form-pull-test',
+        name: 'sharinpix-form-push-test',
       },
     });
   });
@@ -27,7 +27,7 @@ describe('sharinpix form pull NUTs', () => {
   });
 
   it('should require org flag', () => {
-    const result = execCmd('sharinpix form pull --json', {
+    const result = execCmd('sharinpix form push --json', {
       ensureExitCode: 1,
       cwd: testSession.project.dir,
     });
@@ -35,18 +35,18 @@ describe('sharinpix form pull NUTs', () => {
     expect(result.jsonOutput?.name).to.equal('NoDefaultEnvError');
   });
 
-  it('should create sharinpix/forms directory', () => {
-    const result = execCmd('sharinpix form pull --help', {
+  it('should show help with correct flags', () => {
+    const result = execCmd('sharinpix form push --help', {
       ensureExitCode: 0,
       cwd: testSession.project.dir,
     });
 
-    expect(result.shellOutput.stdout).to.include('Pull SharinPix form templates from Salesforce org');
+    expect(result.shellOutput.stdout).to.include('Push SharinPix form templates to Salesforce org');
     expect(result.shellOutput.stdout).to.include('--target-org');
   });
 
   it('should fail with invalid org', async () => {
-    const result = execCmd<PullResult>('sharinpix form pull --target-org testorg@example.com --json', {
+    const result = execCmd<PushResult>('sharinpix form push --target-org testorg@example.com --json', {
       ensureExitCode: 1,
       cwd: testSession.project.dir,
     });
