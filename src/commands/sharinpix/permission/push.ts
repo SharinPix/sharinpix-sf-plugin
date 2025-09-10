@@ -70,7 +70,7 @@ export default class Push extends SfCommand<PushResult> {
 
     for (const file of files) {
       try {
-        const fileName = path.basename(file, '.json');
+        const fileName = decodeURIComponent(path.basename(file, '.json'));
         const fileContent = fs.readFileSync(file, 'utf8');
         const json = JSON.parse(fileContent) as unknown;
         const existingRecord = existingMap.get(fileName);
@@ -116,7 +116,7 @@ export default class Push extends SfCommand<PushResult> {
 
         uploaded++;
       } catch (error) {
-        const fileName = path.basename(file, '.json');
+        const fileName = decodeURIComponent(path.basename(file, '.json'));
         this.warn(
           `Failed to push SharinPix permission ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
         );
