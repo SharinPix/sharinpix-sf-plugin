@@ -53,7 +53,7 @@ export default class Pull extends SfCommand<PullResult> {
         const permissionData: unknown = JSON.parse(record.sharinpix__Json__c);
 
         const safeFilename = encodeURIComponent(record.Name);
-        fs.writeFileSync(`sharinpix/forms/${safeFilename}.json`, JSON.stringify(permissionData, null, 2));
+        fs.writeFileSync(`sharinpix/permission/${safeFilename}.json`, JSON.stringify(permissionData, null, 2));
         this.log(
           messages.getMessage('info.hello', [record.Name, record.sharinpix__Description__c || 'No description'])
         );
