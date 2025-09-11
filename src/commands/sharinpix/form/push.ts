@@ -75,8 +75,8 @@ export default class Push extends SfCommand<PushResult> {
     for (const file of files) {
       try {
         const fileContent = fs.readFileSync(file, 'utf8');
-        const json = JSON.parse(fileContent) as unknown;
-        const fileName = (json as { name: string }).name;
+        const json = JSON.parse(fileContent) as Record<string, unknown>;
+        const fileName = json.name as string;
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
 

@@ -51,7 +51,11 @@ export default class Pull extends SfCommand<PullResult> {
 
     for (const record of records) {
       try {
-        const permissionData: unknown = JSON.parse(record.sharinpix__Json__c);
+        const permissionData: unknown = {
+          ...JSON.parse(record.sharinpix__Json__c),
+          // Add name field to the JSON data for local storage
+          name: record.Name,
+        };
 
         const md5Hash = crypto.createHash('md5').update(record.Name).digest('hex').slice(0, 8);
         const safeFilename = `${record.Name.replaceAll(/[^a-zA-Z0-9]/g, '_')}-${md5Hash}`;
