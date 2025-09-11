@@ -2,7 +2,7 @@
 
 [![NPM](https://img.shields.io/npm/v/@sharinpix/sharinpix-sf-cli.svg?label=@sharinpix/sharinpix-sf-cli)](https://www.npmjs.com/package/@sharinpix/sharinpix-sf-cli) [![Downloads/week](https://img.shields.io/npm/dw/@sharinpix/sharinpix-sf-cli.svg)](https://npmjs.org/package/@sharinpix/sharinpix-sf-cli) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/sharinpix/sharinpix-sf-cli/main/LICENSE.txt)
 
-The SharinPix Salesforce CLI plugin provides tools to interact with SharinPix form templates in your Salesforce orgs. This plugin allows you to pull form templates from your Salesforce org and save them as local JSON files for version control and deployment management.
+The SharinPix Salesforce CLI plugin provides tools to interact with SharinPix form templates and permissions in your Salesforce orgs. This plugin allows you to pull and push form templates and permissions from/to your Salesforce org, saving them as local JSON files for version control and deployment management.
 
 ## Learn about `sf` plugins
 
@@ -39,7 +39,14 @@ We always recommend using the latest version of these commands bundled with the 
 ```bash
 sf org login web
 sf plugins install @sharinpix/sharinpix-sf-cli
+
+# Pull form templates and permissions from Salesforce
 sf sharinpix form pull -o yourusername@salesforce.com
+sf sharinpix permission pull -o yourusername@salesforce.com
+
+# Push form templates and permissions to Salesforce
+sf sharinpix form push -o yourusername@salesforce.com
+sf sharinpix permission push -o yourusername@salesforce.com
 ```
 
 ## Issues
@@ -82,6 +89,7 @@ To use your plugin, run using the local `./bin/dev` or `./bin/dev.cmd` file.
 ```bash
 # Run using local run file.
 ./bin/dev sharinpix form pull --target-org myorg@example.com
+./bin/dev sharinpix permission pull --target-org myorg@example.com
 ```
 
 There should be no differences when running via the Salesforce CLI or using the local run file. However, it can be useful to link the plugin to do some additional testing or run your commands from anywhere on your machine.
@@ -98,6 +106,9 @@ sf plugins
 <!-- commands -->
 
 - [`sf sharinpix form pull`](#sf-sharinpix-form-pull)
+- [`sf sharinpix form push`](#sf-sharinpix-form-push)
+- [`sf sharinpix permission pull`](#sf-sharinpix-permission-pull)
+- [`sf sharinpix permission push`](#sf-sharinpix-permission-push)
 
 ## `sf sharinpix form pull`
 
@@ -124,6 +135,87 @@ EXAMPLES
   Pull form templates from a specific org:
 
     $ sf sharinpix form pull --target-org myorg@example.com
+```
+
+## `sf sharinpix form push`
+
+Push SharinPix form templates to Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix form push [--json] [-o <value>]
+
+FLAGS
+  -o, --target-org=<value>  The Salesforce org to push form templates to.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Existing forms will be updated unless the force flag is used to skip them.
+
+EXAMPLES
+  Push all form templates to the default org:
+
+    $ sf sharinpix form push
+
+  Push form templates to a specific org:
+
+    $ sf sharinpix form push --target-org myorg@example.com
+```
+
+## `sf sharinpix permission pull`
+
+Pull SharinPix permissions from Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix permission pull [--json] [-o <value>]
+
+FLAGS
+  -o, --target-org=<value>  The Salesforce org to pull SharinPix permissions from.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Retrieves all SharinPix permissions from the connected Salesforce org and saves them as JSON files in the local sharinpix/permission directory. This command fetches the permission metadata and the JSON configuration data stored in the sharinpix__Json__c field.
+
+EXAMPLES
+  Pull all SharinPix permissions from the default org:
+
+    $ sf sharinpix permission pull
+
+  Pull SharinPix permissions from a specific org:
+
+    $ sf sharinpix permission pull --target-org myorg@example.com
+```
+
+## `sf sharinpix permission push`
+
+Push SharinPix permissions to Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix permission push [--json] [-o <value>]
+
+FLAGS
+  -o, --target-org=<value>  The Salesforce org to push SharinPix permissions to.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Uploads SharinPix permissions from local JSON files to the connected Salesforce org. This command reads permission configurations from the local directory and creates or updates corresponding records in Salesforce. The sharinpix__Json__c field will be updated with the JSON configuration data.
+
+EXAMPLES
+  Push all SharinPix permissions to the default org:
+
+    $ sf sharinpix permission push
+
+  Push SharinPix permissions to a specific org:
+
+    $ sf sharinpix permission push --target-org myorg@example.com
 ```
 
 <!-- commandsstop -->
