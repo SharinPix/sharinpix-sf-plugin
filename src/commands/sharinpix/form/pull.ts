@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 
@@ -60,7 +61,8 @@ export default class Pull extends SfCommand<PullResult> {
         }
 
         const form: unknown = await response.json();
-        const safeFilename = encodeURIComponent(record.Name);
+        const md5Hash = crypto.createHash('md5').update(record.Name).digest('hex').slice(0, 8);
+        const safeFilename = `${record.Name.replaceAll(/[^a-zA-Z0-9]/g, '_')}-${md5Hash}`;
         fs.writeFileSync(`sharinpix/forms/${safeFilename}.json`, JSON.stringify(form, null, 2));
         this.log(messages.getMessage('info.hello', [record.Name, record.sharinpix__FormUrl__c]));
         formsDownloaded++;
