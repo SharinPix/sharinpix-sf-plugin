@@ -81,7 +81,7 @@ To build the plugin locally, make sure to have npm installed and run the followi
 git clone git@github.com:sharinpix/sharinpix-sf-cli
 
 # Install the dependencies and compile
-npm install && npm run build
+yarn && yarn run build
 ```
 
 To use your plugin, run using the local `./bin/dev` or `./bin/dev.cmd` file.
