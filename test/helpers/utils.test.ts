@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { isJsonEqual } from '../../src/helpers/json-utils.js';
+import { isJsonEqual, createSafeFilename } from '../../src/helpers/utils.js';
 
-describe('jsonUtils', () => {
+describe('Utils', () => {
   describe('isJsonEqual function', () => {
     it('should return true when JSONs are identical', () => {
       const obj1 = {
@@ -106,6 +106,82 @@ describe('jsonUtils', () => {
       expect(isJsonEqual(undefined, undefined)).to.be.true;
       expect(isJsonEqual(undefined, null)).to.be.false;
       expect(isJsonEqual(undefined, {})).to.be.false;
+    });
+  });
+
+  describe('createSafeFilename function', () => {
+    it('should create safe filename for simple names', () => {
+      const result = createSafeFilename('TestForm');
+      expect(result).to.equal('TestForm-9c4472b6');
+    });
+
+    it('should replace special characters with underscores', () => {
+      const result = createSafeFilename('Test-Form@2024');
+      expect(result).to.equal('Test_Form_2024-7ba0b8af');
+    });
+
+    it('should handle spaces and multiple special characters', () => {
+      const result = createSafeFilename('My Test Form (v1.0)');
+      expect(result).to.equal('My_Test_Form__v1_0_-577aa3f7');
+    });
+
+    it('should handle unicode characters', () => {
+      const result = createSafeFilename('Formé-ç-ñ');
+      expect(result).to.equal('Form_____-b0925a28');
+    });
+
+    it('should handle empty string', () => {
+      const result = createSafeFilename('');
+      expect(result).to.equal('-d41d8cd9');
+    });
+
+    it('should handle only special characters', () => {
+      const result = createSafeFilename('!@#$%^&*()');
+      expect(result).to.equal('__________-05b28d17');
+    });
+
+    it('should handle numbers and letters only', () => {
+      const result = createSafeFilename('Form123');
+      expect(result).to.equal('Form123-daf38af8');
+    });
+
+    it('should generate consistent hash for same input', () => {
+      const input = 'Test Form';
+      const result1 = createSafeFilename(input);
+      const result2 = createSafeFilename(input);
+      expect(result1).to.equal(result2);
+    });
+
+    it('should generate different hashes for different inputs', () => {
+      const result1 = createSafeFilename('Form1');
+      const result2 = createSafeFilename('Form2');
+      expect(result1).to.not.equal(result2);
+    });
+
+    it('should handle very long names', () => {
+      const longName = 'A'.repeat(100) + '!@#$%^&*()';
+      const result = createSafeFilename(longName);
+      expect(result).to.equal('A'.repeat(100) + '__________-7bd888ac');
+    });
+
+    it('should handle names with only underscores', () => {
+      const result = createSafeFilename('___');
+      expect(result).to.equal('___-948a13f1');
+    });
+
+    it('should handle mixed case names', () => {
+      const result = createSafeFilename('TestForm123');
+      expect(result).to.equal('TestForm123-3c14c1ae');
+    });
+
+    it('should handle names with dots', () => {
+      const result = createSafeFilename('form.v1.0');
+      expect(result).to.equal('form_v1_0-ab6ea996');
+    });
+
+    it('should handle names with slashes and backslashes', () => {
+      const result = createSafeFilename('form/path\\file');
+      expect(result).to.equal('form_path_file-df773922');
     });
   });
 });

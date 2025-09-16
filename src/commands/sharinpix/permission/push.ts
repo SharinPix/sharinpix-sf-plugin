@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { isJsonEqual } from '../../../helpers/json-utils.js';
+import { isJsonEqual } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.permission.push');
