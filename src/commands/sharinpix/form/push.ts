@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { isJsonEqual } from '../../../helpers/json-utils.js';
+import { isJsonEqual } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.push');
@@ -74,9 +74,9 @@ export default class Push extends SfCommand<PushResult> {
 
     for (const file of files) {
       try {
-        const fileName = path.basename(file, '.json');
         const fileContent = fs.readFileSync(file, 'utf8');
-        const json = JSON.parse(fileContent) as unknown;
+        const json = JSON.parse(fileContent) as Record<string, unknown>;
+        const fileName = json.name as string;
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
 
@@ -146,7 +146,9 @@ export default class Push extends SfCommand<PushResult> {
 
         uploaded++;
       } catch (error) {
-        const fileName = path.basename(file, '.json');
+        const fileContent = fs.readFileSync(file, 'utf8');
+        const json = JSON.parse(fileContent) as unknown;
+        const fileName = (json as { name: string }).name;
         this.warn(
           `Failed to push form template ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
         );

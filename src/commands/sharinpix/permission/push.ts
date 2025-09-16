@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { isJsonEqual } from '../../../helpers/json-utils.js';
+import { isJsonEqual } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.permission.push');
@@ -70,17 +70,20 @@ export default class Push extends SfCommand<PushResult> {
 
     for (const file of files) {
       try {
-        const fileName = path.basename(file, '.json');
         const fileContent = fs.readFileSync(file, 'utf8');
-        const json = JSON.parse(fileContent) as unknown;
+        const json = JSON.parse(fileContent) as Record<string, unknown>;
+        const fileName = json.name as string;
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
+
+        const jsonWithoutName = { ...json };
+        delete jsonWithoutName.name;
 
         if (existingRecord) {
           // Check if permission has changed by comparing with stored JSON
           try {
             const existingJson: unknown = JSON.parse(existingRecord.sharinpix__Json__c);
-            if (isJsonEqual(json, existingJson)) {
+            if (isJsonEqual(jsonWithoutName, existingJson)) {
               this.log(messages.getMessage('info.skipped', [fileName]));
               skipped++;
               continue;
@@ -94,7 +97,7 @@ export default class Push extends SfCommand<PushResult> {
         const permissionData = {
           Name: fileName,
           // eslint-disable-next-line camelcase
-          sharinpix__Json__c: JSON.stringify(json),
+          sharinpix__Json__c: JSON.stringify(jsonWithoutName),
           ...(existingRecord?.sharinpix__Description__c && {
             // eslint-disable-next-line camelcase
             sharinpix__Description__c: existingRecord.sharinpix__Description__c,
@@ -116,7 +119,9 @@ export default class Push extends SfCommand<PushResult> {
 
         uploaded++;
       } catch (error) {
-        const fileName = path.basename(file, '.json');
+        const fileContent = fs.readFileSync(file, 'utf8');
+        const json = JSON.parse(fileContent) as unknown;
+        const fileName = (json as { name: string }).name;
         this.warn(
           `Failed to push SharinPix permission ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
         );

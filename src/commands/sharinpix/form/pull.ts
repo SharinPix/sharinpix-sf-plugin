@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
+import { createSafeFilename } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.pull');
@@ -51,8 +52,8 @@ export default class Pull extends SfCommand<PullResult> {
       try {
         const response = await fetch(record.sharinpix__FormUrl__c + '.json', {
           headers: {
-            'Accept': 'application/json',
-          }
+            Accept: 'application/json',
+          },
         });
 
         if (!response.ok) {
@@ -60,12 +61,15 @@ export default class Pull extends SfCommand<PullResult> {
         }
 
         const form: unknown = await response.json();
-        fs.writeFileSync(`sharinpix/forms/${record.Name}.json`, JSON.stringify(form, null, 2));
+        const safeFilename = createSafeFilename(record.Name);
+        fs.writeFileSync(`sharinpix/forms/${safeFilename}.json`, JSON.stringify(form, null, 2));
         this.log(messages.getMessage('info.hello', [record.Name, record.sharinpix__FormUrl__c]));
         formsDownloaded++;
       } catch (error) {
         // Skip forms that can't be fetched (e.g., network errors, invalid URLs)
-        this.warn(`Failed to fetch form template ${record.Name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        this.warn(
+          `Failed to fetch form template ${record.Name}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
         formsFailed++;
       }
     }
