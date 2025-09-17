@@ -55,9 +55,13 @@ export default class Push extends SfCommand<PushResult> {
       };
     }
 
-    const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
+    const body = {
       // eslint-disable-next-line camelcase
       form_template_create: true,
+    };
+
+    const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
+      payload: JSON.stringify(body),
     });
 
     const existingRecords = (
