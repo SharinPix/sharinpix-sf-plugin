@@ -14,6 +14,14 @@ The Salesforce org to push SharinPix permissions to.
 
 The target Salesforce org where the SharinPix permissions will be uploaded and stored.
 
+# flags.delete.summary
+
+Delete SharinPix permissions from org that no longer have corresponding local files.
+
+# flags.delete.description
+
+When enabled, this flag will delete SharinPix permission records from the Salesforce org if their corresponding local JSON files are missing. Use with caution as this operation cannot be undone.
+
 # examples
 
 - Push all SharinPix permissions to the default org:
@@ -23,6 +31,10 @@ The target Salesforce org where the SharinPix permissions will be uploaded and s
 - Push SharinPix permissions to a specific org:
 
   <%= config.bin %> <%= command.id %> --target-org myorg@example.com
+
+- Push SharinPix permissions and delete orphaned records:
+
+  <%= config.bin %> <%= command.id %> --delete
 
 # info.created
 
@@ -36,6 +48,10 @@ Updated SharinPix permission %s
 
 Skipped SharinPix permission %s (no changes detected)
 
+# info.deleted
+
+Deleted SharinPix permission %s
+
 # info.summary
 
-Push completed: %d permissions uploaded, %d permissions failed, %d permissions skipped
+Push completed: %d permissions uploaded, %d permissions failed, %d permissions skipped, %d permissions deleted

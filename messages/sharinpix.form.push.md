@@ -14,6 +14,14 @@ The Salesforce org to push form templates to.
 
 The target Salesforce org where the SharinPix form templates will be uploaded and stored.
 
+# flags.delete.summary
+
+Delete form templates from org that no longer have corresponding local files.
+
+# flags.delete.description
+
+When enabled, this flag will delete form template records from the Salesforce org if their corresponding local JSON files are missing. Use with caution as this operation cannot be undone.
+
 # examples
 
 - Push all form templates to the default org:
@@ -23,6 +31,10 @@ The target Salesforce org where the SharinPix form templates will be uploaded an
 - Push form templates to a specific org:
 
   <%= config.bin %> <%= command.id %> --target-org myorg@example.com
+
+- Push form templates and delete orphaned records:
+
+  <%= config.bin %> <%= command.id %> --delete
 
 # info.created
 
@@ -36,6 +48,10 @@ Updated form template %s
 
 Skipped form template %s (no changes detected)
 
+# info.deleted
+
+Deleted form template %s
+
 # info.summary
 
-Push completed: %d forms uploaded, %d forms failed, %d forms skipped
+Push completed: %d forms uploaded, %d forms failed, %d forms skipped, %d forms deleted

@@ -18,7 +18,6 @@ type SharinPixPermissionRecord = {
   Id: string;
   Name: string;
   sharinpix__Description__c: string;
-  sharinpix__ID__c: string;
   sharinpix__Json__c: string;
 };
 
@@ -38,11 +37,11 @@ export default class Pull extends SfCommand<PullResult> {
   public async run(): Promise<PullResult> {
     const { flags } = await this.parse(Pull);
     const connection = flags.org.getConnection('63.0');
-    fs.mkdirSync('sharinpix/permission', { recursive: true });
+    fs.mkdirSync('sharinpix/permissions', { recursive: true });
 
     const records = (
       await connection.query<SharinPixPermissionRecord>(
-        'SELECT Id, Name, sharinpix__Description__c, sharinpix__ID__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c order by LastModifiedDate desc'
+        'SELECT Id, Name, sharinpix__Description__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c order by LastModifiedDate desc'
       )
     ).records;
 
@@ -58,7 +57,7 @@ export default class Pull extends SfCommand<PullResult> {
         };
 
         const safeFilename = createSafeFilename(record.Name);
-        fs.writeFileSync(`sharinpix/permission/${safeFilename}.json`, JSON.stringify(permissionData, null, 2));
+        fs.writeFileSync(`sharinpix/permissions/${safeFilename}.json`, JSON.stringify(permissionData, null, 2));
         this.log(
           messages.getMessage('info.hello', [record.Name, record.sharinpix__Description__c || 'No description'])
         );

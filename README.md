@@ -47,6 +47,10 @@ sf sharinpix permission pull -o yourusername@salesforce.com
 # Push form templates and permissions to Salesforce
 sf sharinpix form push -o yourusername@salesforce.com
 sf sharinpix permission push -o yourusername@salesforce.com
+
+# Push with deletion of orphaned records (records that exist in Salesforce but have no corresponding local files)
+sf sharinpix form push -o yourusername@salesforce.com --delete
+sf sharinpix permission push -o yourusername@salesforce.com -d
 ```
 
 ## Issues
@@ -101,6 +105,25 @@ sf plugins link .
 sf plugins
 ```
 
+## Key Features
+
+### Deletion Functionality
+
+Both `form push` and `permission push` commands support a `--delete/-d` flag that provides automatic cleanup of orphaned records:
+
+- **Orphaned Records**: Records that exist in your Salesforce org but no longer have corresponding local JSON files
+- **Safety**: Deletion only occurs when the flag is explicitly provided
+- **Reporting**: The command reports how many records were deleted, failed, uploaded, and skipped
+- **Error Handling**: If a deletion fails, it's logged as a warning and counted in the failed total
+
+**⚠️ Important**: Use the `--delete` flag with caution as deletions cannot be undone. Always ensure you have backups of your data before using this feature.
+
+**Example Workflow**:
+
+1. Pull existing records: `sf sharinpix form pull`
+2. Remove unwanted local JSON files
+3. Push with cleanup: `sf sharinpix form push --delete`
+
 ## Commands
 
 <!-- commands -->
@@ -143,9 +166,10 @@ Push SharinPix form templates to Salesforce org.
 
 ```
 USAGE
-  $ sf sharinpix form push [--json] [-o <value>]
+  $ sf sharinpix form push [--json] [-o <value>] [-d]
 
 FLAGS
+  -d, --delete              Delete form templates from org that no longer have corresponding local files.
   -o, --target-org=<value>  The Salesforce org to push form templates to.
 
 GLOBAL FLAGS
@@ -153,6 +177,8 @@ GLOBAL FLAGS
 
 DESCRIPTION
   Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Existing forms will be updated unless the force flag is used to skip them.
+
+  When the --delete flag is used, the command will also delete form template records from Salesforce that no longer have corresponding local JSON files. Use this flag with caution as deletions cannot be undone.
 
 EXAMPLES
   Push all form templates to the default org:
@@ -162,6 +188,14 @@ EXAMPLES
   Push form templates to a specific org:
 
     $ sf sharinpix form push --target-org myorg@example.com
+
+  Push form templates and delete orphaned records:
+
+    $ sf sharinpix form push --delete
+
+  Push to specific org with deletion:
+
+    $ sf sharinpix form push --target-org myorg@example.com --delete
 ```
 
 ## `sf sharinpix permission pull`
@@ -179,7 +213,7 @@ GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Retrieves all SharinPix permissions from the connected Salesforce org and saves them as JSON files in the local sharinpix/permission directory. This command fetches the permission metadata and the JSON configuration data stored in the sharinpix__Json__c field.
+  Retrieves all SharinPix permissions from the connected Salesforce org and saves them as JSON files in the local sharinpix/permissions directory. This command fetches the permission metadata and the JSON configuration data stored in the sharinpix__Json__c field.
 
 EXAMPLES
   Pull all SharinPix permissions from the default org:
@@ -197,9 +231,10 @@ Push SharinPix permissions to Salesforce org.
 
 ```
 USAGE
-  $ sf sharinpix permission push [--json] [-o <value>]
+  $ sf sharinpix permission push [--json] [-o <value>] [-d]
 
 FLAGS
+  -d, --delete              Delete SharinPix permissions from org that no longer have corresponding local files.
   -o, --target-org=<value>  The Salesforce org to push SharinPix permissions to.
 
 GLOBAL FLAGS
@@ -207,6 +242,8 @@ GLOBAL FLAGS
 
 DESCRIPTION
   Uploads SharinPix permissions from local JSON files to the connected Salesforce org. This command reads permission configurations from the local directory and creates or updates corresponding records in Salesforce. The sharinpix__Json__c field will be updated with the JSON configuration data.
+
+  When the --delete flag is used, the command will also delete SharinPix permission records from Salesforce that no longer have corresponding local JSON files. Use this flag with caution as deletions cannot be undone.
 
 EXAMPLES
   Push all SharinPix permissions to the default org:
@@ -216,6 +253,14 @@ EXAMPLES
   Push SharinPix permissions to a specific org:
 
     $ sf sharinpix permission push --target-org myorg@example.com
+
+  Push SharinPix permissions and delete orphaned records:
+
+    $ sf sharinpix permission push --delete
+
+  Push to specific org with deletion:
+
+    $ sf sharinpix permission push --target-org myorg@example.com -d
 ```
 
 <!-- commandsstop -->
