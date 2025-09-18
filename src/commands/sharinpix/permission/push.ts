@@ -48,9 +48,9 @@ export default class Push extends SfCommand<PushResult> {
     const connection = flags.org.getConnection('63.0');
 
     const files = fs
-      .readdirSync('sharinpix/permission')
+      .readdirSync('sharinpix/permissions')
       .filter((file) => file.endsWith('.json'))
-      .map((file) => path.join('sharinpix/permission', file));
+      .map((file) => path.join('sharinpix/permissions', file));
 
     const existingRecords = (
       await connection.query<SharinPixPermissionRecord>(

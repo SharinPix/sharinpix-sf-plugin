@@ -35,7 +35,7 @@ describe('sharinpix permission pull NUTs', () => {
     expect(result.jsonOutput?.name).to.equal('NoDefaultEnvError');
   });
 
-  it('should create sharinpix/permission directory', () => {
+  it('should create sharinpix/permissions directory', () => {
     const result = execCmd('sharinpix permission pull --help', {
       ensureExitCode: 0,
       cwd: testSession.project.dir,

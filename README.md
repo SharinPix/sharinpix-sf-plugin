@@ -213,7 +213,7 @@ GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Retrieves all SharinPix permissions from the connected Salesforce org and saves them as JSON files in the local sharinpix/permission directory. This command fetches the permission metadata and the JSON configuration data stored in the sharinpix__Json__c field.
+  Retrieves all SharinPix permissions from the connected Salesforce org and saves them as JSON files in the local sharinpix/permissions directory. This command fetches the permission metadata and the JSON configuration data stored in the sharinpix__Json__c field.
 
 EXAMPLES
   Pull all SharinPix permissions from the default org:
