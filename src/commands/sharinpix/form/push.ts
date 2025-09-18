@@ -52,17 +52,6 @@ export default class Push extends SfCommand<PushResult> {
       .filter((file) => file.endsWith('.json'))
       .map((file) => path.join('sharinpix/forms', file));
 
-    if (files.length === 0) {
-      this.log('No form template files found in the specified directory.');
-      return {
-        name: 'OK',
-        uploaded: 0,
-        failed: 0,
-        skipped: 0,
-        deleted: 0,
-      };
-    }
-
     const body = {
       // eslint-disable-next-line camelcase
       form_template_create: true,

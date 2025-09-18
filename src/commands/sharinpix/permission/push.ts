@@ -21,7 +21,6 @@ type SharinPixPermissionRecord = {
   Id: string;
   Name: string;
   sharinpix__Description__c: string;
-  sharinpix__ID__c: string;
   sharinpix__Json__c: string;
 };
 
@@ -53,20 +52,9 @@ export default class Push extends SfCommand<PushResult> {
       .filter((file) => file.endsWith('.json'))
       .map((file) => path.join('sharinpix/permission', file));
 
-    if (files.length === 0) {
-      this.log('No SharinPix permission files found in the specified directory.');
-      return {
-        name: 'OK',
-        uploaded: 0,
-        failed: 0,
-        skipped: 0,
-        deleted: 0,
-      };
-    }
-
     const existingRecords = (
       await connection.query<SharinPixPermissionRecord>(
-        'SELECT Id, Name, sharinpix__Description__c, sharinpix__ID__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c'
+        'SELECT Id, Name, sharinpix__Description__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c'
       )
     ).records;
 

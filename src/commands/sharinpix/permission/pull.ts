@@ -18,7 +18,6 @@ type SharinPixPermissionRecord = {
   Id: string;
   Name: string;
   sharinpix__Description__c: string;
-  sharinpix__ID__c: string;
   sharinpix__Json__c: string;
 };
 
@@ -42,7 +41,7 @@ export default class Pull extends SfCommand<PullResult> {
 
     const records = (
       await connection.query<SharinPixPermissionRecord>(
-        'SELECT Id, Name, sharinpix__Description__c, sharinpix__ID__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c order by LastModifiedDate desc'
+        'SELECT Id, Name, sharinpix__Description__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c order by LastModifiedDate desc'
       )
     ).records;
 
