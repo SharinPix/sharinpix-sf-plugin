@@ -14,6 +14,7 @@ export type PushResult = {
   uploaded?: number;
   failed?: number;
   skipped?: number;
+  deleted?: number;
 };
 
 type FormTemplateRecord = {
@@ -34,6 +35,12 @@ export default class Push extends SfCommand<PushResult> {
       summary: messages.getMessage('flags.org.summary'),
       description: messages.getMessage('flags.org.description'),
     }),
+    delete: Flags.boolean({
+      char: 'd',
+      summary: messages.getMessage('flags.delete.summary'),
+      description: messages.getMessage('flags.delete.description'),
+      default: false,
+    }),
   };
 
   public async run(): Promise<PushResult> {
@@ -44,16 +51,6 @@ export default class Push extends SfCommand<PushResult> {
       .readdirSync('sharinpix/forms')
       .filter((file) => file.endsWith('.json'))
       .map((file) => path.join('sharinpix/forms', file));
-
-    if (files.length === 0) {
-      this.log('No form template files found in the specified directory.');
-      return {
-        name: 'OK',
-        uploaded: 0,
-        failed: 0,
-        skipped: 0,
-      };
-    }
 
     const body = {
       // eslint-disable-next-line camelcase
@@ -75,6 +72,7 @@ export default class Push extends SfCommand<PushResult> {
     let uploaded = 0;
     let failed = 0;
     let skipped = 0;
+    let deleted = 0;
 
     for (const file of files) {
       try {
@@ -161,13 +159,42 @@ export default class Push extends SfCommand<PushResult> {
       }
     }
 
-    this.log(messages.getMessage('info.summary', [uploaded, failed, skipped]));
+    // Handle deletion of records that no longer have corresponding local files
+    if (flags.delete) {
+      const localFileNames = new Set(
+        files.map((file) => {
+          const fileContent = fs.readFileSync(file, 'utf8');
+          const json = JSON.parse(fileContent) as Record<string, unknown>;
+          return json.name as string;
+        })
+      );
+
+      for (const [recordName, record] of existingMap) {
+        if (!localFileNames.has(recordName)) {
+          try {
+            await connection.sobject('sharinpix__FormTemplate__c').delete(record.Id);
+            this.log(messages.getMessage('info.deleted', [recordName]));
+            deleted++;
+          } catch (error) {
+            this.warn(
+              `Failed to delete form template ${recordName}: ${
+                error instanceof Error ? error.message : 'Unknown error'
+              }`
+            );
+            failed++;
+          }
+        }
+      }
+    }
+
+    this.log(messages.getMessage('info.summary', [uploaded, failed, skipped, deleted]));
 
     return {
       name: 'OK',
       uploaded,
       failed,
       skipped,
+      deleted,
     };
   }
 }
