@@ -1,6 +1,7 @@
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import mock from 'mock-fs';
 import Push from '../../../../src/commands/sharinpix/permission/push.js';
 
 describe('sharinpix permission push', () => {
@@ -100,5 +101,55 @@ describe('sharinpix permission push', () => {
       expect(Push.flags.delete.summary).to.include('SharinPix permissions');
       expect(Push.flags.delete.description).to.include('SharinPix permission records');
     });
+  });
+
+  it('should upload permissions and handle failures', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/permissions': {
+        'Permission_1-xxxx.json': '{"name":"Permission 1","fieldA":false}',
+        'Invalid_Json-xxxx.json': 'invalid-json',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'p1',
+        Name: 'Permission 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc1',
+        // eslint-disable-next-line camelcase
+        sharinpix__Json__c: '{"fieldA":true}',
+      },
+    ];
+
+    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
+    const sobjectStub = $$.SANDBOX.stub().returns({
+      update: $$.SANDBOX.stub().resolves(),
+      create: $$.SANDBOX.stub().resolves(),
+    });
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: queryStub,
+      sobject: sobjectStub,
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error: CLI test stub
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub } });
+
+    const result = await pushInstance.run();
+
+    expect(result.uploaded).to.equal(1);
+    expect(result.failed).to.equal(1);
+    expect(result.skipped).to.equal(0);
+    expect(result.deleted).to.equal(0);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    mock.restore();
   });
 });

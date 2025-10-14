@@ -149,11 +149,19 @@ export default class Push extends SfCommand<PushResult> {
         uploaded++;
       } catch (error) {
         const fileContent = fs.readFileSync(file, 'utf8');
-        const json = JSON.parse(fileContent) as unknown;
-        const fileName = (json as { name: string }).name;
-        this.warn(
-          `Failed to push form template ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
-        );
+        try {
+          const json = JSON.parse(fileContent) as unknown;
+          const fileName = (json as { name: string }).name;
+          this.warn(
+            `Failed to push form template ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          );
+        } catch (parseError) {
+          this.warn(
+            `Failed to parse JSON for form template in ${file}: ${
+              parseError instanceof Error ? parseError.message : 'Unknown error'
+            }`
+          );
+        }
         failed++;
         continue;
       }

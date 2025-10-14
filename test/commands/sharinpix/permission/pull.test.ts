@@ -54,7 +54,6 @@ describe('sharinpix permission pull', () => {
   });
 
   it('should download permissions and handle failures', async () => {
-    // Mock Salesforce connection and query
     const mockRecords = [
       {
         Id: 'p1',
