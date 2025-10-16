@@ -1,10 +1,15 @@
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-await-in-loop */
-import fs from 'node:fs';
-import path from 'node:path';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { isJsonEqual } from '../../../helpers/utils.js';
+import {
+  isJsonEqual,
+  readJsonFile,
+  getNameFromJson,
+  getJsonFiles,
+  fetchJson,
+  formatErrorMessage,
+} from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.push');
@@ -47,10 +52,7 @@ export default class Push extends SfCommand<PushResult> {
     const { flags } = await this.parse(Push);
     const connection = flags.org.getConnection('63.0');
 
-    const files = fs
-      .readdirSync('sharinpix/forms')
-      .filter((file) => file.endsWith('.json'))
-      .map((file) => path.join('sharinpix/forms', file));
+    const files = getJsonFiles('sharinpix/forms');
 
     const body = {
       // eslint-disable-next-line camelcase
@@ -75,122 +77,94 @@ export default class Push extends SfCommand<PushResult> {
     let deleted = 0;
 
     for (const file of files) {
-      try {
-        const fileContent = fs.readFileSync(file, 'utf8');
-        const json = JSON.parse(fileContent) as Record<string, unknown>;
-        const fileName = json.name as string;
+      const processFile = async (): Promise<void> => {
+        const json = readJsonFile(file);
+        const fileName = getNameFromJson(json);
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
 
         if (existingRecord) {
-          // Check if form has changed by comparing with stored JSON
-          const response = await fetch(existingRecord?.sharinpix__FormUrl__c + '.json', {
-            headers: {
-              Accept: 'application/json',
-            },
+          const existingJson = await fetchJson(existingRecord.sharinpix__FormUrl__c + '.json').catch((error) => {
+            this.warn(`Failed to check changes for ${fileName}, proceeding with update: ${formatErrorMessage(error)}`);
+            return null;
           });
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
 
-          const existingJson: unknown = await response.json();
-          if (existingJson) {
-            try {
-              if (isJsonEqual(json, existingJson)) {
-                this.log(messages.getMessage('info.skipped', [fileName]));
-                skipped++;
-                continue;
-              }
-            } catch (parseError) {
-              this.warn(`Failed to parse stored JSON for ${fileName}, proceeding with update`);
-              failed++;
-              continue;
-            }
+          if (existingJson && isJsonEqual(json, existingJson)) {
+            this.log(messages.getMessage('info.skipped', [fileName]));
+            skipped++;
+            return;
           }
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const responseData = await (
-          await fetch(`${responseToken.host}/api/v1/form/templates`, {
-            method: 'POST',
-            body: JSON.stringify({
-              sfid: existingId ?? undefined,
-              config: {
-                name: fileName,
-                ...(json as object),
-              },
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-              Authorization: `Bearer ${responseToken.token}`,
+        const response = await fetch(`${responseToken.host}/api/v1/form/templates`, {
+          method: 'POST',
+          body: JSON.stringify({
+            sfid: existingId ?? undefined,
+            config: {
+              name: fileName,
+              ...(json as object),
             },
-          })
-        ).json();
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${responseToken.token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const responseData = (await response.json()) as { url: string };
 
         const formTemplateJson = JSON.stringify({
           ...(json as object),
-          url: (responseData as { url: string }).url,
+          url: responseData.url,
         });
 
         await connection.apex.post('/sharinpix/FormTemplateImport', {
           recordId: existingId ?? undefined,
           name: fileName,
-          url: (responseData as { url: string }).url,
+          url: responseData.url,
           formTemplateJson,
         });
 
-        if (existingId) {
-          this.log(messages.getMessage('info.updated', [fileName]));
-        } else {
-          this.log(messages.getMessage('info.created', [fileName]));
-        }
-
+        this.log(messages.getMessage(existingId ? 'info.updated' : 'info.created', [fileName]));
         uploaded++;
-      } catch (error) {
-        const fileContent = fs.readFileSync(file, 'utf8');
+      };
+
+      await processFile().catch((error: Error) => {
         try {
-          const json = JSON.parse(fileContent) as unknown;
-          const fileName = (json as { name: string }).name;
-          this.warn(
-            `Failed to push form template ${fileName}: ${error instanceof Error ? error.message : 'Unknown error'}`
-          );
-        } catch (parseError) {
-          this.warn(
-            `Failed to parse JSON for form template in ${file}: ${
-              parseError instanceof Error ? parseError.message : 'Unknown error'
-            }`
-          );
+          const json = readJsonFile(file);
+          const fileName = getNameFromJson(json);
+          this.warn(`Failed to push form template ${fileName}: ${formatErrorMessage(error)}`);
+        } catch {
+          this.warn(`Failed to parse JSON for form template in ${file}: ${formatErrorMessage(error)}`);
         }
         failed++;
-        continue;
-      }
+      });
     }
 
-    // Handle deletion of records that no longer have corresponding local files
     if (flags.delete) {
       const localFileNames = new Set(
         files.map((file) => {
-          const fileContent = fs.readFileSync(file, 'utf8');
-          const json = JSON.parse(fileContent) as Record<string, unknown>;
-          return json.name as string;
+          const json = readJsonFile(file);
+          return getNameFromJson(json);
         })
       );
 
       for (const [recordName, record] of existingMap) {
         if (!localFileNames.has(recordName)) {
-          try {
-            await connection.sobject('sharinpix__FormTemplate__c').delete(record.Id);
-            this.log(messages.getMessage('info.deleted', [recordName]));
-            deleted++;
-          } catch (error) {
-            this.warn(
-              `Failed to delete form template ${recordName}: ${
-                error instanceof Error ? error.message : 'Unknown error'
-              }`
-            );
-            failed++;
-          }
+          await (connection.sobject('sharinpix__FormTemplate__c').delete(record.Id) as Promise<unknown>)
+            .then(() => {
+              this.log(messages.getMessage('info.deleted', [recordName]));
+              deleted++;
+            })
+            .catch((error: Error) => {
+              this.warn(`Failed to delete form template ${recordName}: ${formatErrorMessage(error)}`);
+              failed++;
+            });
         }
       }
     }

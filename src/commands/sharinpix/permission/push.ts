@@ -1,10 +1,14 @@
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-await-in-loop */
-import fs from 'node:fs';
-import path from 'node:path';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { isJsonEqual } from '../../../helpers/utils.js';
+import {
+  isJsonEqual,
+  readJsonFile,
+  getNameFromJson,
+  getJsonFiles,
+  formatErrorMessage,
+} from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.permission.push');
@@ -47,10 +51,7 @@ export default class Push extends SfCommand<PushResult> {
     const { flags } = await this.parse(Push);
     const connection = flags.org.getConnection('63.0');
 
-    const files = fs
-      .readdirSync('sharinpix/permissions')
-      .filter((file) => file.endsWith('.json'))
-      .map((file) => path.join('sharinpix/permissions', file));
+    const files = getJsonFiles('sharinpix/permissions');
 
     const existingRecords = (
       await connection.query<SharinPixPermissionRecord>(
@@ -66,31 +67,27 @@ export default class Push extends SfCommand<PushResult> {
     let deleted = 0;
 
     for (const file of files) {
-      try {
-        const fileContent = fs.readFileSync(file, 'utf8');
-        const json = JSON.parse(fileContent) as Record<string, unknown>;
-        const fileName = json.name as string;
+      const processFile = async (): Promise<void> => {
+        const json = readJsonFile(file);
+        const fileName = getNameFromJson(json);
         const existingRecord = existingMap.get(fileName);
-        const existingId = existingRecord?.Id ?? null;
 
         const jsonWithoutName = { ...json };
         delete jsonWithoutName.name;
 
         if (existingRecord) {
-          // Check if permission has changed by comparing with stored JSON
           try {
             const existingJson: unknown = JSON.parse(existingRecord.sharinpix__Json__c);
             if (isJsonEqual(jsonWithoutName, existingJson)) {
               this.log(messages.getMessage('info.skipped', [fileName]));
               skipped++;
-              continue;
+              return;
             }
           } catch (parseError) {
             this.warn(`Failed to parse stored JSON for ${fileName}, proceeding with update`);
           }
         }
 
-        // Update or create the permission record
         const permissionData = {
           Name: fileName,
           // eslint-disable-next-line camelcase
@@ -101,66 +98,50 @@ export default class Push extends SfCommand<PushResult> {
           }),
         };
 
-        if (existingId) {
-          // Update existing record
+        if (existingRecord?.Id) {
           await connection.sobject('sharinpix__SharinPixPermission__c').update({
             ...permissionData,
-            Id: existingId,
+            Id: existingRecord.Id,
           });
-          this.log(messages.getMessage('info.updated', [fileName]));
         } else {
-          // Create new record
           await connection.sobject('sharinpix__SharinPixPermission__c').create(permissionData);
-          this.log(messages.getMessage('info.created', [fileName]));
         }
 
+        this.log(messages.getMessage(existingRecord ? 'info.updated' : 'info.created', [fileName]));
         uploaded++;
-      } catch (error) {
-        const fileContent = fs.readFileSync(file, 'utf8');
+      };
+
+      await processFile().catch((error: Error) => {
         try {
-          const json = JSON.parse(fileContent) as unknown;
-          const fileName = (json as { name: string }).name;
-          this.warn(
-            `Failed to push SharinPix permission ${fileName}: ${
-              error instanceof Error ? error.message : 'Unknown error'
-            }`
-          );
-        } catch (parseError) {
-          this.warn(
-            `Failed to parse JSON for SharinPix permission in ${file}: ${
-              parseError instanceof Error ? parseError.message : 'Unknown error'
-            }`
-          );
+          const json = readJsonFile(file);
+          const fileName = getNameFromJson(json);
+          this.warn(`Failed to push SharinPix permission ${fileName}: ${formatErrorMessage(error)}`);
+        } catch {
+          this.warn(`Failed to parse JSON for SharinPix permission in ${file}: ${formatErrorMessage(error)}`);
         }
         failed++;
-        continue;
-      }
+      });
     }
 
-    // Handle deletion of records that no longer have corresponding local files
     if (flags.delete) {
       const localFileNames = new Set(
         files.map((file) => {
-          const fileContent = fs.readFileSync(file, 'utf8');
-          const json = JSON.parse(fileContent) as Record<string, unknown>;
-          return json.name as string;
+          const json = readJsonFile(file);
+          return getNameFromJson(json);
         })
       );
 
       for (const [recordName, record] of existingMap) {
         if (!localFileNames.has(recordName)) {
-          try {
-            await connection.sobject('sharinpix__SharinPixPermission__c').delete(record.Id);
-            this.log(messages.getMessage('info.deleted', [recordName]));
-            deleted++;
-          } catch (error) {
-            this.warn(
-              `Failed to delete SharinPix permission ${recordName}: ${
-                error instanceof Error ? error.message : 'Unknown error'
-              }`
-            );
-            failed++;
-          }
+          await (connection.sobject('sharinpix__SharinPixPermission__c').delete(record.Id) as Promise<unknown>)
+            .then(() => {
+              this.log(messages.getMessage('info.deleted', [recordName]));
+              deleted++;
+            })
+            .catch((error: Error) => {
+              this.warn(`Failed to delete SharinPix permission ${recordName}: ${formatErrorMessage(error)}`);
+              failed++;
+            });
         }
       }
     }
