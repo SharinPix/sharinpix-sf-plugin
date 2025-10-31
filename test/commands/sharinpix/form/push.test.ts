@@ -1,6 +1,7 @@
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import mock from 'mock-fs';
 import Push from '../../../../src/commands/sharinpix/form/push.js';
 
 describe('sharinpix form push', () => {
@@ -76,5 +77,73 @@ describe('sharinpix form push', () => {
       expect(Push.flags.delete.summary).to.include('Delete');
       expect(Push.flags.delete.description).to.include('delete');
     });
+  });
+
+  it('should upload forms and handle failures', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
+        'Invalid_Json-xxxx.json': 'invalid-json',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'f1',
+        Name: 'Form 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/form1',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc1',
+      },
+    ];
+
+    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
+    const sobjectStub = $$.SANDBOX.stub().returns({
+      update: $$.SANDBOX.stub().resolves(),
+      create: $$.SANDBOX.stub().resolves(),
+    });
+    const apexStub = {
+      post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }),
+    };
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: queryStub,
+      sobject: sobjectStub,
+      apex: apexStub,
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    const fetchStub = $$.SANDBOX.stub();
+    fetchStub.onFirstCall().resolves({
+      ok: true,
+      json: async () => ({ name: 'Form 1', fieldA: false }), // changed value triggers upload
+      status: 200,
+      statusText: 'OK',
+    });
+    fetchStub.onSecondCall().resolves({
+      ok: true,
+      json: async () => ({ url: 'https://example.com/form1-new' }),
+      status: 200,
+      statusText: 'OK',
+    });
+    global.fetch = fetchStub;
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error stub CLI parse
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub } });
+
+    const result = await pushInstance.run();
+
+    expect(result.uploaded).to.equal(1);
+    expect(result.failed).to.equal(1);
+    expect(result.skipped).to.equal(0);
+    expect(result.deleted).to.equal(0);
+
+    mock.restore();
   });
 });
