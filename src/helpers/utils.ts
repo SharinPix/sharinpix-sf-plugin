@@ -51,6 +51,13 @@ export function getJsonFiles(dirPath: string): string[] {
     .map((file) => `${dirPath}/${file}`);
 }
 
+export function getCsvFiles(dirPath: string): string[] {
+  return fs
+    .readdirSync(dirPath)
+    .filter((file) => file.endsWith('.csv'))
+    .map((file) => `${dirPath}/${file}`);
+}
+
 export function orderElementKeys(keys: string[]): string[] {
   const keySet = new Set(keys);
   const ordered: string[] = [];
