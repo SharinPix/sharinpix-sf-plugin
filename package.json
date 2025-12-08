@@ -5,7 +5,8 @@
   "dependencies": {
     "@oclif/core": "^4",
     "@salesforce/core": "^8",
-    "@salesforce/sf-plugins-core": "^12"
+    "@salesforce/sf-plugins-core": "^12",
+    "csv": "^6.4.1"
   },
   "engines": {
     "node": ">=18.0.0"
