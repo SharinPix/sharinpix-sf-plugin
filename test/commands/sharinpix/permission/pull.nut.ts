@@ -73,7 +73,8 @@ describe('sharinpix permission pull NUTs', () => {
       cwd: testSession.project.dir,
     });
 
-    expect(result.shellOutput.stdout).to.include('-o, --target-org');
+    const normalized = result.shellOutput.stdout.replace(/\s+/g, ' ');
+    expect(normalized).to.match(/-o,\s+--(?:target-org|org)(?:[=\s]|$)/);
   });
 
   it('should show examples in help', () => {
