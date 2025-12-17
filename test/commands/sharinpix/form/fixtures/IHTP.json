@@ -1,0 +1,1300 @@
+{
+  "submit": {
+    "label": "Submit"
+  },
+  "elements": [
+    {
+      "index": 0,
+      "id": "019b9dd9-a40c-7428-ac54-5718483c2736",
+      "elemType": "richtext",
+      "richDescription": "<p><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACy0AAAF+CAMAAAACiOQBAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAOVBMVEVHcExKuEiKjI9Pl6UoktCIiYyGiIsoktAoktBWsVVKuEgoktCFhokoktBNuEgoktArktBJuEiBgoXppdp2AAAADnRSTlMAvnEYw6PRez9AfaDv6kJ1l0cAACAASURBVHja7N3dlqq4FkDhpsM4CTAQqt//YY9a+8dSErLCCoQw50Vf7VYkgJ+piP/8Q1RE5t/32CdERERERN/9+99b/2OfEBERERGhZSIiIiIitExEREREhJaJiIiIiNAyERERERFaJiIiIiJCy0REREREaJmIiIiICC0TEREREaFlIiIiolx1N+W6qneXnYtpbJ/Ze+4eWiYiIiJCy2g5yOfhIWe0TERERISW0bK/p5oNWiYiIiJCy2jZP9c8nMnMaJmIiIjQMlre38xnITNaJiIiIrSMlo8jM1omIiIiQsto+axiRstERESEltHy4WIudlUGWiYiIiK0jJYLuGFGoWBGy0RERISW0XIhU8wFrslAy0RERISW0XIxYC5uhhktExEREVpGyyzJQMtERESEltHyScBc0IoMtExERERoGS2zIgMtExEREVpGyyeqkK/8oWUiIiJCy2i50BXMaJmIiIgILaPlghdkoGUiIiJCy2gZL6NlIiIiQstoGS+jZSIiIkLLaBkvo2UiIiJCy2j5Elp+eBktExEREaFltFzcD5agZSIiIkLLaPkMXj5mOQZaJiIiIrSMllmOgZaJiIgILaNllmOgZSIiIkLLaLnWht2XY6BlIiIiQsto+TzLMfaeXkbLREREhJbR8onaefUyWiYiIiK0jJa5OQZaJiIiIrSMllmNgZaJiIgILaPl2r/sh5aJiIgILaNltHz8agy0TERERGgZLbMaAy2rn8N986jv2BVERFRA7hFaRstwGS0XUv/33Gt6dgcRER1M5WGcnrXWVPOi0DJaLuNWcmg5JdP8OPsa5peJiOhIK7fTn+bR1vKy0DJaLoPLylrumsUqm33tijn/urPvbtsuJjr2lx+ireNYGxZfm8s8AK6Eg0AhW8l4F3Vy+hvsI/lKgKGAg7ACJk0/OuCXgdEyWq751hjaWv5arKnqcDTlnIDd2Xf32xX+94VepJxpuToOtnbxtbnMA+AKOAgUmm0l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\"></p>"
+    },
+    {
+      "index": 1,
+      "id": "019b9a00-a636-76c9-a151-af527026d266",
+      "apiName": "hospital_room",
+      "elemType": "question",
+      "label": "Hospital Room",
+      "inputType": "repeated",
+      "addOptions": [
+        {
+          "label": "New Hospital Room",
+          "value": [
+            {
+              "id": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9a00-a636-76c9-a151-b03e751921a1",
+              "apiName": "deficiency"
+            },
+            {
+              "id": "019b9d5c-c8e8-77fb-bc4b-631b0e13ddc1",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9d38-f45d-7036-a18d-ad5262891353",
+              "apiName": "add_photos"
+            },
+            {
+              "id": "019b9d5c-c8e8-77fb-bc4b-667561ea5bf9",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9d5c-0de4-740d-9817-4402d86b2270",
+              "value": "New Hospital Room",
+              "apiName": "room_type"
+            },
+            {
+              "id": "019b9d5c-c8e8-77fb-bc4b-667561ea5bf9",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9d61-a618-70b0-8828-98ccefc1c422",
+              "value": "New Hospital Room",
+              "apiName": "room_type"
+            },
+            {
+              "id": "019b9c50-df9b-706d-b409-d4ebc450d602",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9c50-3218-7539-971b-b000c6302854",
+              "apiName": "name2"
+            },
+            {
+              "id": "019b9c50-df9b-706d-b409-d9e686f99e8d",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9c50-4511-7499-bb1f-3a6150041bad",
+              "apiName": "building1"
+            },
+            {
+              "id": "019b9c50-df9c-71d9-a079-fcd895c744dd",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9c50-5980-7196-8d58-9fec1625102c",
+              "apiName": "room_name1"
+            },
+            {
+              "id": "019b9c50-df9c-71d9-a07a-02adbc7a5872",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9c50-6e00-71c9-883e-d7663563da44",
+              "apiName": "floor_number1"
+            },
+            {
+              "id": "019b9c50-df9c-71d9-a07a-0416d4d88c68",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9c50-849e-76d1-af94-f187f6b25279",
+              "apiName": "direction1"
+            },
+            {
+              "id": "019b9d5c-c8ea-763e-8d2d-a238f2cd3cc9",
+              "parentId": "019b9c50-df97-7593-a2eb-7ef040e02356",
+              "questionId": "019b9c55-f980-766d-95b3-4a2687d73fe4",
+              "valueNumber": 0,
+              "apiName": "inventory"
+            }
+          ]
+        },
+        {
+          "label": "Inventory Room",
+          "value": [
+            {
+              "id": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9a00-a636-76c9-a151-b03e751921a1",
+              "apiName": "deficiency"
+            },
+            {
+              "id": "019b9d5c-bc0c-7371-a565-28e896b00a87",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9d38-f45d-7036-a18d-ad5262891353",
+              "apiName": "add_photos"
+            },
+            {
+              "id": "019b9d5c-bc0c-7371-a565-2e0e771a0468",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9d5c-0de4-740d-9817-4402d86b2270",
+              "value": "Inventory Room",
+              "apiName": "room_type"
+            },
+            {
+              "id": "019b9d5c-bc0c-7371-a565-2e0e771a0468",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9d61-a618-70b0-8828-98ccefc1c422",
+              "value": "Inventory Room",
+              "apiName": "room_type"
+            },
+            {
+              "id": "019b9c51-bfc2-779a-b332-9316f0d4288c",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9c50-3218-7539-971b-b000c6302854",
+              "apiName": "name2"
+            },
+            {
+              "id": "019b9c51-bfc2-779a-b332-96456748c916",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9c50-4511-7499-bb1f-3a6150041bad",
+              "apiName": "building1"
+            },
+            {
+              "id": "019b9c51-bfc2-779a-b332-991beda8a9d7",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9c50-5980-7196-8d58-9fec1625102c",
+              "apiName": "room_name1"
+            },
+            {
+              "id": "019b9c51-bfc3-749d-aaa8-dfd8eb55ca96",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9c50-6e00-71c9-883e-d7663563da44",
+              "apiName": "floor_number1"
+            },
+            {
+              "id": "019b9c51-bfc4-72a9-90c1-7a4d40f7e52a",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9c50-849e-76d1-af94-f187f6b25279",
+              "apiName": "direction1"
+            },
+            {
+              "id": "019b9d5c-bc0e-7387-a817-0612ac858676",
+              "parentId": "019b9c51-bfc1-7030-a302-a5e5b20f47c3",
+              "questionId": "019b9c55-f980-766d-95b3-4a2687d73fe4",
+              "valueNumber": 0,
+              "apiName": "inventory"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "apiName": "deficiency",
+      "elemType": "question",
+      "label": "Hospital Room",
+      "labelFormula": "BLANKVALUE(room_name.value, \"Room\")",
+      "inputType": "section",
+      "style": "default",
+      "parentId": "019b9a00-a636-76c9-a151-af527026d266",
+      "sectionId": "019b9a00-a636-76c9-a151-af527026d266"
+    },
+    {
+      "index": 3,
+      "id": "019b9d38-f45d-7036-a18d-ad5262891353",
+      "apiName": "add_photos",
+      "elemType": "question",
+      "label": "Add Photos",
+      "inputType": "sharinpix-app",
+      "mobileApp": {
+        "action": "capture"
+      },
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 4,
+      "id": "019b9d61-a618-70b0-8828-98ccefc1c422",
+      "apiName": "room_type",
+      "elemType": "question",
+      "label": "Type",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "New Hospital Room"
+        },
+        {
+          "label": "",
+          "value": "Inventory Room"
+        }
+      ],
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 5,
+      "id": "019b9c50-3218-7539-971b-b000c6302854",
+      "apiName": "name2",
+      "elemType": "question",
+      "label": "Room Number",
+      "inputType": "string",
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 6,
+      "id": "019b9c50-4511-7499-bb1f-3a6150041bad",
+      "apiName": "building1",
+      "elemType": "question",
+      "label": "Department",
+      "inputType": "string",
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 7,
+      "id": "019b9c50-5980-7196-8d58-9fec1625102c",
+      "apiName": "room_name",
+      "elemType": "question",
+      "label": "Room Name",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "IPU Bedroom "
+        },
+        {
+          "label": "",
+          "value": "Bath"
+        },
+        {
+          "label": "",
+          "value": "Behaviour Therapist"
+        },
+        {
+          "label": "",
+          "value": "Chart Room"
+        }
+      ],
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 8,
+      "id": "019b9c50-6e00-71c9-883e-d7663563da44",
+      "apiName": "floor_number1",
+      "elemType": "question",
+      "label": "Floor Number",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Basement"
+        },
+        {
+          "label": "",
+          "value": "Ground floor"
+        },
+        {
+          "label": "",
+          "value": "Level 1"
+        },
+        {
+          "label": "",
+          "value": "Level 2"
+        },
+        {
+          "label": "",
+          "value": "Level 3"
+        },
+        {
+          "label": "",
+          "value": "Level 4"
+        },
+        {
+          "label": "",
+          "value": "Level 5"
+        },
+        {
+          "label": "",
+          "value": "Level 6"
+        }
+      ],
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 9,
+      "id": "019b9c50-849e-76d1-af94-f187f6b25279",
+      "apiName": "direction1",
+      "elemType": "question",
+      "label": "Direction",
+      "inputType": "radio",
+      "options": [
+        {
+          "label": "",
+          "value": "N"
+        },
+        {
+          "label": "",
+          "value": "S"
+        },
+        {
+          "label": "",
+          "value": "E"
+        },
+        {
+          "label": "",
+          "value": "W"
+        }
+      ],
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 10,
+      "id": "019b9c55-f980-766d-95b3-4a2687d73fe4",
+      "apiName": "inventory",
+      "elemType": "question",
+      "label": "Inventory",
+      "inputType": "repeated",
+      "addOptions": [
+        {
+          "label": "Equipment Inventory",
+          "value": [
+            {
+              "id": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+              "value": "Inventory",
+              "apiName": "deficiency1"
+            },
+            {
+              "id": "019b9dc1-3a24-70aa-90ad-08c17893527a",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9c5a-4592-739f-80ab-22551c1fd8e5",
+              "value": "Equipment Inventory",
+              "apiName": "type"
+            },
+            {
+              "id": "019b9dc1-3a24-70aa-90ad-0f0dd5fceba1",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9d39-4362-747d-af6c-fdcef8bb1515",
+              "apiName": "add_photos"
+            },
+            {
+              "id": "019b9dc1-3a25-767c-9eb4-632762ec4a5f",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9c71-0967-7307-a4f5-c032c8a60a31",
+              "apiName": "bucket"
+            },
+            {
+              "id": "019b9dc1-3a25-767c-9eb4-653036c23165",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9c73-28b5-747c-ae68-b73cff9fa94c",
+              "apiName": "equipment"
+            },
+            {
+              "id": "019b9dc1-3a31-757e-815d-57967b24f8a0",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9ca1-7aa6-76bf-bf14-7a0827537d33",
+              "value": "",
+              "apiName": "equipment_name"
+            },
+            {
+              "id": "019b9dc1-3a38-7078-b0e0-b7184b42c4e6",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a16-8883-75e0-bb5c-11c7c5657c40",
+              "apiName": "description"
+            },
+            {
+              "id": "019b9dc1-3a3f-710e-b7f2-24ea3e85ce8c",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a17-1287-74ce-b147-9269cdef1d9b",
+              "apiName": "equipment_group"
+            },
+            {
+              "id": "019b9dc1-3a3f-710e-b7f2-29ee5051cfd3",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a18-58f6-73ab-b6d4-ac5df4cdc155",
+              "apiName": "manufacturer"
+            },
+            {
+              "id": "019b9dc1-3a3f-710e-b7f2-2d08068b739c",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a19-4dec-7290-ac47-43bf600d70cf",
+              "apiName": "model"
+            },
+            {
+              "id": "019b9dc1-3a3f-710e-b7f2-32e905b666fb",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a19-b6db-727b-810d-8dc29f93ba6e",
+              "apiName": "equipment_type"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-a1073bc62f2c",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a27-b800-732c-874c-809b6fb97bc0",
+              "apiName": "asset_tag_number"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-a6dc66f17d4a",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a1b-1031-77f0-b0ba-27e1bc11666d",
+              "apiName": "placement"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-aa82689c83dd",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a1c-1749-731d-8470-d0d65e308896",
+              "apiName": "swing"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-ac133a50afc9",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a1d-5487-7268-bbd4-0c47db58d86c",
+              "apiName": "power_connection"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-b3770d057e84",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a1e-5cc4-7615-afe2-576187eb30fc",
+              "apiName": "network_connection"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-b5db965313e6",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a1f-02bc-77cb-8a60-c3971eb9c959",
+              "apiName": "height_in"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-bbd6916d7ddc",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a1f-3e76-77ac-b5e6-f9d0516c889f",
+              "apiName": "width_in"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-be75d87be076",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a1f-80a3-75a8-bc0c-e1fc01d5eede",
+              "apiName": ""
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-c1f65a74e161",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a22-07b6-718e-9be7-c8eec2d8a484",
+              "apiName": "electrical_notes"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-c44ad80bd047",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a20-ef61-7799-a5a4-89ed5535409b",
+              "apiName": "plumbing_notes"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-cbc3fd2d8fa8",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a22-fa30-7184-904d-2c731bff3506",
+              "apiName": "other_notes"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-cd621e2a8063",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a28-0044-75cc-8f8c-4ada66f58d03",
+              "apiName": "parent_asset_tag"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-d0287d32247c",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a28-a3e0-75fb-9b58-3607057dbeb5",
+              "apiName": "hospital_inv_ref_no"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-d7752403cc17",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a29-e4d2-754e-8298-5c32eecbf5f7",
+              "apiName": "serial_number"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-dbd62d148c06",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a22-6dfd-718e-b80f-17690d7e4cb9",
+              "apiName": "network_connection_notes"
+            },
+            {
+              "id": "019b9dc1-3a40-73bf-936d-dc2b56b2d42e",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a2a-6314-7426-898b-4b78f8978c3d",
+              "apiName": "condition_of_asset"
+            },
+            {
+              "id": "019b9dc1-3a41-74f0-8768-75e021e8e8f6",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a2b-3371-720c-b33e-27bae0dc5064",
+              "valueNumber": 1,
+              "apiName": "quantity"
+            },
+            {
+              "id": "019b9dc1-3a41-74f0-8768-7abc4db68bb2",
+              "parentId": "019b9dc1-3a1b-77cc-9891-28eaf9ad5183",
+              "questionId": "019b9a34-04e5-717e-a07f-0e94884197c4",
+              "apiName": "ihp_tag_no"
+            }
+          ]
+        },
+        {
+          "label": "Furniture Inventory",
+          "value": [
+            {
+              "id": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+              "value": "Inventory",
+              "apiName": "deficiency1"
+            },
+            {
+              "id": "019b9dc1-523e-7105-9428-fa4fc0b82e15",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9c5a-4592-739f-80ab-22551c1fd8e5",
+              "value": "Furniture Inventory",
+              "apiName": "type"
+            },
+            {
+              "id": "019b9dc1-523e-7105-9428-fc8094176b3f",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9d39-4362-747d-af6c-fdcef8bb1515",
+              "apiName": "add_photos"
+            },
+            {
+              "id": "019b9dc1-523e-7105-9429-00c70221112f",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9c71-0967-7307-a4f5-c032c8a60a31",
+              "apiName": "bucket"
+            },
+            {
+              "id": "019b9dc1-523f-75ba-8912-3f7352ada8d6",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9c73-28b5-747c-ae68-b73cff9fa94c",
+              "apiName": "equipment"
+            },
+            {
+              "id": "019b9dc1-5246-7349-a16b-219c5b0e7a31",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9ca1-7aa6-76bf-bf14-7a0827537d33",
+              "value": "",
+              "apiName": "equipment_name"
+            },
+            {
+              "id": "019b9dc1-524d-715a-bbd0-436fadb43bb0",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a16-8883-75e0-bb5c-11c7c5657c40",
+              "apiName": "description"
+            },
+            {
+              "id": "019b9dc1-5256-73df-a61b-64b49e5c3093",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a17-1287-74ce-b147-9269cdef1d9b",
+              "apiName": "equipment_group"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-4d0981fa7c5d",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a18-58f6-73ab-b6d4-ac5df4cdc155",
+              "apiName": "manufacturer"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-5261ef5aed7e",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a19-4dec-7290-ac47-43bf600d70cf",
+              "apiName": "model"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-5466cdf0275f",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a19-b6db-727b-810d-8dc29f93ba6e",
+              "apiName": "equipment_type"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-58caf968e839",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a27-b800-732c-874c-809b6fb97bc0",
+              "apiName": "asset_tag_number"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-5fc2417f4210",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a1b-1031-77f0-b0ba-27e1bc11666d",
+              "apiName": "placement"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-6341a00754cd",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a1c-1749-731d-8470-d0d65e308896",
+              "apiName": "swing"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-67b95bbbb319",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a1d-5487-7268-bbd4-0c47db58d86c",
+              "apiName": "power_connection"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-6a9e37cf8877",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a1e-5cc4-7615-afe2-576187eb30fc",
+              "apiName": "network_connection"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-6ca706560903",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a1f-02bc-77cb-8a60-c3971eb9c959",
+              "apiName": "height_in"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-7371e2d2ce20",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a1f-3e76-77ac-b5e6-f9d0516c889f",
+              "apiName": "width_in"
+            },
+            {
+              "id": "019b9dc1-5257-72ca-99b2-740dcadd1c49",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a1f-80a3-75a8-bc0c-e1fc01d5eede",
+              "apiName": ""
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-191a37870b9c",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a22-07b6-718e-9be7-c8eec2d8a484",
+              "apiName": "electrical_notes"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-1d4d683a5a9f",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a20-ef61-7799-a5a4-89ed5535409b",
+              "apiName": "plumbing_notes"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-21f5a29f6b64",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a22-fa30-7184-904d-2c731bff3506",
+              "apiName": "other_notes"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-259af8d00a90",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a28-0044-75cc-8f8c-4ada66f58d03",
+              "apiName": "parent_asset_tag"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-295d3b6b69fc",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a28-a3e0-75fb-9b58-3607057dbeb5",
+              "apiName": "hospital_inv_ref_no"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-2fe90cc9c1b4",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a29-e4d2-754e-8298-5c32eecbf5f7",
+              "apiName": "serial_number"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-33a3dca429d9",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a22-6dfd-718e-b80f-17690d7e4cb9",
+              "apiName": "network_connection_notes"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-347174194942",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a2a-6314-7426-898b-4b78f8978c3d",
+              "apiName": "condition_of_asset"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-3a46c382397f",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a2b-3371-720c-b33e-27bae0dc5064",
+              "valueNumber": 1,
+              "apiName": "quantity"
+            },
+            {
+              "id": "019b9dc1-5258-740f-82a6-3de330f86fbb",
+              "parentId": "019b9dc1-5236-7608-be0b-e9981afcb6a1",
+              "questionId": "019b9a34-04e5-717e-a07f-0e94884197c4",
+              "apiName": "ihp_tag_no"
+            }
+          ]
+        }
+      ],
+      "parentId": "019b9a00-a636-76c9-a151-b03e751921a1",
+      "sectionId": "019b9a00-a636-76c9-a151-b03e751921a1"
+    },
+    {
+      "index": 11,
+      "id": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "apiName": "deficiency1",
+      "elemType": "question",
+      "label": "Inventory",
+      "labelFormula": "BLANKVALUE(equipment_name.value, \"Inventory\")",
+      "inputType": "section",
+      "style": "default",
+      "parentId": "019b9c55-f980-766d-95b3-4a2687d73fe4",
+      "sectionId": "019b9c55-f980-766d-95b3-4a2687d73fe4"
+    },
+    {
+      "index": 12,
+      "id": "019b9c5a-4592-739f-80ab-22551c1fd8e5",
+      "apiName": "type",
+      "elemType": "question",
+      "label": "Type",
+      "inputType": "radio",
+      "options": [
+        {
+          "label": "",
+          "value": "Equipment Inventory"
+        },
+        {
+          "label": "",
+          "value": "Furniture Inventory"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 13,
+      "id": "019b9d39-4362-747d-af6c-fdcef8bb1515",
+      "apiName": "add_photos",
+      "elemType": "question",
+      "label": "Add Photos",
+      "inputType": "sharinpix-app",
+      "mobileApp": {
+        "action": "capture"
+      },
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 14,
+      "id": "019b9c71-0967-7307-a4f5-c032c8a60a31",
+      "apiName": "bucket",
+      "elemType": "question",
+      "label": "Bucket",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Bedroom",
+          "visibility": "type.value = \"Furniture Inventory\""
+        },
+        {
+          "label": "",
+          "value": "Monitoring",
+          "visibility": "type.value = \"Equipment Inventory\""
+        },
+        {
+          "label": "",
+          "value": "Lighting",
+          "visibility": "type.value = \"Equipment Inventory\""
+        },
+        {
+          "label": "",
+          "value": "MSU",
+          "visibility": "type.value = \"Equipment Inventory\""
+        },
+        {
+          "label": "",
+          "value": "Furniture",
+          "visibility": "type.value = \"Furniture Inventory\""
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 15,
+      "id": "019b9c73-28b5-747c-ae68-b73cff9fa94c",
+      "apiName": "equipment",
+      "elemType": "question",
+      "label": "Equipment",
+      "defaultValueFormula": "",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Bed",
+          "visibility": "bucket.value = \"Bedroom\""
+        },
+        {
+          "label": "",
+          "value": "Table",
+          "visibility": "bucket.value = \"Bedroom\""
+        },
+        {
+          "label": "",
+          "value": "Monitor",
+          "visibility": "bucket.value = \"Monitoring\""
+        },
+        {
+          "label": "",
+          "value": "Pump",
+          "visibility": "bucket.value = \"Monitoring\""
+        },
+        {
+          "label": "",
+          "value": "Camera",
+          "visibility": "bucket.value = \"Monitoring\""
+        },
+        {
+          "label": "",
+          "value": "Television",
+          "visibility": "bucket.value = \"Monitoring\""
+        },
+        {
+          "label": "",
+          "value": "Light Ceiling Mounted",
+          "visibility": "bucket.value = \"Lighting\""
+        },
+        {
+          "label": "",
+          "value": "Light, recessed",
+          "visibility": "bucket.value = \"Lighting\""
+        },
+        {
+          "label": "",
+          "value": "Headwall",
+          "visibility": "bucket.value = \"MSU\""
+        },
+        {
+          "label": "",
+          "value": "Boom dual pendant",
+          "visibility": "bucket.value = \"MSU\""
+        },
+        {
+          "label": "",
+          "value": "Cabinet bedside",
+          "visibility": "bucket.value = \"MSU\""
+        },
+        {
+          "label": "",
+          "value": "Chair high back",
+          "visibility": "bucket.value = \"MSU\""
+        },
+        {
+          "label": "",
+          "value": "New Equipment"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 16,
+      "id": "019ba22b-b459-726a-a793-7008bbfcf68a",
+      "apiName": "equipment_name",
+      "visibility": "equipment.value = \"New Equipment\"",
+      "elemType": "question",
+      "label": "Equipment name",
+      "defaultValueFormula": "CASE(equipment.value,\n  \"New Equipment\", \"\",\n  equipment.value\n)",
+      "validations": [
+        {
+          "rule": ""
+        }
+      ],
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 17,
+      "id": "019b9a16-8883-75e0-bb5c-11c7c5657c40",
+      "apiName": "description",
+      "elemType": "question",
+      "label": "Description",
+      "required": true,
+      "defaultValue": "",
+      "defaultValueFormula": "CASE(equipment.value,\n  \"Bed\", \"electric, med surg\",\n  \"Table\", \"Overbed\",\n  \"Monitor\", \"Vital Signs\",\n   \"Television\", \"55-in\",\n   \"Headwall\", \"dual rail\",\n    \"Boom\", \"dual pendant\",\n    \"Cabinet\", \"bedside\",\n    \"Chair\", \"high back\"\n)",
+      "inputType": "textarea",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 18,
+      "id": "019b9a17-1287-74ce-b147-9269cdef1d9b",
+      "apiName": "equipment_group",
+      "elemType": "question",
+      "label": "Equipment Group",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Fixed"
+        },
+        {
+          "label": "",
+          "value": "Major moveable"
+        },
+        {
+          "label": "",
+          "value": "Minor moveable"
+        },
+        {
+          "label": "",
+          "value": "N/A"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 19,
+      "id": "019b9a18-58f6-73ab-b6d4-ac5df4cdc155",
+      "apiName": "manufacturer",
+      "elemType": "question",
+      "label": "Manufacturer",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Zimmer Biomet"
+        },
+        {
+          "label": "",
+          "value": "Canada Billiard"
+        },
+        {
+          "label": "",
+          "value": "Ergotron"
+        },
+        {
+          "label": "",
+          "value": "Bingo Pro"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 20,
+      "id": "019b9a19-4dec-7290-ac47-43bf600d70cf",
+      "apiName": "model",
+      "elemType": "question",
+      "label": "Model",
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 21,
+      "id": "019b9a19-b6db-727b-810d-8dc29f93ba6e",
+      "apiName": "equipment_type",
+      "elemType": "question",
+      "label": "Equipment Type",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Accessory"
+        },
+        {
+          "label": "",
+          "value": "Appliance"
+        },
+        {
+          "label": "",
+          "value": "Edge Device"
+        },
+        {
+          "label": "",
+          "value": "Equipement"
+        },
+        {
+          "label": "",
+          "value": "ICAT"
+        },
+        {
+          "label": "",
+          "value": "Stainless steel"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 22,
+      "id": "019b9a27-b800-732c-874c-809b6fb97bc0",
+      "apiName": "asset_tag_number",
+      "elemType": "question",
+      "label": "Asset Tag Number",
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 23,
+      "id": "019b9a1b-1031-77f0-b0ba-27e1bc11666d",
+      "apiName": "placement",
+      "elemType": "question",
+      "label": "Placement",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Counter top"
+        },
+        {
+          "label": "",
+          "value": "Floor mounted"
+        },
+        {
+          "label": "",
+          "value": "Free standing"
+        },
+        {
+          "label": "",
+          "value": "Mobile"
+        },
+        {
+          "label": "",
+          "value": "Portable"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 24,
+      "id": "019b9a1c-1749-731d-8470-d0d65e308896",
+      "apiName": "swing",
+      "elemType": "question",
+      "label": "Swing",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "Left"
+        },
+        {
+          "label": "",
+          "value": "Right"
+        },
+        {
+          "label": "",
+          "value": "Left & Right"
+        },
+        {
+          "label": "",
+          "value": "Top"
+        },
+        {
+          "label": "",
+          "value": "Front"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 25,
+      "id": "019b9a1c-e617-7219-95c9-fc4b8f7c7e6f",
+      "elemType": "richtext",
+      "richDescription": "<p><strong>Electrical&nbsp;Information</strong></p>",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 26,
+      "id": "019b9a1d-5487-7268-bbd4-0c47db58d86c",
+      "apiName": "power_connection",
+      "elemType": "question",
+      "label": "Power Connection",
+      "inputType": "select",
+      "options": [
+        {
+          "label": "",
+          "value": "GFCI"
+        },
+        {
+          "label": "",
+          "value": "Hardwired"
+        },
+        {
+          "label": "",
+          "value": "L6-30P"
+        },
+        {
+          "label": "",
+          "value": "Nema1-15P"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 27,
+      "id": "019b9a1e-5cc4-7615-afe2-576187eb30fc",
+      "apiName": "network_connection",
+      "elemType": "question",
+      "label": "Network Connection",
+      "inputType": "radio",
+      "options": [
+        {
+          "label": "",
+          "value": "Yes"
+        },
+        {
+          "label": "",
+          "value": "No"
+        }
+      ],
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 28,
+      "id": "019b9a1e-a9c8-76a9-8e44-002e9931b5ed",
+      "elemType": "richtext",
+      "richDescription": "<p><strong>Equipment&nbsp;Dimension</strong></p>",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 29,
+      "id": "019b9a1f-02bc-77cb-8a60-c3971eb9c959",
+      "apiName": "height_in",
+      "elemType": "question",
+      "label": "Height (in)",
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 30,
+      "id": "019b9a1f-3e76-77ac-b5e6-f9d0516c889f",
+      "apiName": "width_in",
+      "elemType": "question",
+      "label": "Width (in)",
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 31,
+      "id": "019b9a1f-80a3-75a8-bc0c-e1fc01d5eede",
+      "apiName": "",
+      "elemType": "question",
+      "label": "Depth (in)",
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 32,
+      "id": "019b9a20-9fb9-73aa-a80c-6ce47e7cc7a4",
+      "elemType": "richtext",
+      "richDescription": "<p><strong>Notes</strong></p>",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 33,
+      "id": "019b9a22-07b6-718e-9be7-c8eec2d8a484",
+      "apiName": "electrical_notes",
+      "elemType": "question",
+      "label": "Electrical Notes",
+      "inputType": "textarea",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 34,
+      "id": "019b9a20-ef61-7799-a5a4-89ed5535409b",
+      "apiName": "plumbing_notes",
+      "elemType": "question",
+      "label": "Plumbing notes",
+      "inputType": "textarea",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 35,
+      "id": "019b9a22-fa30-7184-904d-2c731bff3506",
+      "apiName": "other_notes",
+      "elemType": "question",
+      "label": "Other notes",
+      "inputType": "textarea",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 36,
+      "id": "019b9a28-0044-75cc-8f8c-4ada66f58d03",
+      "apiName": "parent_asset_tag",
+      "elemType": "question",
+      "label": "Parent Asset Tag",
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 37,
+      "id": "019b9a28-a3e0-75fb-9b58-3607057dbeb5",
+      "apiName": "hospital_inv_ref_no",
+      "elemType": "question",
+      "label": "Hospital Inv. Ref. No.",
+      "magicFill": {
+        "prompt": "Capture the number in the image keeping only the number as answed. If there is an error, do not output anything"
+      },
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 38,
+      "id": "019b9a29-e4d2-754e-8298-5c32eecbf5f7",
+      "apiName": "serial_number",
+      "elemType": "question",
+      "label": "Serial Number",
+      "magicFill": {
+        "prompt": "Capture the number in the image keeping only the number as answed. If there is an error, do not output anything",
+        "overwrite": true
+      },
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 39,
+      "id": "019b9a22-6dfd-718e-b80f-17690d7e4cb9",
+      "apiName": "network_connection_notes",
+      "elemType": "question",
+      "label": "Network Connection Notes",
+      "inputType": "textarea",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 40,
+      "id": "019b9a2a-6314-7426-898b-4b78f8978c3d",
+      "apiName": "condition_of_asset",
+      "elemType": "question",
+      "label": "Condition of Asset",
+      "inputType": "radio",
+      "options": [
+        {
+          "label": "",
+          "value": "Good",
+          "color": "#3BA755"
+        },
+        {
+          "label": "",
+          "value": "Fair",
+          "color": "#1A96FE"
+        },
+        {
+          "label": "",
+          "value": "Poor",
+          "color": "#e74c3c",
+          "mobileApp": {
+            "action": "capture"
+          }
+        }
+      ],
+      "note": {
+        "enable": true,
+        "requiredRule": "condition_of_asset.value = \"Poor\""
+      },
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 41,
+      "id": "019b9a2b-3371-720c-b33e-27bae0dc5064",
+      "apiName": "quantity",
+      "elemType": "question",
+      "label": "Quantity",
+      "defaultValue": 1,
+      "inputType": "number",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    },
+    {
+      "index": 42,
+      "id": "019b9a34-04e5-717e-a07f-0e94884197c4",
+      "apiName": "ihp_tag_no",
+      "elemType": "question",
+      "label": "IHP Tag No.",
+      "magicFill": {
+        "prompt": "Capture tag number keeping only the number answer and do not output anything of an error occurs."
+      },
+      "inputType": "string",
+      "parentId": "019b9c55-f980-766d-95b3-4d5a72f51f87",
+      "sectionId": "019b9c55-f980-766d-95b3-4d5a72f51f87"
+    }
+  ]
+}
