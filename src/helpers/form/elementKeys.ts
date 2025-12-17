@@ -5,13 +5,14 @@ import {
   numberTransformer,
   stringTransformer,
   type Transformer,
-} from './Transformers.js';
+} from './transformers.js';
 
 const elementKeys = [
   { key: 'id', transformer: stringTransformer },
   { key: 'note', transformer: jsonTransformer },
-  { key: 'height', transformer: numberTransformer },
+  { key: 'index', transformer: numberTransformer },
   { key: 'label', transformer: stringTransformer },
+  { key: 'height', transformer: numberTransformer },
   { key: 'style', transformer: stringTransformer },
   { key: 'apiName', transformer: stringTransformer },
   { key: 'options', transformer: arrayTransformer },
