@@ -5,7 +5,7 @@ import {
   numberTransformer,
   stringTransformer,
   type Transformer,
-} from './Transformers.js';
+} from './transformers.js';
 
 const elementKeys = [
   { key: 'id', transformer: stringTransformer },
