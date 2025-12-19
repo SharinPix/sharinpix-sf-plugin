@@ -18,11 +18,13 @@ describe('sharinpix form pull', () => {
     expect(Pull.summary).to.include('Pull SharinPix form templates');
     expect(Pull.description).to.include('Retrieves all SharinPix form templates');
     expect(Pull.flags).to.have.property('org');
+    expect(Pull.flags).to.have.property('csv');
   });
 
   it('should define the correct result type', () => {
     expect(Pull).to.be.a('function');
     expect(Pull.flags.org.required).to.be.true;
+    expect(Pull.flags.csv.type).to.equal('boolean');
   });
 
   it('should require org flag', async () => {
