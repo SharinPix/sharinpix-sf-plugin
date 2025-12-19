@@ -3,7 +3,8 @@ import path from 'node:path';
 import { stringify } from 'csv-stringify/sync';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { getJsonFiles, formatErrorMessage, orderElementKeys } from '../../../helpers/utils.js';
+import { getJsonFiles, formatErrorMessage } from '../../../helpers/utils.js';
+import { elementKeyOrder, serializeCell } from '../../../helpers/form/elementKeys.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.json2csv');
@@ -12,7 +13,7 @@ const FORMS_DIRECTORY = 'sharinpix/forms';
 
 const CSV_OPTIONS = {
   quotedMatch: /[",\n\r]/,
-  quotedEmpty: false,
+  quotedEmpty: true,
   escape: '"',
 } as const;
 
@@ -25,27 +26,24 @@ export type Json2CsvResult = {
 type FormElement = Record<string, unknown>;
 type ProcessResult = { success: true; fileName: string } | { success: false; fileName: string; reason: string };
 
-function formatCell(value: unknown): string {
-  if (value === null || value === undefined) return '';
-  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') return String(value);
-  if (Array.isArray(value) || typeof value === 'object') return JSON.stringify(value);
-  return String(value);
-}
-
 function buildHeaders(elements: FormElement[]): string[] {
   const allKeys = new Set<string>();
   for (const element of elements) {
     for (const key of Object.keys(element)) {
+      if (key === 'index') continue;
       allKeys.add(key);
     }
   }
-  return orderElementKeys(Array.from(allKeys));
+  return elementKeyOrder.filter((key) => key !== 'index' && allKeys.has(key));
 }
 
 function generateCsvContent(headers: string[], elements: FormElement[]): string {
-  const rows: string[][] = [headers];
+  const rows: Array<Array<string | undefined>> = [headers];
   for (const element of elements) {
-    const row = headers.map((key) => formatCell(element[key]));
+    const row = headers.map((key) => {
+      const value = element[key];
+      return serializeCell(key, value);
+    });
     rows.push(row);
   }
   return stringify(rows, CSV_OPTIONS);

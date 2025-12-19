@@ -1,6 +1,6 @@
 import * as crypto from 'node:crypto';
 import fs from 'node:fs';
-import { ELEMENT_KEY_ORDER } from './form/elementKeyOrder.js';
+import { elementKeyOrder } from './form/elementKeys.js';
 
 export function isJsonEqual(obj1: unknown, obj2: unknown): boolean {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
@@ -59,24 +59,7 @@ export function getCsvFiles(dirPath: string): string[] {
 }
 
 export function orderElementKeys(keys: string[]): string[] {
-  const keySet = new Set(keys);
-  const ordered: string[] = [];
-  const unknownKeys: string[] = [];
-
-  for (const key of ELEMENT_KEY_ORDER) {
-    if (keySet.has(key)) {
-      ordered.push(key);
-      keySet.delete(key);
-    }
-  }
-
-  for (const key of keys) {
-    if (keySet.has(key)) {
-      unknownKeys.push(key);
-    }
-  }
-
-  unknownKeys.sort();
-
-  return [...ordered, ...unknownKeys];
+  const knownKeys = new Set(elementKeyOrder);
+  const ordered = elementKeyOrder.filter((key) => keys.includes(key));
+  return ordered.filter((key) => knownKeys.has(key));
 }
