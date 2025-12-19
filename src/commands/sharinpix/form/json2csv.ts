@@ -4,6 +4,7 @@ import { stringify } from 'csv-stringify/sync';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 import { getJsonFiles, formatErrorMessage, orderElementKeys } from '../../../helpers/utils.js';
+import { serializeCell } from '../../../helpers/form/elementKeys.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.json2csv');
@@ -25,13 +26,6 @@ export type Json2CsvResult = {
 type FormElement = Record<string, unknown>;
 type ProcessResult = { success: true; fileName: string } | { success: false; fileName: string; reason: string };
 
-function formatCell(value: unknown): string {
-  if (value === null || value === undefined) return '';
-  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') return String(value);
-  if (Array.isArray(value) || typeof value === 'object') return JSON.stringify(value);
-  return String(value);
-}
-
 function buildHeaders(elements: FormElement[]): string[] {
   const allKeys = new Set<string>();
   for (const element of elements) {
@@ -45,7 +39,7 @@ function buildHeaders(elements: FormElement[]): string[] {
 function generateCsvContent(headers: string[], elements: FormElement[]): string {
   const rows: string[][] = [headers];
   for (const element of elements) {
-    const row = headers.map((key) => formatCell(element[key]));
+    const row = headers.map((key) => serializeCell(key, element[key]));
     rows.push(row);
   }
   return stringify(rows, CSV_OPTIONS);

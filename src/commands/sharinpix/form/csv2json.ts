@@ -4,12 +4,12 @@ import { parse } from 'csv-parse/sync';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 import { getCsvFiles, formatErrorMessage, orderElementKeys } from '../../../helpers/utils.js';
+import { parseCell } from '../../../helpers/form/elementKeys.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.csv2json');
 
 const FORMS_DIRECTORY = 'sharinpix/forms';
-const NUMERIC_FIELDS = ['index', 'max', 'min', 'step', 'rows', 'cols'];
 
 const CSV_PARSE_OPTIONS = {
   skipEmptyLines: true,
@@ -30,36 +30,13 @@ function parseCsvRows(content: string): string[][] {
   return parse(content, CSV_PARSE_OPTIONS);
 }
 
-function parseCellValue(header: string, rawValue: string): unknown {
-  const trimmed = rawValue.trim();
-  if (trimmed === '') return '';
-  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-    try {
-      const parsed = JSON.parse(trimmed) as unknown;
-      if (typeof parsed === 'object' && parsed !== null) return parsed;
-    } catch {
-      // Ignore parse errors, continue with other type detection
-    }
-  }
-
-  if (NUMERIC_FIELDS.includes(header)) {
-    const numValue = Number(trimmed);
-    const numberPattern = /^-?\d+(\.\d+)?([eE][+-]?\d+)?$/;
-    if (!Number.isNaN(numValue) && isFinite(numValue) && numberPattern.test(trimmed)) {
-      return numValue;
-    }
-  }
-
-  return trimmed;
-}
-
-function parseElementRow(row: string[], headers: string[]): FormElement {
+function parseElementRow(row: string[], headers: string[], rowIndex: number): FormElement {
   const values = new Map<string, unknown>();
   for (let index = 0; index < headers.length; index++) {
-    const header = headers[index];
+    const header = (headers[index] ?? '').trim();
     const rawValue = row[index] ?? '';
-    if (header && rawValue !== '') {
-      values.set(header, parseCellValue(header, rawValue));
+    if (header && rawValue.trim() !== '') {
+      values.set(header, parseCell(header, rawValue, { row: rowIndex, column: index + 1 }));
     }
   }
 
@@ -71,35 +48,11 @@ function parseElementRow(row: string[], headers: string[]): FormElement {
   return element;
 }
 
-function preserveElementTypes(csvElements: FormElement[], originalElements: FormElement[]): FormElement[] {
-  const originalElementsById = new Map(originalElements.map((el) => [String(el.id), el]));
-  return csvElements.map((csvElement) => {
-    const typedElement: FormElement = { ...csvElement };
-    const originalElement = originalElementsById.get(String(csvElement.id));
-    if (originalElement) {
-      for (const [key, csvValue] of Object.entries(csvElement)) {
-        const originalValue = originalElement[key];
-        if (typeof csvValue === 'string' && (csvValue === 'true' || csvValue === 'false'))
-          if (typeof originalValue === 'boolean') typedElement[key] = csvValue === 'true';
-      }
-    }
-
-    return typedElement;
-  });
-}
-
 function mergeElementsIntoJson(
   existingJson: Record<string, unknown>,
   elements: FormElement[]
 ): Record<string, unknown> {
-  const originalElements = Array.isArray(existingJson.elements) ? (existingJson.elements as FormElement[]) : [];
-  const typedElements = preserveElementTypes(elements, originalElements);
-
-  const merged: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(existingJson)) {
-    merged[key] = key === 'elements' ? typedElements : value;
-  }
-  return merged;
+  return { ...existingJson, elements };
 }
 
 async function loadAndValidateJson(jsonPath: string): Promise<Record<string, unknown>> {
@@ -139,7 +92,7 @@ async function processCsvFile(filePath: string): Promise<ProcessResult> {
     const elements: FormElement[] = [];
 
     for (let i = 1; i < rows.length; i++) {
-      elements.push(parseElementRow(rows[i], headers));
+      elements.push(parseElementRow(rows[i], headers, i + 1));
     }
 
     const jsonPath = filePath.replace(/\.csv$/i, '.json');
