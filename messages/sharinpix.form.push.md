@@ -22,6 +22,14 @@ Delete form templates from org that no longer have corresponding local files.
 
 When enabled, this flag will delete form template records from the Salesforce org if their corresponding local JSON files are missing. Use with caution as this operation cannot be undone.
 
+# flags.csv.summary
+
+Convert local CSV files to JSON before pushing.
+
+# flags.csv.description
+
+When enabled, the command first runs the CSV-to-JSON conversion (same as `sharinpix:form:csv2json`) on files in `sharinpix/forms`, then proceeds to push the resulting JSON files.
+
 # examples
 
 - Push all form templates to the default org:
@@ -35,6 +43,10 @@ When enabled, this flag will delete form template records from the Salesforce or
 - Push form templates and delete orphaned records:
 
   <%= config.bin %> <%= command.id %> --delete
+
+- Convert CSV to JSON, then push:
+
+  <%= config.bin %> <%= command.id %> --csv
 
 # info.created
 
