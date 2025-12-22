@@ -14,6 +14,14 @@ The Salesforce org to pull form templates from.
 
 The target Salesforce org containing the SharinPix form templates to be pulled.
 
+# flags.csv.summary
+
+Also generate CSV files from the downloaded JSON form definitions.
+
+# flags.csv.description
+
+When enabled, after downloading all form templates as JSON into `sharinpix/forms`, the command runs the JSON-to-CSV conversion (same as `sharinpix:form:json2csv`).
+
 # examples
 
 - Pull all form templates from the default org:
@@ -23,6 +31,10 @@ The target Salesforce org containing the SharinPix form templates to be pulled.
 - Pull form templates from a specific org:
 
   <%= config.bin %> <%= command.id %> --target-org myorg@example.com
+
+- Pull form templates and also generate CSV files:
+
+  <%= config.bin %> <%= command.id %> --csv
 
 # info.hello
 

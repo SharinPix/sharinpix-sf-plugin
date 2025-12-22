@@ -20,6 +20,7 @@ describe('sharinpix form push', () => {
     expect(Push.description).to.include('Uploads SharinPix form templates');
     expect(Push.flags).to.have.property('org');
     expect(Push.flags).to.have.property('delete');
+    expect(Push.flags).to.have.property('csv');
   });
 
   it('should define the correct result type', () => {
@@ -40,6 +41,8 @@ describe('sharinpix form push', () => {
     expect(Push.flags.org.char).to.equal('o');
     expect(Push.flags.delete.char).to.equal('d');
     expect(Push.flags.delete.default).to.be.false;
+    expect(Push.flags.csv.char).to.equal('c');
+    expect(Push.flags.csv.default).to.be.false;
   });
 
   describe('delete flag functionality', () => {
