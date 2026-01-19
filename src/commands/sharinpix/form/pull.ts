@@ -32,6 +32,12 @@ export default class Pull extends SfCommand<PullResult> {
       summary: messages.getMessage('flags.org.summary'),
       description: messages.getMessage('flags.org.description'),
     }),
+    csv: Flags.boolean({
+      char: 'c',
+      summary: messages.getMessage('flags.csv.summary'),
+      description: messages.getMessage('flags.csv.description'),
+      default: false,
+    }),
   };
 
   public async run(): Promise<PullResult> {
@@ -66,7 +72,6 @@ export default class Pull extends SfCommand<PullResult> {
         this.log(messages.getMessage('info.hello', [record.Name, record.sharinpix__FormUrl__c]));
         formsDownloaded++;
       } catch (error) {
-        // Skip forms that can't be fetched (e.g., network errors, invalid URLs)
         this.warn(
           `Failed to fetch form template ${record.Name}: ${error instanceof Error ? error.message : 'Unknown error'}`
         );
@@ -75,6 +80,10 @@ export default class Pull extends SfCommand<PullResult> {
     }
 
     this.log(`Successfully downloaded ${formsDownloaded} form template(s). ${formsFailed} failed.`);
+
+    if (flags.csv) {
+      await this.config.runCommand('sharinpix:form:json2csv', []);
+    }
 
     return {
       name: 'OK',

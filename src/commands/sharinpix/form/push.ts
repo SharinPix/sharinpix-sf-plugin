@@ -46,11 +46,21 @@ export default class Push extends SfCommand<PushResult> {
       description: messages.getMessage('flags.delete.description'),
       default: false,
     }),
+    csv: Flags.boolean({
+      char: 'c',
+      summary: messages.getMessage('flags.csv.summary'),
+      description: messages.getMessage('flags.csv.description'),
+      default: false,
+    }),
   };
 
   public async run(): Promise<PushResult> {
     const { flags } = await this.parse(Push);
     const connection = flags.org.getConnection('63.0');
+
+    if (flags.csv) {
+      await this.config.runCommand('sharinpix:form:csv2json', []);
+    }
 
     const files = getJsonFiles('sharinpix/forms');
 
