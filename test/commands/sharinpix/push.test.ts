@@ -52,7 +52,7 @@ describe('sharinpix push', () => {
     const pushInstance = new Push(argv, config as any);
 
     const orgStub = {
-      getUsername: () => 'test-org'
+      getUsername: () => 'test-org',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     $$.SANDBOX.stub(pushInstance as any, 'parse').callsFake(async () => ({ flags: { org: orgStub, delete: false } }));
@@ -86,7 +86,7 @@ describe('sharinpix push', () => {
     const pushInstance = new Push(argv, config as any);
 
     const orgStub = {
-      getUsername: () => 'test-org'
+      getUsername: () => 'test-org',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     $$.SANDBOX.stub(pushInstance as any, 'parse').callsFake(async () => ({ flags: { org: orgStub, delete: true } }));

@@ -54,7 +54,7 @@ describe('sharinpix pull', () => {
 
     // Stub parse to return a mocked org flag
     const orgStub = {
-      getUsername: () => 'test-org'
+      getUsername: () => 'test-org',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     $$.SANDBOX.stub(pullInstance as any, 'parse').callsFake(async () => ({ flags: { org: orgStub } }));

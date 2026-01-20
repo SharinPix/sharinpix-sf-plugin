@@ -68,7 +68,8 @@ export default class Pull extends SfCommand<PullResult> {
       } catch (error) {
         // Skip permissions that can't be fetched (e.g., network errors, invalid data)
         this.warn(
-          `Failed to fetch SharinPix permission ${record.Name}: ${error instanceof Error ? error.message : 'Unknown error'
+          `Failed to fetch SharinPix permission ${record.Name}: ${
+            error instanceof Error ? error.message : 'Unknown error'
           }`
         );
         permissionsFailed++;
