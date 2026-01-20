@@ -87,11 +87,7 @@ describe('sharinpix form csv2json', () => {
   });
 
   it('should handle CSV with quoted values containing commas', async () => {
-    const csvContent = [
-      'id,label,type',
-      '1,"Question, with comma",text',
-      '2,"Another, question",select',
-    ].join('\n');
+    const csvContent = ['id,label,type', '1,"Question, with comma",text', '2,"Another, question",select'].join('\n');
 
     const formWithCommasJson = JSON.stringify({
       name: 'FormWithCommas',
@@ -128,11 +124,7 @@ describe('sharinpix form csv2json', () => {
   });
 
   it('should handle CSV with escaped quotes', async () => {
-    const csvContent = [
-      'id,label,type',
-      '1,"Question with ""quotes""",text',
-      '2,Regular question,select',
-    ].join('\n');
+    const csvContent = ['id,label,type', '1,"Question with ""quotes""",text', '2,Regular question,select'].join('\n');
 
     const formWithQuotesJson = JSON.stringify({
       name: 'FormWithQuotes',
@@ -168,16 +160,11 @@ describe('sharinpix form csv2json', () => {
   });
 
   it('should handle CSV with newlines in quoted values', async () => {
-    const csvContent = [
-      'id,label,type',
-      '1,"Question with\nnewline",text',
-    ].join('\n');
+    const csvContent = ['id,label,type', '1,"Question with\nnewline",text'].join('\n');
 
     const formWithNewlineJson = JSON.stringify({
       name: 'FormWithNewline',
-      elements: [
-        { id: '1', label: 'Question with\nnewline', type: 'text' },
-      ],
+      elements: [{ id: '1', label: 'Question with\nnewline', type: 'text' }],
     });
 
     mock({
@@ -233,12 +220,7 @@ describe('sharinpix form csv2json', () => {
   });
 
   it('should handle CSV with empty cells', async () => {
-    const csvContent = [
-      'id,label,type,options',
-      '1,Question 1,text,',
-      '2,,select,',
-      '3,Question 3,,',
-    ].join('\n');
+    const csvContent = ['id,label,type,options', '1,Question 1,text,', '2,,select,', '3,Question 3,,'].join('\n');
 
     const formWithEmptyJson = JSON.stringify({
       name: 'FormWithEmpty',
@@ -279,16 +261,11 @@ describe('sharinpix form csv2json', () => {
   });
 
   it('should handle options field with non-JSON values', async () => {
-    const csvContent = [
-      'id,label,type,options',
-      '1,Question 1,text,plain-text-option',
-    ].join('\n');
+    const csvContent = ['id,label,type,options', '1,Question 1,text,plain-text-option'].join('\n');
 
     const formWithPlainOptionsJson = JSON.stringify({
       name: 'FormWithPlainOptions',
-      elements: [
-        { id: '1', label: 'Question 1', type: 'text', options: 'plain-text-option' },
-      ],
+      elements: [{ id: '1', label: 'Question 1', type: 'text', options: 'plain-text-option' }],
     });
 
     mock({
@@ -396,5 +373,3 @@ describe('sharinpix form csv2json', () => {
     expect(parsed.elements[0]).to.include({ id: '1', label: 'Question 1', type: 'text' });
   });
 });
-
-

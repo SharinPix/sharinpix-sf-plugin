@@ -44,4 +44,3 @@ describe('sharinpix form csv2json NUTs', () => {
     expect(result.jsonOutput?.result?.name).to.equal('OK');
   });
 });
-
