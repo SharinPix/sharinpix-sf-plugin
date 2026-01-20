@@ -59,7 +59,7 @@ export default class Push extends SfCommand<PushResult> {
     return this.runWithFlags(flags);
   }
 
-  public async runWithFlags(flags: { org: Org; delete: boolean }): Promise<PushResult> {
+  public async runWithFlags(flags: { org: Org; delete: boolean; csv?: boolean }): Promise<PushResult> {
     const connection = flags.org.getConnection('63.0');
 
     if (flags.csv) {

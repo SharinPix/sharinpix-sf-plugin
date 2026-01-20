@@ -45,7 +45,7 @@ export default class Pull extends SfCommand<PullResult> {
     return this.runWithFlags(flags);
   }
 
-  public async runWithFlags(flags: { org: Org }): Promise<PullResult> {
+  public async runWithFlags(flags: { org: Org; csv?: boolean }): Promise<PullResult> {
     const connection = flags.org.getConnection('63.0');
     fs.mkdirSync('sharinpix/forms', { recursive: true });
 
