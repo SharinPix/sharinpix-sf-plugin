@@ -110,7 +110,7 @@ describe('sharinpix config push', () => {
     expect(result.success).to.be.true;
     expect(fetchStub.callCount).to.equal(1);
     expect(fetchStub.firstCall.args[0]).to.equal('https://example.com/api/v1/organization/config');
-    expect(fetchStub.firstCall.args[1]).to.have.property('method', 'POST');
+    expect(fetchStub.firstCall.args[1]).to.have.property('method', 'PUT');
   });
 
   it('should handle API errors gracefully', async () => {
