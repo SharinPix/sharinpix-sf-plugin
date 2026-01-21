@@ -27,7 +27,7 @@ type FormElement = Record<string, unknown>;
 type ProcessResult = { success: true; fileName: string } | { success: false; fileName: string; reason: string };
 
 function parseCsvRows(content: string): string[][] {
-  return parse(content, CSV_PARSE_OPTIONS) as string[][];
+  return parse(content, CSV_PARSE_OPTIONS);
 }
 
 function parseCellValue(header: string, rawValue: string): unknown {
