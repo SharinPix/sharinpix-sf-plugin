@@ -50,12 +50,12 @@ export default class Push extends SfCommand<PushResult> {
 
       // Push config to API
       const response = await fetch(`${responseToken.host}/api/v1/organization/config`, {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(config),
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Authorization: `Bearer ${responseToken.token}`,
+          Accept: '*/*',
+          Authorization: `Token token="${responseToken.token}"`,
         },
       });
 
@@ -70,9 +70,7 @@ export default class Push extends SfCommand<PushResult> {
         success: true,
       };
     } catch (error) {
-      this.error(
-        messages.getMessage('error.failed', [formatErrorMessage(error)])
-      );
+      this.error(messages.getMessage('error.failed', [formatErrorMessage(error)]));
     }
   }
 }
