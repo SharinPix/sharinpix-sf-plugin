@@ -2,7 +2,7 @@
 /* eslint-disable no-await-in-loop */
 import fs from 'node:fs';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
-import { Messages } from '@salesforce/core';
+import { Messages, Org } from '@salesforce/core';
 import { createSafeFilename } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -36,14 +36,17 @@ export default class Pull extends SfCommand<PullResult> {
 
   public async run(): Promise<PullResult> {
     const { flags } = await this.parse(Pull);
+    return this.runWithFlags(flags);
+  }
+
+  public async runWithFlags(flags: { org: Org }): Promise<PullResult> {
     const connection = flags.org.getConnection('63.0');
     fs.mkdirSync('sharinpix/permissions', { recursive: true });
 
-    const records = (
-      await connection.query<SharinPixPermissionRecord>(
-        'SELECT Id, Name, sharinpix__Description__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c order by LastModifiedDate desc'
-      )
-    ).records;
+    const result = await connection.query<SharinPixPermissionRecord>(
+      'SELECT Id, Name, sharinpix__Description__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c order by LastModifiedDate desc'
+    );
+    const records = result.records;
 
     let permissionsDownloaded = 0;
     let permissionsFailed = 0;
