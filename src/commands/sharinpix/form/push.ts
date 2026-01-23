@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-await-in-loop */
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
-import { Messages } from '@salesforce/core';
+import { Messages, Org } from '@salesforce/core';
 import {
   isJsonEqual,
   readJsonFile,
@@ -56,6 +56,10 @@ export default class Push extends SfCommand<PushResult> {
 
   public async run(): Promise<PushResult> {
     const { flags } = await this.parse(Push);
+    return this.runWithFlags(flags);
+  }
+
+  public async runWithFlags(flags: { org: Org; delete: boolean; csv?: boolean }): Promise<PushResult> {
     const connection = flags.org.getConnection('63.0');
 
     if (flags.csv) {
