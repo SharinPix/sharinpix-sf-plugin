@@ -26,7 +26,7 @@ The Salesforce org used to obtain the authentication token for accessing the Sha
 
 # info.success
 
-Successfully pulled organization config to sharinpix/configs/config.json
+Successfully pulled organization config to sharinpix/config.json
 
 # error.failed
 
@@ -34,4 +34,4 @@ Failed to pull organization config: %s
 
 # error.notFound
 
-Config file not found at sharinpix/configs/config.json
+Config file not found at sharinpix/config.json

@@ -34,4 +34,4 @@ Failed to push organization config: %s
 
 # error.notFound
 
-Config file not found at sharinpix/configs/config.json. Run 'sharinpix:config:pull' first or create the file manually.
+Config file not found at sharinpix/config.json. Run 'sharinpix:config:pull' first or create the file manually.

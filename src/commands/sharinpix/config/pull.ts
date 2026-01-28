@@ -57,7 +57,7 @@ export default class Pull extends SfCommand<PullResult> {
       const config: unknown = await response.json();
 
       // Save to local file
-      fs.writeFileSync('sharinpix/configs/config.json', JSON.stringify(config, null, 2));
+      fs.writeFileSync('sharinpix/config.json', JSON.stringify(config, null, 2));
       this.log(messages.getMessage('info.success'));
 
       return {

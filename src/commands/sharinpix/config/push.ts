@@ -31,11 +31,11 @@ export default class Push extends SfCommand<PushResult> {
 
     try {
       // Read local config file
-      if (!fs.existsSync('sharinpix/configs/config.json')) {
+      if (!fs.existsSync('sharinpix/config.json')) {
         this.error(messages.getMessage('error.notFound'));
       }
 
-      const configContent = fs.readFileSync('sharinpix/configs/config.json', 'utf-8');
+      const configContent = fs.readFileSync('sharinpix/config.json', 'utf-8');
       const config: unknown = JSON.parse(configContent);
 
       // Get authentication token
