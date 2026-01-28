@@ -77,7 +77,7 @@ describe('sharinpix config push', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     mock({
-      'sharinpix/configs': {
+      sharinpix: {
         'config.json': JSON.stringify(mockConfig),
       },
     });
@@ -121,7 +121,7 @@ describe('sharinpix config push', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     mock({
-      'sharinpix/configs': {
+      sharinpix: {
         'config.json': JSON.stringify(mockConfig),
       },
     });
@@ -159,7 +159,7 @@ describe('sharinpix config push', () => {
   it('should handle invalid JSON in config file', async () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     mock({
-      'sharinpix/configs': {
+      sharinpix: {
         'config.json': 'invalid-json',
       },
     });
