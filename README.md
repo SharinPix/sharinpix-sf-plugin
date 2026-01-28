@@ -128,10 +128,115 @@ Both `form push` and `permission push` commands support a `--delete/-d` flag tha
 
 <!-- commands -->
 
+- [`sf sharinpix pull`](#sf-sharinpix-pull)
+- [`sf sharinpix push`](#sf-sharinpix-push)
+- [`sf sharinpix form csv2json`](#sf-sharinpix-form-csv2json)
+- [`sf sharinpix form json2csv`](#sf-sharinpix-form-json2csv)
 - [`sf sharinpix form pull`](#sf-sharinpix-form-pull)
 - [`sf sharinpix form push`](#sf-sharinpix-form-push)
 - [`sf sharinpix permission pull`](#sf-sharinpix-permission-pull)
 - [`sf sharinpix permission push`](#sf-sharinpix-permission-push)
+
+## `sf sharinpix pull`
+
+Pull all SharinPix assets (forms and permissions) from Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix pull [--json] [-o <value>]
+
+FLAGS
+  -o, --target-org=<value>  The Salesforce org to pull assets from.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Retrieves all SharinPix form templates and permissions from the connected Salesforce org. This is a convenience command that executes both sharinpix:form:pull and sharinpix:permission:pull.
+
+EXAMPLES
+  Pull all assets from the default org:
+
+    $ sf sharinpix pull
+
+  Pull all assets from a specific org:
+
+    $ sf sharinpix pull --target-org myorg@example.com
+```
+
+## `sf sharinpix push`
+
+Push all SharinPix assets (forms and permissions) to Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix push [--json] [-o <value>] [-d]
+
+FLAGS
+  -d, --delete              Delete assets in the org that do not exist locally.
+  -o, --target-org=<value>  The Salesforce org to push assets to.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Uploads all local SharinPix form templates and permissions to the connected Salesforce org. This is a convenience command that executes both sharinpix:form:push and sharinpix:permission:push.
+
+  When the --delete flag is used, the command will also delete both form template and permission records from Salesforce that no longer have corresponding local JSON files. Use this flag with caution as deletions cannot be undone.
+
+EXAMPLES
+  Push all assets to the default org:
+
+    $ sf sharinpix push
+
+  Push all assets to a specific org:
+
+    $ sf sharinpix push --target-org myorg@example.com
+
+  Push all assets and delete missing ones from the org:
+
+    $ sf sharinpix push --delete
+```
+
+## `sf sharinpix form csv2json`
+
+Generate JSON files from SharinPix form CSV definitions.
+
+```
+USAGE
+  $ sf sharinpix form csv2json [--json]
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Scans the local sharinpix/forms directory for SharinPix form CSV definition files and generates corresponding JSON files. Each CSV file is expected to have a header row of element keys and one row per element, as produced by the json2csv command.
+
+EXAMPLES
+  Generate JSON files for all local SharinPix form CSV definitions:
+
+    $ sf sharinpix form csv2json
+```
+
+## `sf sharinpix form json2csv`
+
+Generate CSV files from SharinPix form JSON definitions.
+
+```
+USAGE
+  $ sf sharinpix form json2csv [--json]
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Scans the local sharinpix/forms directory for SharinPix form JSON definition files and generates corresponding CSV files. The CSV files contain a header row built from all element keys and one row per element. Nested values are stringified.
+
+EXAMPLES
+  Generate CSV files for all local SharinPix form JSON definitions:
+
+    $ sf sharinpix form json2csv
+```
 
 ## `sf sharinpix form pull`
 
