@@ -38,14 +38,8 @@ export default class Push extends SfCommand<PushResult> {
       const configContent = fs.readFileSync('sharinpix/config.json', 'utf-8');
       const config: unknown = JSON.parse(configContent);
 
-      // Get authentication token
-      const body = {
-        // eslint-disable-next-line camelcase
-        form_template_create: true,
-      };
-
       const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
-        payload: JSON.stringify(body),
+        payload: JSON.stringify({}),
       });
 
       // Push config to API
