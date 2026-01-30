@@ -2,7 +2,7 @@
 
 [![NPM](https://img.shields.io/npm/v/@sharinpix/sharinpix-sf-cli.svg?label=@sharinpix/sharinpix-sf-cli)](https://www.npmjs.com/package/@sharinpix/sharinpix-sf-cli) [![Downloads/week](https://img.shields.io/npm/dw/@sharinpix/sharinpix-sf-cli.svg)](https://npmjs.org/package/@sharinpix/sharinpix-sf-cli) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/sharinpix/sharinpix-sf-cli/main/LICENSE.txt)
 
-The SharinPix Salesforce CLI plugin provides tools to interact with SharinPix form templates and permissions in your Salesforce orgs. This plugin allows you to pull and push form templates and permissions from/to your Salesforce org, saving them as local JSON files for version control and deployment management.
+The SharinPix Salesforce CLI plugin provides tools to interact with SharinPix organization configuration, form templates, and permissions in your Salesforce orgs. This plugin allows you to pull and push configs, form templates, and permissions from/to your Salesforce org, saving them as local JSON files for version control and deployment management.
 
 ## Learn about `sf` plugins
 
@@ -40,15 +40,24 @@ We always recommend using the latest version of these commands bundled with the 
 sf org login web
 sf plugins install @sharinpix/sharinpix-sf-cli
 
-# Pull form templates and permissions from Salesforce
+# Pull all (configs, forms, and permissions) from Salesforce
+sf sharinpix pull -o yourusername@salesforce.com
+
+# Push all (configs, forms, and permissions) to Salesforce
+sf sharinpix push -o yourusername@salesforce.com
+
+# Pull individual components
+sf sharinpix config pull -o yourusername@salesforce.com
 sf sharinpix form pull -o yourusername@salesforce.com
 sf sharinpix permission pull -o yourusername@salesforce.com
 
-# Push form templates and permissions to Salesforce
+# Push individual components
+sf sharinpix config push -o yourusername@salesforce.com
 sf sharinpix form push -o yourusername@salesforce.com
 sf sharinpix permission push -o yourusername@salesforce.com
 
-# Push with deletion of orphaned records (records that exist in Salesforce but have no corresponding local files)
+# Push with deletion of orphaned records (for forms and permissions only)
+sf sharinpix push -o yourusername@salesforce.com --delete
 sf sharinpix form push -o yourusername@salesforce.com --delete
 sf sharinpix permission push -o yourusername@salesforce.com -d
 ```
@@ -92,6 +101,8 @@ To use your plugin, run using the local `./bin/dev` or `./bin/dev.cmd` file.
 
 ```bash
 # Run using local run file.
+./bin/dev sharinpix pull --target-org myorg@example.com
+./bin/dev sharinpix config pull --target-org myorg@example.com
 ./bin/dev sharinpix form pull --target-org myorg@example.com
 ./bin/dev sharinpix permission pull --target-org myorg@example.com
 ```
@@ -130,6 +141,8 @@ Both `form push` and `permission push` commands support a `--delete/-d` flag tha
 
 - [`sf sharinpix pull`](#sf-sharinpix-pull)
 - [`sf sharinpix push`](#sf-sharinpix-push)
+- [`sf sharinpix config pull`](#sf-sharinpix-config-pull)
+- [`sf sharinpix config push`](#sf-sharinpix-config-push)
 - [`sf sharinpix form csv2json`](#sf-sharinpix-form-csv2json)
 - [`sf sharinpix form json2csv`](#sf-sharinpix-form-json2csv)
 - [`sf sharinpix form pull`](#sf-sharinpix-form-pull)
@@ -139,63 +152,117 @@ Both `form push` and `permission push` commands support a `--delete/-d` flag tha
 
 ## `sf sharinpix pull`
 
-Pull all SharinPix assets (forms and permissions) from Salesforce org.
+Pull all SharinPix components (configs, forms, and permissions) from Salesforce org.
 
 ```
 USAGE
   $ sf sharinpix pull [--json] [-o <value>]
 
 FLAGS
-  -o, --target-org=<value>  The Salesforce org to pull assets from.
+  -o, --target-org=<value>  The Salesforce org to pull components from.
 
 GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Retrieves all SharinPix form templates and permissions from the connected Salesforce org. This is a convenience command that executes both sharinpix:form:pull and sharinpix:permission:pull.
+  Retrieves all SharinPix components including organization configuration, form templates, and permissions from the connected Salesforce org. This is a convenience command that executes sharinpix:config:pull, sharinpix:form:pull, and sharinpix:permission:pull.
 
 EXAMPLES
-  Pull all assets from the default org:
+  Pull all components from the default org:
 
     $ sf sharinpix pull
 
-  Pull all assets from a specific org:
+  Pull all components from a specific org:
 
     $ sf sharinpix pull --target-org myorg@example.com
 ```
 
 ## `sf sharinpix push`
 
-Push all SharinPix assets (forms and permissions) to Salesforce org.
+Push all SharinPix components (configs, forms, and permissions) to Salesforce org.
 
 ```
 USAGE
   $ sf sharinpix push [--json] [-o <value>] [-d]
 
 FLAGS
-  -d, --delete              Delete assets in the org that do not exist locally.
-  -o, --target-org=<value>  The Salesforce org to push assets to.
+  -d, --delete              Delete forms and permissions in the org that do not exist locally.
+  -o, --target-org=<value>  The Salesforce org to push components to.
 
 GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Uploads all local SharinPix form templates and permissions to the connected Salesforce org. This is a convenience command that executes both sharinpix:form:push and sharinpix:permission:push.
+  Uploads all local SharinPix components including organization configuration, form templates, and permissions to the connected Salesforce org. This is a convenience command that executes sharinpix:config:push, sharinpix:form:push, and sharinpix:permission:push.
 
-  When the --delete flag is used, the command will also delete both form template and permission records from Salesforce that no longer have corresponding local JSON files. Use this flag with caution as deletions cannot be undone.
+  When the --delete flag is used, the command will also delete form template and permission records from Salesforce that no longer have corresponding local JSON files. Use this flag with caution as deletions cannot be undone. Note: The delete flag does not apply to configs.
 
 EXAMPLES
-  Push all assets to the default org:
+  Push all components to the default org:
 
     $ sf sharinpix push
 
-  Push all assets to a specific org:
+  Push all components to a specific org:
 
     $ sf sharinpix push --target-org myorg@example.com
 
-  Push all assets and delete missing ones from the org:
+  Push all components and delete missing forms/permissions from the org:
 
     $ sf sharinpix push --delete
+```
+
+## `sf sharinpix config pull`
+
+Pull SharinPix organization configuration from Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix config pull [--json] [-o <value>]
+
+FLAGS
+  -o, --target-org=<value>  The Salesforce org to pull configuration from.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Retrieves the SharinPix organization configuration from the connected Salesforce org and saves it as a JSON file in the local sharinpix/config.json file.
+
+EXAMPLES
+  Pull configuration from the default org:
+
+    $ sf sharinpix config pull
+
+  Pull configuration from a specific org:
+
+    $ sf sharinpix config pull --target-org myorg@example.com
+```
+
+## `sf sharinpix config push`
+
+Push SharinPix organization configuration to Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix config push [--json] [-o <value>]
+
+FLAGS
+  -o, --target-org=<value>  The Salesforce org to push configuration to.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Uploads the SharinPix organization configuration from the local sharinpix/config.json file to the connected Salesforce org.
+
+EXAMPLES
+  Push configuration to the default org:
+
+    $ sf sharinpix config push
+
+  Push configuration to a specific org:
+
+    $ sf sharinpix config push --target-org myorg@example.com
 ```
 
 ## `sf sharinpix form csv2json`

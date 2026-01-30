@@ -2,6 +2,7 @@ import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import Pull from '../../../src/commands/sharinpix/pull.js';
+import ConfigPull from '../../../src/commands/sharinpix/config/pull.js';
 import FormPull from '../../../src/commands/sharinpix/form/pull.js';
 import PermissionPull from '../../../src/commands/sharinpix/permission/pull.js';
 
@@ -33,6 +34,12 @@ describe('sharinpix pull', () => {
 
   it('should call form and permission pull commands', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    const configRunStub = $$.SANDBOX.stub(ConfigPull.prototype, 'runWithFlags').resolves({
+      name: 'OK',
+      success: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
     const formRunStub = $$.SANDBOX.stub(FormPull.prototype, 'runWithFlags').resolves({
       name: 'OK',
       formsDownloaded: 1,
@@ -61,6 +68,7 @@ describe('sharinpix pull', () => {
 
     const result = await pullInstance.run();
 
+    expect(configRunStub.calledOnce).to.be.true;
     expect(formRunStub.calledOnce).to.be.true;
     expect(permissionRunStub.calledOnce).to.be.true;
     expect(result.forms).to.deep.equal({
