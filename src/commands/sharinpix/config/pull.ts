@@ -69,9 +69,7 @@ export default class Pull extends SfCommand<PullResult> {
         success: true,
       };
     } catch (error) {
-      this.error(
-        messages.getMessage('error.failed', [formatErrorMessage(error)])
-      );
+      this.error(messages.getMessage('error.failed', [formatErrorMessage(error)]));
     }
   }
 }
