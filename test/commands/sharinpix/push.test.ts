@@ -2,6 +2,7 @@ import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import Push from '../../../src/commands/sharinpix/push.js';
+import ConfigPush from '../../../src/commands/sharinpix/config/push.js';
 import FormPush from '../../../src/commands/sharinpix/form/push.js';
 import PermissionPush from '../../../src/commands/sharinpix/permission/push.js';
 
@@ -34,6 +35,12 @@ describe('sharinpix push', () => {
 
   it('should call form and permission push commands', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    const configRunStub = $$.SANDBOX.stub(ConfigPush.prototype, 'runWithFlags').resolves({
+      name: 'OK',
+      success: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
     const formRunStub = $$.SANDBOX.stub(FormPush.prototype, 'runWithFlags').resolves({
       name: 'OK',
       uploaded: 1,
@@ -59,6 +66,7 @@ describe('sharinpix push', () => {
 
     const result = await pushInstance.run();
 
+    expect(configRunStub.calledOnce).to.be.true;
     expect(formRunStub.calledOnce).to.be.true;
     expect(permissionRunStub.calledOnce).to.be.true;
     expect(result.forms).to.deep.equal({
@@ -75,6 +83,12 @@ describe('sharinpix push', () => {
   });
 
   it('should pass delete flag to sub-commands', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    const configRunStub = $$.SANDBOX.stub(ConfigPush.prototype, 'runWithFlags').resolves({
+      name: 'OK',
+      success: true,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
     const formRunStub = $$.SANDBOX.stub(FormPush.prototype, 'runWithFlags').resolves({ name: 'OK' } as any);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
@@ -93,6 +107,7 @@ describe('sharinpix push', () => {
 
     await pushInstance.run();
 
+    expect(configRunStub.calledOnce).to.be.true;
     expect(formRunStub.firstCall.args[0]).to.have.property('delete', true);
     expect(permissionRunStub.firstCall.args[0]).to.have.property('delete', true);
   });
