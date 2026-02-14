@@ -190,7 +190,7 @@
     "husky": "^9.1.7",
     "mock-fs": "^5.5.0",
     "oclif": "^4.22.67",
-    "semantic-release": "^24.2.7",
+    "semantic-release": "^24.2.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
