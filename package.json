@@ -61,9 +61,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "release": {
-    "branches": ["csv-editor"]
-  },
   "wireit": {
     "build": {
       "dependencies": [
