@@ -1,9 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { stringify } from 'csv-stringify/sync';
-import { SfCommand } from '@salesforce/sf-plugins-core';
+import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 import { getJsonFiles, formatErrorMessage, orderElementKeys } from '../../../helpers/utils.js';
+import { listCsvFiles } from '../../../shared/csv-editor/pathSafety.js';
+import { startCsvEditor } from '../../../shared/csv-editor/startCsvEditor.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.json2csv');
@@ -79,7 +81,35 @@ export default class Json2Csv extends SfCommand<Json2CsvResult> {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
 
+  public static readonly flags = {
+    edit: Flags.boolean({
+      summary: messages.getMessage('flags.edit.summary'),
+      description: messages.getMessage('flags.edit.description'),
+      default: true,
+      allowNo: true,
+    }),
+    port: Flags.integer({
+      summary: messages.getMessage('flags.port.summary'),
+      description: messages.getMessage('flags.port.description'),
+      default: 0,
+    }),
+    recursive: Flags.boolean({
+      summary: messages.getMessage('flags.recursive.summary'),
+      description: messages.getMessage('flags.recursive.description'),
+      default: true,
+      allowNo: true,
+    }),
+    open: Flags.boolean({
+      summary: messages.getMessage('flags.open.summary'),
+      description: messages.getMessage('flags.open.description'),
+      default: true,
+      allowNo: true,
+    }),
+  };
+
   public async run(): Promise<Json2CsvResult> {
+    const { flags } = await this.parse(Json2Csv);
+
     let files: string[];
     try {
       files = getJsonFiles(FORMS_DIRECTORY);
@@ -100,6 +130,40 @@ export default class Json2Csv extends SfCommand<Json2CsvResult> {
       skipped++;
     });
     this.log(messages.getMessage('info.summary', [converted, skipped]));
+
+    const outputDir = path.resolve(FORMS_DIRECTORY);
+    if (flags.edit) {
+      const csvFiles = listCsvFiles(outputDir, flags.recursive);
+      if (csvFiles.length === 0) {
+        this.log(messages.getMessage('info.noCsvFiles'));
+        return { name: 'OK', converted, skipped };
+      }
+      try {
+        const { url, close } = await startCsvEditor({
+          outputDir,
+          port: flags.port,
+          recursive: flags.recursive,
+          openBrowser: flags.open,
+        });
+        this.log(messages.getMessage('info.editorStarting', [url]));
+        await new Promise<void>((resolve) => {
+          const onSignal = (): void => {
+            process.off('SIGINT', onSignal);
+            process.off('SIGTERM', onTerm);
+            void close().then(resolve);
+          };
+          const onTerm = (): void => {
+            process.off('SIGINT', onSignal);
+            process.off('SIGTERM', onTerm);
+            void close().then(resolve);
+          };
+          process.on('SIGINT', onSignal);
+          process.on('SIGTERM', onTerm);
+        });
+      } catch (error) {
+        this.warn(formatErrorMessage(error));
+      }
+    }
 
     return {
       name: 'OK',

@@ -6,7 +6,10 @@
     "@oclif/core": "^4",
     "@salesforce/core": "^8",
     "@salesforce/sf-plugins-core": "^12",
-    "csv": "^6.4.1"
+    "csv": "^6.4.1",
+    "fastify": "^4.28.0",
+    "@fastify/static": "^7.0.0",
+    "open": "^10.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -62,7 +65,8 @@
     "build": {
       "dependencies": [
         "compile",
-        "lint"
+        "lint",
+        "copy-csv-editor"
       ]
     },
     "compile": {
@@ -77,6 +81,12 @@
         "*.tsbuildinfo"
       ],
       "clean": "if-file-deleted"
+    },
+    "copy-csv-editor": {
+      "command": "node -e \"const fs=require('fs');const path=require('path');const src='src/shared/csv-editor/public';const dest='lib/shared/csv-editor/public';if(fs.existsSync(src)){fs.mkdirSync(path.dirname(dest),{recursive:true});fs.cpSync(src,dest,{recursive:true});}\"",
+      "dependencies": ["compile"],
+      "files": ["src/shared/csv-editor/public/**"],
+      "output": ["lib/shared/csv-editor/public/**"]
     },
     "format": {
       "command": "prettier --write \"+(src|test|schemas)/**/*.+(ts|js|json)|command-snapshot.json\"",

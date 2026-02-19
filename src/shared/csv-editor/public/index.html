@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SharinPix CLI CSV editor</title>
+    <script src="/oi.csv.js"></script>
+    <script src="/oi.csv.editor.js"></script>
+    <link rel="stylesheet" href="/styles.css" type="text/css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>SharinPix CLI CSV editor</h1>
+        <div class="toolbar">
+          <select id="fileList" aria-label="Select CSV file">
+            <option value="">-- Select a file --</option>
+          </select>
+          <button type="button" id="btnLoad" disabled>Load</button>
+          <button type="button" id="btnSave" disabled>Save</button>
+          <button type="button" id="btnReload" disabled>Reload from disk</button>
+        </div>
+        <div id="status" class="status" aria-live="polite"></div>
+      </header>
+      <main class="main">
+        <div id="editorTarget"></div>
+      </main>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>

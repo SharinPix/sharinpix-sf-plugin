@@ -289,9 +289,14 @@ EXAMPLES
 
 Generate CSV files from SharinPix form JSON definitions.
 
+After conversion, the command can open the output folder once in your file manager so you can pick which CSV to edit in Excel, Numbers, LibreOffice, or another app.
+
 ```
 USAGE
-  $ sf sharinpix form json2csv [--json]
+  $ sf sharinpix form json2csv [--json] [--no-edit]
+
+FLAGS
+  --no-edit  Do not open the output folder after conversion.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -299,10 +304,16 @@ GLOBAL FLAGS
 DESCRIPTION
   Scans the local sharinpix/forms directory for SharinPix form JSON definition files and generates corresponding CSV files. The CSV files contain a header row built from all element keys and one row per element. Nested values are stringified.
 
+  By default, after generating CSVs, the command opens the output folder once. Use --no-edit to skip.
+
 EXAMPLES
-  Generate CSV files for all local SharinPix form JSON definitions:
+  Generate CSV files and open the folder:
 
     $ sf sharinpix form json2csv
+
+  Generate CSV files without opening the folder:
+
+    $ sf sharinpix form json2csv --no-edit
 ```
 
 ## `sf sharinpix form pull`
