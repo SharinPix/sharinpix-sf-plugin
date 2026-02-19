@@ -30,7 +30,7 @@ jobs:
     permissions:
       contents: write
       packages: write
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js
