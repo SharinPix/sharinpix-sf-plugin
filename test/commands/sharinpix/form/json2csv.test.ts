@@ -48,9 +48,15 @@ describe('sharinpix form json2csv', () => {
       },
     });
 
-    const argv: string[] = [];
+    const argv: string[] = ['--no-edit'];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    const config: any = {
+      bin: 'sf',
+      name: 'test',
+      root: '',
+      version: '1.0.0',
+      runHook: async () => ({ successes: [] }),
+    };
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const json2csv = new Json2Csv(argv, config);
 
@@ -124,9 +130,15 @@ describe('sharinpix form json2csv', () => {
       },
     });
 
-    const argv: string[] = [];
+    const argv: string[] = ['--no-edit'];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    const config: any = {
+      bin: 'sf',
+      name: 'test',
+      root: '',
+      version: '1.0.0',
+      runHook: async () => ({ successes: [] }),
+    };
 
     // Step 1: Convert JSON to CSV
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
