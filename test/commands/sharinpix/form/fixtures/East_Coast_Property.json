@@ -1,0 +1,1726 @@
+{
+  "beta": true,
+  "name": "East Coast Property Inspection",
+  "submit": {
+    "label": "Submit"
+  },
+  "elements": [
+    {
+      "id": "019ac524-147e-7746-abae-aa44eb629a4e",
+      "index": 0,
+      "elemType": "richtext",
+      "richDescription": "<p><img src=\"https://p.sharinpix.com/3/c5e1160/YXBwLnNoYXJpbnBpeC5jb20vaW1hZ2VzLzA3ODdiYTQ5LTQ3NjgtNDM5Yy05MTkwLTNmYjhjMWNjMjIzZi90aHVtYm5haWxzL29yaWdpbmFsLWNjM2RmZmYzYTQ0LmpwZw/east-coast-property.png\"></p>"
+    },
+    {
+      "id": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "index": 1,
+      "label": "Inspection Details",
+      "style": "inline",
+      "apiName": "inspector_details",
+      "elemType": "question",
+      "inputType": "section"
+    },
+    {
+      "id": "019ac534-db9a-7015-b982-502b7c751f46",
+      "index": 2,
+      "label": "Inspector Name",
+      "apiName": "inspector_name",
+      "elemType": "question",
+      "parentId": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "inputType": "string",
+      "sectionId": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "defaultValue": "Lucas"
+    },
+    {
+      "id": "019ac538-93d5-77b8-aec9-c0727dcfbd35",
+      "index": 3,
+      "label": "Property Manager Name",
+      "apiName": "inspector_name1",
+      "elemType": "question",
+      "parentId": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "inputType": "string",
+      "sectionId": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "defaultValue": "Alex"
+    },
+    {
+      "id": "019ac539-bc1c-7208-94c1-0016ab26ef58",
+      "index": 4,
+      "label": "Address",
+      "apiName": "address",
+      "elemType": "question",
+      "parentId": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "inputType": "textarea",
+      "sectionId": "019ac532-d2a5-72c9-9c42-8e21949661da"
+    },
+    {
+      "id": "019ac537-e122-716a-9667-3d40248349b8",
+      "index": 5,
+      "label": "Inspection Date",
+      "apiName": "inspection_date",
+      "elemType": "question",
+      "parentId": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "setToNow": true,
+      "inputType": "date",
+      "sectionId": "019ac532-d2a5-72c9-9c42-8e21949661da",
+      "calendarFormat": "m-d-Y",
+      "setToNowButton": true
+    },
+    {
+      "id": "2d2af928-d11f-40a7-8f5f-28601127817c",
+      "index": 6,
+      "label": "Rooms",
+      "apiName": "rooms",
+      "elemType": "question",
+      "inputType": "repeated",
+      "addOptions": [
+        {
+          "label": "Bedroom",
+          "value": [
+            {
+              "id": "ccca3dfb-de6b-4779-b15c-0ec76843672b",
+              "value": "Bedroom",
+              "apiName": "room",
+              "questionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+            },
+            {
+              "id": "0a2baeb2-3d96-4711-aa40-8b69273a0d15",
+              "value": "Bedroom",
+              "apiName": "room_name",
+              "parentId": "ccca3dfb-de6b-4779-b15c-0ec76843672b",
+              "questionId": "1235f84b-b337-4fe4-aa0f-8648c1f74042"
+            },
+            {
+              "id": "019ac45f-d625-7022-a4ba-51e7af6d8def",
+              "apiName": "walls_paint_marks_cracks_peeling_nail_holes",
+              "parentId": "ccca3dfb-de6b-4779-b15c-0ec76843672b",
+              "questionId": "e865fcad-92df-449c-9efd-4f9cddbf9069"
+            },
+            {
+              "id": "019ac45f-d625-7022-a4ba-5606b155cdf7",
+              "apiName": "add_photos",
+              "parentId": "019ac45f-d625-7022-a4ba-51e7af6d8def",
+              "questionId": "fdf22f57-6c8b-44a9-b4eb-5f28766d82cd"
+            },
+            {
+              "id": "019ac91b-22da-7469-9d7e-c555f00c2e9d",
+              "apiName": "RI_GeneralCondition2",
+              "parentId": "019ac45f-d625-7022-a4ba-51e7af6d8def",
+              "questionId": "019ac573-1d81-755d-9d7a-2983d1063a19"
+            },
+            {
+              "id": "019ac45f-d625-7022-a4ba-5efb9c612a61",
+              "apiName": "RI_AdditionalComment2",
+              "parentId": "019ac45f-d625-7022-a4ba-51e7af6d8def",
+              "questionId": "0201bed2-a2e8-492a-a598-88a8eabda37a"
+            },
+            {
+              "id": "019ac45f-d625-7022-a4ba-6134abfb39ad",
+              "apiName": "windows_screens_cracks_latches_working_screen_tears",
+              "parentId": "ccca3dfb-de6b-4779-b15c-0ec76843672b",
+              "questionId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7"
+            },
+            {
+              "id": "019ac45f-d625-7022-a4ba-64b461993884",
+              "apiName": "RI_Photo3",
+              "parentId": "019ac45f-d625-7022-a4ba-6134abfb39ad",
+              "questionId": "2c204372-c327-4021-bb98-1a0d41a0ecca"
+            },
+            {
+              "id": "019ac91b-22da-7469-9d7e-c800bae9f06a",
+              "apiName": "RI_GeneralCondition3",
+              "parentId": "019ac45f-d625-7022-a4ba-6134abfb39ad",
+              "questionId": "019ac572-bd6d-77df-83e2-a1aec4ed4479"
+            },
+            {
+              "id": "019ac45f-d625-7022-a4ba-6dbd946b9e30",
+              "apiName": "RI_AdditionalComment3",
+              "parentId": "019ac45f-d625-7022-a4ba-6134abfb39ad",
+              "questionId": "b1772c90-59f1-4581-9948-49ff92b2e7bd"
+            },
+            {
+              "id": "019ac45f-d628-745e-adfc-714b4e7b6119",
+              "apiName": "room_items",
+              "parentId": "ccca3dfb-de6b-4779-b15c-0ec76843672b",
+              "questionId": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+              "valueNumber": 0
+            }
+          ]
+        },
+        {
+          "label": "Kitchen",
+          "value": [
+            {
+              "id": "019ac52e-4a92-766f-a42e-724f32a31960",
+              "value": "Kitchen",
+              "apiName": "room",
+              "questionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+            },
+            {
+              "id": "019ac52e-4a93-7561-96a0-eb311ca0ccd4",
+              "value": "Kitchen",
+              "apiName": "room_name",
+              "parentId": "019ac52e-4a92-766f-a42e-724f32a31960",
+              "questionId": "1235f84b-b337-4fe4-aa0f-8648c1f74042"
+            },
+            {
+              "id": "019ac52e-4a94-7228-ab0d-a47499ed9c16",
+              "apiName": "walls_paint_marks_cracks_peeling_nail_holes",
+              "parentId": "019ac52e-4a92-766f-a42e-724f32a31960",
+              "questionId": "e865fcad-92df-449c-9efd-4f9cddbf9069"
+            },
+            {
+              "id": "019ac52e-4a94-7228-ab0d-a9992df3bb02",
+              "apiName": "add_photos",
+              "parentId": "019ac52e-4a94-7228-ab0d-a47499ed9c16",
+              "questionId": "fdf22f57-6c8b-44a9-b4eb-5f28766d82cd"
+            },
+            {
+              "id": "019ac918-29f8-7480-b71e-1b54f761bc0a",
+              "apiName": "RI_GeneralCondition2",
+              "parentId": "019ac52e-4a94-7228-ab0d-a47499ed9c16",
+              "questionId": "019ac573-1d81-755d-9d7a-2983d1063a19"
+            },
+            {
+              "id": "019ac52e-4a95-74db-9d1d-d7bfd3a9c0f2",
+              "apiName": "RI_AdditionalComment2",
+              "parentId": "019ac52e-4a94-7228-ab0d-a47499ed9c16",
+              "questionId": "0201bed2-a2e8-492a-a598-88a8eabda37a"
+            },
+            {
+              "id": "019ac52e-4a95-74db-9d1d-da5008069146",
+              "apiName": "windows_screens_cracks_latches_working_screen_tears",
+              "parentId": "019ac52e-4a92-766f-a42e-724f32a31960",
+              "questionId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7"
+            },
+            {
+              "id": "019ac52e-4a95-74db-9d1d-de1b824608b4",
+              "apiName": "RI_Photo3",
+              "parentId": "019ac52e-4a95-74db-9d1d-da5008069146",
+              "questionId": "2c204372-c327-4021-bb98-1a0d41a0ecca"
+            },
+            {
+              "id": "019ac918-29f8-7480-b71e-1e3563c98b88",
+              "apiName": "RI_GeneralCondition3",
+              "parentId": "019ac52e-4a95-74db-9d1d-da5008069146",
+              "questionId": "019ac572-bd6d-77df-83e2-a1aec4ed4479"
+            },
+            {
+              "id": "019ac52e-4a95-74db-9d1d-e532702a4f14",
+              "apiName": "RI_AdditionalComment3",
+              "parentId": "019ac52e-4a95-74db-9d1d-da5008069146",
+              "questionId": "b1772c90-59f1-4581-9948-49ff92b2e7bd"
+            },
+            {
+              "id": "019ac52e-4a95-74db-9d1d-ea74583d217f",
+              "apiName": "room_items",
+              "parentId": "019ac52e-4a92-766f-a42e-724f32a31960",
+              "questionId": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+              "valueNumber": 0
+            }
+          ]
+        },
+        {
+          "label": "Bathroom",
+          "value": [
+            {
+              "id": "019ac943-5f71-777f-9571-a7371e480a6b",
+              "value": "Bathroom",
+              "apiName": "room",
+              "questionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+            },
+            {
+              "id": "019ac943-5f71-777f-9571-aa8cfe2b0a77",
+              "value": "Bathroom",
+              "apiName": "room_name",
+              "parentId": "019ac943-5f71-777f-9571-a7371e480a6b",
+              "questionId": "1235f84b-b337-4fe4-aa0f-8648c1f74042"
+            },
+            {
+              "id": "019ac943-5f71-777f-9571-ad0f11b526e8",
+              "apiName": "walls_paint_marks_cracks_peeling_nail_holes",
+              "parentId": "019ac943-5f71-777f-9571-a7371e480a6b",
+              "questionId": "e865fcad-92df-449c-9efd-4f9cddbf9069"
+            },
+            {
+              "id": "019ac943-5f71-777f-9571-b253fd44989e",
+              "apiName": "add_photos",
+              "parentId": "019ac943-5f71-777f-9571-ad0f11b526e8",
+              "questionId": "fdf22f57-6c8b-44a9-b4eb-5f28766d82cd"
+            },
+            {
+              "id": "019ac943-5f71-777f-9571-b4fc495938a7",
+              "apiName": "RI_GeneralCondition2",
+              "parentId": "019ac943-5f71-777f-9571-ad0f11b526e8",
+              "questionId": "019ac573-1d81-755d-9d7a-2983d1063a19"
+            },
+            {
+              "id": "019ac943-5f71-777f-9571-b8b645051896",
+              "value": "",
+              "apiName": "RI_AdditionalComment2",
+              "parentId": "019ac943-5f71-777f-9571-ad0f11b526e8",
+              "questionId": "0201bed2-a2e8-492a-a598-88a8eabda37a"
+            },
+            {
+              "id": "019ac943-5f71-777f-9571-bcd9edfb5619",
+              "apiName": "windows_screens_cracks_latches_working_screen_tears",
+              "parentId": "019ac943-5f71-777f-9571-a7371e480a6b",
+              "questionId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7"
+            },
+            {
+              "id": "019ac943-5f71-777f-9571-c3b44c1654fb",
+              "apiName": "RI_Photo3",
+              "parentId": "019ac943-5f71-777f-9571-bcd9edfb5619",
+              "questionId": "2c204372-c327-4021-bb98-1a0d41a0ecca"
+            },
+            {
+              "id": "019ac943-5f72-70fb-af88-3d1ccdf42e12",
+              "apiName": "RI_GeneralCondition3",
+              "parentId": "019ac943-5f71-777f-9571-bcd9edfb5619",
+              "questionId": "019ac572-bd6d-77df-83e2-a1aec4ed4479"
+            },
+            {
+              "id": "019ac943-5f72-70fb-af88-433cc1c2494a",
+              "apiName": "RI_AdditionalComment3",
+              "parentId": "019ac943-5f71-777f-9571-bcd9edfb5619",
+              "questionId": "b1772c90-59f1-4581-9948-49ff92b2e7bd"
+            },
+            {
+              "id": "019ac943-5f72-70fb-af88-4639f8d56363",
+              "apiName": "room_items",
+              "parentId": "019ac943-5f71-777f-9571-a7371e480a6b",
+              "questionId": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+              "valueNumber": 0
+            }
+          ]
+        },
+        {
+          "label": "Others",
+          "value": [
+            {
+              "id": "019ac918-836e-707f-92b4-a0ad0b8e3788",
+              "value": "Others",
+              "apiName": "room",
+              "questionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-6d1a51ed7c59",
+              "value": "Others",
+              "apiName": "room_name",
+              "parentId": "019ac918-836e-707f-92b4-a0ad0b8e3788",
+              "questionId": "1235f84b-b337-4fe4-aa0f-8648c1f74042"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-72a9422e0f44",
+              "apiName": "walls_paint_marks_cracks_peeling_nail_holes",
+              "parentId": "019ac918-836e-707f-92b4-a0ad0b8e3788",
+              "questionId": "e865fcad-92df-449c-9efd-4f9cddbf9069"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-7704bb1931fe",
+              "apiName": "add_photos",
+              "parentId": "019ac918-836f-75db-bfe9-72a9422e0f44",
+              "questionId": "fdf22f57-6c8b-44a9-b4eb-5f28766d82cd"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-7a75db2edcfa",
+              "apiName": "RI_GeneralCondition2",
+              "parentId": "019ac918-836f-75db-bfe9-72a9422e0f44",
+              "questionId": "019ac573-1d81-755d-9d7a-2983d1063a19"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-7f8e7e4e3117",
+              "apiName": "RI_AdditionalComment2",
+              "parentId": "019ac918-836f-75db-bfe9-72a9422e0f44",
+              "questionId": "0201bed2-a2e8-492a-a598-88a8eabda37a"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-8381741cf95f",
+              "apiName": "windows_screens_cracks_latches_working_screen_tears",
+              "parentId": "019ac918-836e-707f-92b4-a0ad0b8e3788",
+              "questionId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-870f2fe47fa6",
+              "apiName": "RI_Photo3",
+              "parentId": "019ac918-836f-75db-bfe9-8381741cf95f",
+              "questionId": "2c204372-c327-4021-bb98-1a0d41a0ecca"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-8bc586279ca8",
+              "apiName": "RI_GeneralCondition3",
+              "parentId": "019ac918-836f-75db-bfe9-8381741cf95f",
+              "questionId": "019ac572-bd6d-77df-83e2-a1aec4ed4479"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-8d5deb56c6fa",
+              "apiName": "RI_AdditionalComment3",
+              "parentId": "019ac918-836f-75db-bfe9-8381741cf95f",
+              "questionId": "b1772c90-59f1-4581-9948-49ff92b2e7bd"
+            },
+            {
+              "id": "019ac918-836f-75db-bfe9-91265acfc935",
+              "apiName": "room_items",
+              "parentId": "019ac918-836e-707f-92b4-a0ad0b8e3788",
+              "questionId": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+              "valueNumber": 0
+            }
+          ]
+        }
+      ],
+      "defaultValue": [
+        {
+          "id": "019ac53b-ad9a-70ac-9e98-49bd18bf3abc",
+          "apiName": "rooms",
+          "questionId": "2d2af928-d11f-40a7-8f5f-28601127817c",
+          "valueNumber": 1
+        },
+        {
+          "id": "019ac53b-ad99-7589-9c54-2f7b36544c76",
+          "index": 0,
+          "value": "Bedroom",
+          "apiName": "room",
+          "parentId": "019ac53b-ad9a-70ac-9e98-49bd18bf3abc",
+          "questionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-750310587a77",
+          "value": "Bedroom",
+          "apiName": "room_name",
+          "parentId": "019ac53b-ad99-7589-9c54-2f7b36544c76",
+          "questionId": "1235f84b-b337-4fe4-aa0f-8648c1f74042"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-7af7687a5120",
+          "apiName": "RI_OverallRoom",
+          "parentId": "019ac53b-ad99-7589-9c54-2f7b36544c76",
+          "questionId": "659683c4-db33-4449-9366-caab40432c65"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-7f2ec88114f6",
+          "apiName": "add_photos_of_the_room",
+          "parentId": "019ac53b-ad9b-730b-9c54-7af7687a5120",
+          "questionId": "41871722-9bed-4ba4-a9ac-0679b22b360e"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-825fe3d3dff3",
+          "value": "New",
+          "apiName": "RI_GeneralCondition",
+          "parentId": "019ac53b-ad9b-730b-9c54-7af7687a5120",
+          "questionId": "a69e810b-df43-4129-97f1-b444253d08fc"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-846e757c29a9",
+          "apiName": "RI_MagicFill",
+          "parentId": "019ac53b-ad9b-730b-9c54-7af7687a5120",
+          "questionId": "f826b130-36f3-4a7a-b7f6-31e073fb3360"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-8926c05454b2",
+          "apiName": "RI_ConditionDoors",
+          "parentId": "019ac53b-ad99-7589-9c54-2f7b36544c76",
+          "questionId": "1858f128-f214-40db-8468-43a06741d94c"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-8daf3c9344a5",
+          "apiName": "RI_Photo1",
+          "parentId": "019ac53b-ad9b-730b-9c54-8926c05454b2",
+          "questionId": "df794ee0-081e-4fdc-9f73-7b742eb13a53"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-935c906182d0",
+          "value": "New",
+          "apiName": "RI_GeneralCondition1",
+          "parentId": "019ac53b-ad9b-730b-9c54-8926c05454b2",
+          "questionId": "85ec6131-a3ae-47ed-ad64-bfd8f39f7823"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-95ab9a00cac6",
+          "apiName": "RI_AdditionalComment1",
+          "parentId": "019ac53b-ad9b-730b-9c54-8926c05454b2",
+          "questionId": "58b33075-9ade-4bd8-8c81-5b1b393b9a5d"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-98f1c2195c79",
+          "apiName": "RI_ConditionWalls",
+          "parentId": "019ac53b-ad99-7589-9c54-2f7b36544c76",
+          "questionId": "e865fcad-92df-449c-9efd-4f9cddbf9069"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-9e150204b057",
+          "apiName": "RI_Photo2",
+          "parentId": "019ac53b-ad9b-730b-9c54-98f1c2195c79",
+          "questionId": "fdf22f57-6c8b-44a9-b4eb-5f28766d82cd"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-a3d5126316ac",
+          "value": "New",
+          "apiName": "RI_GeneralCondition2",
+          "parentId": "019ac53b-ad9b-730b-9c54-98f1c2195c79",
+          "questionId": "cab34fff-50d5-47df-975d-f94223320afd"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-a6b41907ac0f",
+          "apiName": "RI_AdditionalComment2",
+          "parentId": "019ac53b-ad9b-730b-9c54-98f1c2195c79",
+          "questionId": "0201bed2-a2e8-492a-a598-88a8eabda37a"
+        },
+        {
+          "id": "019ac53b-ad9b-730b-9c54-a94f7a9578c2",
+          "apiName": "RI_WindowScreensCoverings",
+          "parentId": "019ac53b-ad99-7589-9c54-2f7b36544c76",
+          "questionId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7"
+        },
+        {
+          "id": "019ac53b-ad9c-749c-b949-f3fab84fd11e",
+          "apiName": "RI_Photo3",
+          "parentId": "019ac53b-ad9b-730b-9c54-a94f7a9578c2",
+          "questionId": "2c204372-c327-4021-bb98-1a0d41a0ecca"
+        },
+        {
+          "id": "019ac53b-ad9c-749c-b949-f4d43310185a",
+          "value": "New",
+          "apiName": "RI_GeneralCondition3",
+          "parentId": "019ac53b-ad9b-730b-9c54-a94f7a9578c2",
+          "questionId": "0cdcd8cb-4fe8-44a6-9ea5-20ba7ebb9f92"
+        },
+        {
+          "id": "019ac53b-ad9c-749c-b949-f99a73f776b6",
+          "apiName": "RI_AdditionalComment3",
+          "parentId": "019ac53b-ad9b-730b-9c54-a94f7a9578c2",
+          "questionId": "b1772c90-59f1-4581-9948-49ff92b2e7bd"
+        },
+        {
+          "id": "019ac53b-ad9c-749c-b949-ff25ad6cf7ab",
+          "apiName": "room_items",
+          "parentId": "019ac53b-ad99-7589-9c54-2f7b36544c76",
+          "questionId": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+          "valueNumber": 0
+        }
+      ]
+    },
+    {
+      "id": "50defe23-ede5-4030-a7be-306c48c77ab3",
+      "index": 7,
+      "label": "Room",
+      "apiName": "room",
+      "elemType": "question",
+      "parentId": "2d2af928-d11f-40a7-8f5f-28601127817c",
+      "inputType": "section",
+      "sectionId": "2d2af928-d11f-40a7-8f5f-28601127817c",
+      "labelFormula": "room_name"
+    },
+    {
+      "id": "1235f84b-b337-4fe4-aa0f-8648c1f74042",
+      "index": 8,
+      "label": "Room Name",
+      "apiName": "room_name",
+      "elemType": "question",
+      "parentId": "50defe23-ede5-4030-a7be-306c48c77ab3",
+      "inputType": "string",
+      "sectionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+    },
+    {
+      "id": "019ac967-e0da-7122-8fce-ff9ee60f3630",
+      "index": 9,
+      "label": "Photos",
+      "apiName": "capture_photos",
+      "elemType": "question",
+      "parentId": "50defe23-ede5-4030-a7be-306c48c77ab3",
+      "inputType": "sharinpix-app",
+      "mobileApp": {
+        "action": "capture"
+      },
+      "sectionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+    },
+    {
+      "id": "e865fcad-92df-449c-9efd-4f9cddbf9069",
+      "index": 10,
+      "label": "Walls & Paint: (Marks, cracks, peeling, nail holes)",
+      "style": "inline",
+      "apiName": "walls_paint_marks_cracks_peeling_nail_holes",
+      "elemType": "question",
+      "parentId": "50defe23-ede5-4030-a7be-306c48c77ab3",
+      "inputType": "section",
+      "sectionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+    },
+    {
+      "id": "019ac573-1d81-755d-9d7a-2983d1063a19",
+      "index": 11,
+      "label": "General condition:",
+      "apiName": "RI_GeneralCondition2",
+      "options": [
+        {
+          "label": "Good",
+          "value": "Good"
+        },
+        {
+          "label": "Fair",
+          "value": "Fair"
+        },
+        {
+          "label": "Poor",
+          "value": "Poor",
+          "mobileApp": {
+            "action": "capture"
+          }
+        }
+      ],
+      "elemType": "question",
+      "parentId": "e865fcad-92df-449c-9efd-4f9cddbf9069",
+      "inputType": "radio",
+      "mobileApp": {
+        "action": "capture"
+      },
+      "sectionId": "e865fcad-92df-449c-9efd-4f9cddbf9069"
+    },
+    {
+      "id": "0201bed2-a2e8-492a-a598-88a8eabda37a",
+      "index": 12,
+      "label": "Additional Comments",
+      "apiName": "RI_AdditionalComment2",
+      "elemType": "question",
+      "parentId": "e865fcad-92df-449c-9efd-4f9cddbf9069",
+      "inputType": "textarea",
+      "sectionId": "e865fcad-92df-449c-9efd-4f9cddbf9069",
+      "visibility": "RI_GeneralCondition2 = \"Poor\"",
+      "defaultValue": ""
+    },
+    {
+      "id": "a4c7fd5d-25a9-4c30-8006-feb1533940e7",
+      "index": 13,
+      "label": "Windows & Screens: (Cracks, latches working)",
+      "style": "inline",
+      "apiName": "windows_screens_cracks_latches_working_screen_tears",
+      "elemType": "question",
+      "parentId": "50defe23-ede5-4030-a7be-306c48c77ab3",
+      "inputType": "section",
+      "sectionId": "50defe23-ede5-4030-a7be-306c48c77ab3"
+    },
+    {
+      "id": "019ac572-bd6d-77df-83e2-a1aec4ed4479",
+      "index": 14,
+      "label": "General condition:",
+      "apiName": "RI_GeneralCondition3",
+      "options": [
+        {
+          "label": "Good",
+          "value": "Good"
+        },
+        {
+          "label": "Fair",
+          "value": "Fair"
+        },
+        {
+          "label": "Poor",
+          "value": "Poor",
+          "mobileApp": {
+            "action": "capture"
+          }
+        }
+      ],
+      "elemType": "question",
+      "parentId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7",
+      "inputType": "radio",
+      "sectionId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7"
+    },
+    {
+      "id": "b1772c90-59f1-4581-9948-49ff92b2e7bd",
+      "index": 15,
+      "label": "Additional Comments",
+      "apiName": "RI_AdditionalComment3",
+      "elemType": "question",
+      "parentId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7",
+      "inputType": "textarea",
+      "sectionId": "a4c7fd5d-25a9-4c30-8006-feb1533940e7",
+      "visibility": "RI_GeneralCondition3 = \"RI_GeneralCondition3\""
+    },
+    {
+      "id": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+      "index": 16,
+      "label": "Fixtures",
+      "apiName": "room_items",
+      "elemType": "question",
+      "parentId": "50defe23-ede5-4030-a7be-306c48c77ab3",
+      "inputType": "repeated",
+      "sectionId": "50defe23-ede5-4030-a7be-306c48c77ab3",
+      "addOptions": [
+        {
+          "label": "Letterbox",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "5c818ea4-0fda-4997-b369-0b40edb613e2",
+              "value": "Letterbox",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Front Entrance\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Crossover, Driveweight, Footpath, Front Fence",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "bc185e54-a8c0-40df-84a6-ad3af057b719",
+              "value": "Crossover, Driveweight, Footpath, Front Fence",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Front Entrance\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Gates/Fences",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "6ee8f9ff-4157-4d46-a3cf-eaeb9ebeed48",
+              "value": "Gates/Fences",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Front Entrance\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Front Garden",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "486b7ee0-4b0d-4b56-9201-e239e21a6d2f",
+              "value": "Front Garden",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Front Entrance\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Hot Water Service",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "9c86a71e-ad41-469a-bcad-9c3f3fc6baaa",
+              "value": "Hot Water Service",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Laundry\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Tiling",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "f5d79932-457f-4972-a351-d83cc9fe5de4",
+              "value": "Tiling",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Laundry\" OR room_name = \"Other Room\" OR room_name = \"Kitchen\""
+        },
+        {
+          "label": "Taps",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "7ffe5543-57b8-40f8-97c7-19a4519964c0",
+              "value": "Taps",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\" OR room_name = \"Laundry\" OR room_name = \"Kitchen\""
+        },
+        {
+          "label": "ShowerCondition of BathCondition of Bath/Shower Screen",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "aac1fc40-15c2-4fac-b0ab-ccf162a66020",
+              "value": "ShowerCondition of BathCondition of Bath/Shower Screen",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Sink",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "8c231a69-050d-4aa5-a461-0dfaea749bb9",
+              "value": "Sink",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\" OR room_name = \"Laundry\" OR room_name = \"Kitchen\""
+        },
+        {
+          "label": "Mirrors",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "3a37f021-808a-46fa-98ab-7ea56e85dfac",
+              "value": "Mirrors",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Toilet",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "de59d92a-51eb-4b2e-98b8-c7a2e273a5d1",
+              "value": "Toilet",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Toilet Paper Holder",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "487b34e3-1136-41bb-90a7-a92001f31e8b",
+              "value": "Toilet Paper Holder",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Towel Rails",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "b0b76be8-114a-49fe-9919-84235fd3856b",
+              "value": "Towel Rails",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Exhaust Fan",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "c967ffef-a008-44eb-a1a8-92b9cea5f00d",
+              "value": "Exhaust Fan",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Ensuite\" OR room_name = \"Toilet in its Own Room\" OR room_name = \"Bathroom Facilities\" OR room_name = \"Laundry\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Shower",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "0b63c35e-e290-4cd4-9153-8a5867cf02ce",
+              "value": "Shower",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Other Room\" OR room_name = \"Bathroom Facilities\""
+        },
+        {
+          "label": "Bath/Shower Screen",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "bbab0da2-8f8c-49f0-a20f-4c090e1742af",
+              "value": "Bath/Shower Screen",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Bath",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "c2ba5f15-fafe-426b-8e31-47f24030039b",
+              "value": "Bath",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Bathroom Facilities\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Bath/Shower Screen",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "9353f5f2-c99b-40a2-89a0-e02bf579e6a5",
+              "value": "Bath/Shower Screen",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Other Room\" OR room_name = \"Bathroom Facilities\""
+        },
+        {
+          "label": "Security System",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "d8cdfa07-adc8-470d-8398-8d30cf3af074",
+              "value": "Security System",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Front Entrance\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Rangehood/Exhaust Fan",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "67711f69-dea3-465b-a6e8-887ab2e0eb97",
+              "value": "Rangehood/Exhaust Fan",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Kitchen\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Internal Doors",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "3b11e495-7e1e-4b65-957e-4bd0d6f433f2",
+              "value": "Internal Doors",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\" AND room_name != \"Deck Verandah\""
+        },
+        {
+          "label": "External Door and Door Lock",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "ba9de2e5-2a0e-4194-b7af-69b0063944a6",
+              "value": "External Door and Door Lock",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Windows",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "3dca0bea-7f16-4ed5-8571-1c1392e4ba48",
+              "value": "Windows",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Light Fittings",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "941714ae-594e-4314-8b2a-adddc0052fb6",
+              "value": "Light Fittings",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Window Screens",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "9b64ae39-73ef-4f86-be6c-3bf40ed0c8d9",
+              "value": "Window Screens",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Switches/Power Points",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "346f359b-557a-4618-9ef6-594a177f35e7",
+              "value": "Switches/Power Points",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Blinds/Curtains",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "e6f226f0-025d-43de-a5c4-677521f3d5b5",
+              "value": "Blinds/Curtains",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\" AND room_name != \"Deck Verandah\" AND room_name != \"Carport\""
+        },
+        {
+          "label": "Ceilings",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "27db713a-03dd-4720-9083-91379050077e",
+              "value": "Ceilings",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Walls",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "a52d672f-2f00-42ca-bbe2-a1ae213e7016",
+              "value": "Walls",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Mould",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "91c0735f-d501-4c97-800c-6edb81e08c62",
+              "value": "Mould",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Picture Hooks",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "3967d7fc-ee90-4d6f-958f-4cf46e95802e",
+              "value": "Picture Hooks",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\" AND room_name != \"Deck Verandah\" AND room_name != \"Carport\""
+        },
+        {
+          "label": "Cupboard/Draws/Shelves",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "b47af8c8-3a8b-4717-89bf-e0c57d31f63c",
+              "value": "Cupboard/Draws/Shelves",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Skirting Boards",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "16c8abde-681b-4906-ac5a-6aaffc5999d2",
+              "value": "Skirting Boards",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Flooring",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "cd8fa3d0-c821-4854-988f-267cf8bcd3d9",
+              "value": "Flooring",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Heating/Cooling Appliance",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "e2ef17a4-2310-4092-9d96-ca624ffc3f9d",
+              "value": "Heating/Cooling Appliance",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\""
+        },
+        {
+          "label": "Recycle Bin",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "eb1afac4-79fe-4b63-a2e9-db3b77159bbb",
+              "value": "Recycle Bin",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Recycle and General Waste\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "General Waste Bin",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "11b9dde0-dc43-4fcb-b8eb-8e7f557886e0",
+              "value": "General Waste Bin",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Recycle and General Waste\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Smoke Alarms",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "55d519a1-2d0b-4d03-a1a9-dfd59ab3506c",
+              "value": "Smoke Alarms",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name != \"Recycle and General Waste\" AND room_name != \"Electrical Safety\" AND room_name != \"General Items\" AND room_name != \"Deck Verandah\" AND room_name != \"Carport\""
+        },
+        {
+          "label": "Bench",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "6626d3fe-4a5c-4e20-a770-ae04b5f52332",
+              "value": "Bench",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Kitchen\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Hot Plates/Stove/Cooktop",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "9bc9e350-bca8-43d7-a6f0-c7eff6c58388",
+              "value": "Hot Plates/Stove/Cooktop",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Kitchen\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Oven and Griller",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "ec160254-6eb1-44be-83d7-b27698344444",
+              "value": "Oven and Griller",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Kitchen\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Dishwasher",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "2c35f1c1-8f2b-412b-9afe-f72678d1acac",
+              "value": "Dishwasher",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Kitchen\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Balcony/Porch/Decking",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "63a029db-cde4-4ee3-999c-899ce7e6992f",
+              "value": "Balcony/Porch/Decking",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Deck Verandah\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Switchboard",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "3c554f03-6abb-44dc-bbfa-6cc9893b4896",
+              "value": "Switchboard",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Electrical Safety\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Keys",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "7d3a6af9-6ccd-445c-a4d5-ecefba6614d0",
+              "value": "Keys",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Clothesline",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "116ae20b-86a0-478e-b249-9f123558bd36",
+              "value": "Clothesline",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Back Garden",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "b972929d-3052-4e49-ac32-24a5a9aa9c27",
+              "value": "Back Garden",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Side/Other Garden",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "d81c65ca-4871-4bbd-b59f-dde931d35efc",
+              "value": "Side/Other Garden",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Fences",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "5ef55e53-1b30-4be2-aa04-5c2fe527ed22",
+              "value": "Fences",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Pool/Spa Fence and Gate",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "bfc26f1b-3be7-4d6b-88b4-4aa24fd67e24",
+              "value": "Pool/Spa Fence and Gate",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "TV Connection and Telephone Connection",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "35b980ab-3457-42c9-bb7d-28eedd9bb7f3",
+              "value": "TV Connection and Telephone Connection",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Water Tank",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "31469f46-1034-4a8a-9271-4f7f19df5250",
+              "value": "Water Tank",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Storage Shed",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "4280476d-3ef7-4f19-8e36-58a36a93d8d1",
+              "value": "Storage Shed",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Storage Cage",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "df78413c-4e69-4f80-9553-6bd282d9b5c0",
+              "value": "Storage Cage",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Carpark",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "191ed84d-7cf4-4290-b2bc-0bbd56fc3587",
+              "value": "Carpark",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"General Items\" OR room_name = \"Other Room\""
+        },
+        {
+          "label": "Garage/Carport",
+          "value": [
+            {
+              "id": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "apiName": "roomItem",
+              "questionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+            },
+            {
+              "id": "1e7d2169-7837-429a-a10c-62afecfb272f",
+              "value": "Garage/Carport",
+              "apiName": "room_item_name",
+              "parentId": "c0acae74-fcfd-4709-a8d5-7de6b76babf2",
+              "questionId": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363"
+            }
+          ],
+          "visibility": "room_name = \"Carport\" OR room_name = \"Other Room\""
+        }
+      ]
+    },
+    {
+      "id": "e9c68185-6a76-4b1b-8e5f-012c4bccb551",
+      "index": 17,
+      "label": "Fixture",
+      "style": "fold",
+      "apiName": "roomItem",
+      "elemType": "question",
+      "parentId": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+      "inputType": "section",
+      "sectionId": "bb21cae9-6e7d-400a-b674-eb331e9da13b",
+      "labelFormula": "room_item_name"
+    },
+    {
+      "id": "d305ad9a-cfe7-4fa8-bc24-8dc50c220363",
+      "index": 18,
+      "label": "Item Name",
+      "apiName": "room_item_name",
+      "elemType": "question",
+      "parentId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551",
+      "inputType": "string",
+      "sectionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+    },
+    {
+      "id": "60235dfc-9b6c-48cd-a567-53aabecae2ba",
+      "index": 19,
+      "label": "Photos",
+      "apiName": "photoRoomItem",
+      "elemType": "question",
+      "parentId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551",
+      "inputType": "sharinpix-app",
+      "sectionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+    },
+    {
+      "id": "019ac574-54cb-7344-973d-8b152ac5537c",
+      "index": 20,
+      "label": "General condition:",
+      "apiName": "RI_GeneralCondition5",
+      "options": [
+        {
+          "label": "Good",
+          "value": "Good"
+        },
+        {
+          "label": "Fair",
+          "value": "Fair"
+        },
+        {
+          "label": "Poor",
+          "value": "Poor"
+        }
+      ],
+      "elemType": "question",
+      "parentId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551",
+      "inputType": "radio",
+      "sectionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+    },
+    {
+      "id": "a2174829-5c80-48a2-8c73-c92168322e2e",
+      "index": 21,
+      "label": "Additional Comments",
+      "apiName": "RI_AdditionalCommentRoomItem",
+      "elemType": "question",
+      "parentId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551",
+      "inputType": "textarea",
+      "sectionId": "e9c68185-6a76-4b1b-8e5f-012c4bccb551"
+    }
+  ],
+  "uuid": "4460e1ab-9046-462f-87d5-6b1452c24558",
+  "id": "a0Dam00001ZAnJcEAL"
+}
