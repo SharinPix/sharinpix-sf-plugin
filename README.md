@@ -141,6 +141,7 @@ Both `form push` and `permission push` commands support a `--delete/-d` flag tha
 
 - [`sf sharinpix pull`](#sf-sharinpix-pull)
 - [`sf sharinpix push`](#sf-sharinpix-push)
+- [`sf sharinpix settings`](#sf-sharinpix-settings)
 - [`sf sharinpix config pull`](#sf-sharinpix-config-pull)
 - [`sf sharinpix config push`](#sf-sharinpix-config-push)
 - [`sf sharinpix form csv2json`](#sf-sharinpix-form-csv2json)
@@ -209,6 +210,29 @@ EXAMPLES
   Push all components and delete missing forms/permissions from the org:
 
     $ sf sharinpix push --delete
+```
+
+## `sf sharinpix settings`
+
+Open the SharinPix settings page in a Salesforce org.
+
+```
+USAGE
+  $ sf sharinpix settings [--json] [-o <value>]
+
+FLAGS
+  -o, --target-org=<value>  The Salesforce org to open.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Opens the SharinPix settings Lightning page in your default browser for the specified Salesforce org. This command is a convenience wrapper around `sf org open` with the path set to `/lightning/n/sharinpix__SharinPix_setting`.
+
+EXAMPLES
+  Open the SharinPix settings page for a specific org:
+
+    $ sf sharinpix settings --target-org myorg@example.com
 ```
 
 ## `sf sharinpix config pull`
