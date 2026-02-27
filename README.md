@@ -28,7 +28,7 @@ For cross clouds commands, e.g. `sf env list`, we utilize [oclif hooks](https://
 
 This plugin includes sample hooks in the [src/hooks directory](src/hooks). You'll just need to add the appropriate logic. You can also delete any of the hooks if they aren't required for your plugin.
 
-# Everything past here is only a suggestion as to what should be in your specific plugin's description
+## About this plugin
 
 This plugin is bundled with the [Salesforce CLI](https://developer.salesforce.com/tools/sfdxcli). For more information on the CLI, read the [getting started guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm).
 
