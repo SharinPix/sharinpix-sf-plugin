@@ -4,10 +4,10 @@ import { fileURLToPath } from 'node:url';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import { parse } from 'csv-parse/sync';
 import mock from 'mock-fs';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
+import { parseCsv } from '../../../../src/helpers/csv.js';
 import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
 
 function schemaHeadersFromKeys(allKeys: Set<string>): string[] {
@@ -232,11 +232,7 @@ describe('sharinpix form json2csv', () => {
     expect(fs.existsSync('sharinpix/forms/EmptyStringMissing.csv')).to.be.true;
 
     const csvContent = fs.readFileSync('sharinpix/forms/EmptyStringMissing.csv', 'utf8');
-    const rows = parse(csvContent, {
-      skipEmptyLines: true,
-      relaxColumnCount: true,
-      relaxQuotes: true,
-    }) as string[][];
+    const rows = parseCsv(csvContent);
     const headers: string[] = rows[0] ?? [];
     const row1: string[] = rows[1] ?? [];
     const row2: string[] = rows[2] ?? [];
@@ -347,7 +343,7 @@ describe('sharinpix form json2csv', () => {
         expect(fs.existsSync(csvPath)).to.be.true;
 
         const csvContent = fs.readFileSync(csvPath, 'utf8');
-        const rows = parse(csvContent, { skipEmptyLines: true, relaxColumnCount: true, relaxQuotes: true }) as string[][];
+        const rows = parseCsv(csvContent);
         const headers: string[] = rows[0] ?? [];
 
         const original = originalJson as { elements?: Array<Record<string, unknown>> };
