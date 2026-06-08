@@ -1,21 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { parse } from 'csv-parse/sync';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 import { getCsvFiles, formatErrorMessage, orderElementKeys } from '../../../helpers/utils.js';
 import { parseCell } from '../../../helpers/form/elementKeys.js';
+import { parseCsv } from '../../../helpers/csv.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.csv2json');
 
 const FORMS_DIRECTORY = 'sharinpix/forms';
-
-const CSV_PARSE_OPTIONS = {
-  skipEmptyLines: true,
-  relaxColumnCount: true,
-  relaxQuotes: true,
-} as const;
 
 export type Csv2JsonResult = {
   name: string;
@@ -25,10 +19,6 @@ export type Csv2JsonResult = {
 
 type FormElement = Record<string, unknown>;
 type ProcessResult = { success: true; fileName: string } | { success: false; fileName: string; reason: string };
-
-function parseCsvRows(content: string): string[][] {
-  return parse(content, CSV_PARSE_OPTIONS);
-}
 
 function mergeElementsIntoJson(
   existingJson: Record<string, unknown>,
@@ -110,7 +100,7 @@ async function processCsvFile(filePath: string): Promise<ProcessResult> {
 
   try {
     const content = await fs.promises.readFile(filePath, 'utf8');
-    const rows = parseCsvRows(content);
+    const rows = parseCsv(content);
 
     if (rows.length < 2) throw new Error(messages.getMessage('error.noDataRows'));
 

@@ -2,10 +2,10 @@ import fs from 'node:fs';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import { parse } from 'csv-parse/sync';
 import mock from 'mock-fs';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
+import { parseCsv } from '../../../../src/helpers/csv.js';
 
 describe('sharinpix form csv2json', () => {
   const $$ = new TestContext();
@@ -442,7 +442,7 @@ describe('sharinpix form csv2json', () => {
     expect(fs.existsSync('sharinpix/forms/CsvRoundTrip.csv')).to.be.true;
 
     const outCsv = fs.readFileSync('sharinpix/forms/CsvRoundTrip.csv', 'utf8');
-    const rows = parse(outCsv, { skipEmptyLines: true, relaxColumnCount: true, relaxQuotes: true });
+    const rows = parseCsv(outCsv);
     const headers = rows[0] ?? [];
     const dataRow = rows[1] ?? [];
     const record: Record<string, string> = {};
