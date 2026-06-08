@@ -236,7 +236,7 @@ describe('sharinpix form json2csv', () => {
       skipEmptyLines: true,
       relaxColumnCount: true,
       relaxQuotes: true,
-    });
+    }) as string[][];
     const headers: string[] = rows[0] ?? [];
     const row1: string[] = rows[1] ?? [];
     const row2: string[] = rows[2] ?? [];
@@ -347,7 +347,7 @@ describe('sharinpix form json2csv', () => {
         expect(fs.existsSync(csvPath)).to.be.true;
 
         const csvContent = fs.readFileSync(csvPath, 'utf8');
-        const rows = parse(csvContent, { skipEmptyLines: true, relaxColumnCount: true, relaxQuotes: true });
+        const rows = parse(csvContent, { skipEmptyLines: true, relaxColumnCount: true, relaxQuotes: true }) as string[][];
         const headers: string[] = rows[0] ?? [];
 
         const original = originalJson as { elements?: Array<Record<string, unknown>> };

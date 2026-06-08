@@ -442,7 +442,7 @@ describe('sharinpix form csv2json', () => {
     expect(fs.existsSync('sharinpix/forms/CsvRoundTrip.csv')).to.be.true;
 
     const outCsv = fs.readFileSync('sharinpix/forms/CsvRoundTrip.csv', 'utf8');
-    const rows = parse(outCsv, { skipEmptyLines: true, relaxColumnCount: true, relaxQuotes: true });
+    const rows = parse(outCsv, { skipEmptyLines: true, relaxColumnCount: true, relaxQuotes: true }) as string[][];
     const headers = rows[0] ?? [];
     const dataRow = rows[1] ?? [];
     const record: Record<string, string> = {};
