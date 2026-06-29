@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { isJsonEqual, createSafeFilename } from '../../src/helpers/utils.js';
+import { isJsonEqual, createSafeFilename, stripRootUuid } from '../../src/helpers/utils.js';
 
 describe('Utils', () => {
   describe('isJsonEqual function', () => {
@@ -106,6 +106,36 @@ describe('Utils', () => {
       expect(isJsonEqual(undefined, undefined)).to.be.true;
       expect(isJsonEqual(undefined, null)).to.be.false;
       expect(isJsonEqual(undefined, {})).to.be.false;
+    });
+  });
+
+  describe('stripRootUuid function', () => {
+    it('should remove root-level uuid', () => {
+      const json = {
+        name: 'Test Form',
+        uuid: '12345',
+        elements: [{ id: '1', uuid: 'nested' }],
+      };
+
+      expect(stripRootUuid(json)).to.deep.equal({
+        name: 'Test Form',
+        elements: [{ id: '1', uuid: 'nested' }],
+      });
+    });
+
+    it('should return a copy unchanged when uuid is absent', () => {
+      const json = { name: 'Test Form', elements: [] };
+
+      expect(stripRootUuid(json)).to.deep.equal(json);
+      expect(stripRootUuid(json)).to.not.equal(json);
+    });
+
+    it('should not mutate the original object', () => {
+      const json = { name: 'Test Form', uuid: '12345' };
+
+      stripRootUuid(json);
+
+      expect(json).to.deep.equal({ name: 'Test Form', uuid: '12345' });
     });
   });
 

@@ -9,6 +9,7 @@ import {
   getJsonFiles,
   fetchJson,
   formatErrorMessage,
+  stripRootUuid,
 } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -94,6 +95,7 @@ export default class Push extends SfCommand<PushResult> {
       const processFile = async (): Promise<void> => {
         const json = readJsonFile(file);
         const fileName = getNameFromJson(json);
+        const jsonForPush = stripRootUuid(json);
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
 
@@ -103,7 +105,12 @@ export default class Push extends SfCommand<PushResult> {
             return null;
           });
 
-          if (existingJson && isJsonEqual(json, existingJson)) {
+          if (
+            existingJson &&
+            typeof existingJson === 'object' &&
+            !Array.isArray(existingJson) &&
+            isJsonEqual(jsonForPush, stripRootUuid(existingJson as Record<string, unknown>))
+          ) {
             this.log(messages.getMessage('info.skipped', [fileName]));
             skipped++;
             return;
@@ -116,7 +123,7 @@ export default class Push extends SfCommand<PushResult> {
             sfid: existingId ?? undefined,
             config: {
               name: fileName,
-              ...(json as object),
+              ...jsonForPush,
             },
           }),
           headers: {
@@ -133,7 +140,7 @@ export default class Push extends SfCommand<PushResult> {
         const responseData = (await response.json()) as { url: string };
 
         const formTemplateJson = JSON.stringify({
-          ...(json as object),
+          ...jsonForPush,
           url: responseData.url,
         });
 

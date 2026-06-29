@@ -86,7 +86,8 @@ describe('sharinpix form push', () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     mock({
       'sharinpix/forms': {
-        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
+        'Form_1-xxxx.json':
+          '{"name":"Form 1","uuid":"source-org-uuid","fieldA":true,"elements":[{"uuid":"nested-uuid"}]}',
         'Invalid_Json-xxxx.json': 'invalid-json',
       },
     });
@@ -146,6 +147,18 @@ describe('sharinpix form push', () => {
     expect(result.failed).to.equal(1);
     expect(result.skipped).to.equal(0);
     expect(result.deleted).to.equal(0);
+
+    const uploadRequest = fetchStub.secondCall.args[1] as { body: string };
+    const uploadBody = JSON.parse(uploadRequest.body) as {
+      config: Record<string, unknown>;
+    };
+    expect(uploadBody.config).to.not.have.property('uuid');
+    expect(uploadBody.config.elements).to.deep.equal([{ uuid: 'nested-uuid' }]);
+
+    const importPayload = apexStub.post.secondCall.args[1] as { formTemplateJson: string };
+    const importedJson = JSON.parse(importPayload.formTemplateJson) as Record<string, unknown>;
+    expect(importedJson).to.not.have.property('uuid');
+    expect(importedJson.elements).to.deep.equal([{ uuid: 'nested-uuid' }]);
 
     mock.restore();
   });
