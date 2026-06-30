@@ -176,7 +176,9 @@
   "author": "SharinPix",
   "resolutions": {
     "@types/node": "^20.5.1",
-    "@oclif/core": "4.11.11"
+    "@oclif/core": "4.11.11",
+    "@actions/http-client/undici": "^6.27.0",
+    "@semantic-release/github/undici": "^7.24.0"
   },
   "overrides": {
     "@types/node": "^20.5.1",
@@ -193,7 +195,7 @@
     "husky": "^9.1.7",
     "mock-fs": "^5.5.0",
     "oclif": "^4.23.24",
-    "semantic-release": "^25.0.3",
+    "semantic-release": "^25.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
