@@ -175,10 +175,12 @@
   "type": "module",
   "author": "SharinPix",
   "resolutions": {
-    "@types/node": "^20.5.1"
+    "@types/node": "^20.5.1",
+    "@oclif/core": "4.11.11"
   },
   "overrides": {
-    "@types/node": "^20.5.1"
+    "@types/node": "^20.5.1",
+    "@oclif/core": "4.11.11"
   },
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^5.3.10",
