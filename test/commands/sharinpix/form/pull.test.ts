@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
@@ -70,7 +71,11 @@ describe('sharinpix form pull', () => {
     const fetchStub = $$.SANDBOX.stub();
     fetchStub.onCall(0).resolves({
       ok: true,
-      json: async () => ({ name: 'Form 1', data: 'test' }),
+      json: async () => ({
+        name: 'Form 1',
+        uuid: 'org-a-uuid',
+        data: 'test',
+      }),
       status: 200,
       statusText: 'OK',
     });
@@ -81,9 +86,18 @@ describe('sharinpix form pull', () => {
     });
     global.fetch = fetchStub;
 
+    const writeFileSyncStub = $$.SANDBOX.stub(fs, 'writeFileSync');
+
     const result = await pullInstance.run();
 
     expect(result.formsDownloaded).to.equal(1);
     expect(result.formsFailed).to.equal(1);
+
+    const writtenJson = JSON.parse(writeFileSyncStub.firstCall.args[1] as string) as Record<string, unknown>;
+    expect(writtenJson).to.not.have.property('uuid');
+    expect(writtenJson).to.deep.equal({
+      name: 'Form 1',
+      data: 'test',
+    });
   });
 });
