@@ -71,7 +71,16 @@ export default class Pull extends SfCommand<PullResult> {
 
         const form: unknown = await response.json();
         const safeFilename = createSafeFilename(record.Name);
-        fs.writeFileSync(`sharinpix/forms/${safeFilename}.json`, JSON.stringify(form, null, 2));
+        fs.writeFileSync(
+          `sharinpix/forms/${safeFilename}.json`,
+          JSON.stringify(
+            form,
+            function (key: string, value: unknown): unknown {
+              return key === 'uuid' && this === form ? undefined : value;
+            },
+            2
+          )
+        );
         this.log(messages.getMessage('info.hello', [record.Name, record.sharinpix__FormUrl__c]));
         formsDownloaded++;
       } catch (error) {
