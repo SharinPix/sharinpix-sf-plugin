@@ -46,6 +46,8 @@ describe('sharinpix form pull', () => {
         sharinpix__FormUrl__c: 'https://example.com/form1',
         // eslint-disable-next-line camelcase
         sharinpix__Description__c: 'desc1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormTemplateMain__c: 'm1',
       },
       {
         Id: 'a2',
@@ -54,6 +56,8 @@ describe('sharinpix form pull', () => {
         sharinpix__FormUrl__c: 'https://example.com/form2',
         // eslint-disable-next-line camelcase
         sharinpix__Description__c: 'desc2',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormTemplateMain__c: 'm2',
       },
     ];
 
@@ -93,11 +97,69 @@ describe('sharinpix form pull', () => {
     expect(result.formsDownloaded).to.equal(1);
     expect(result.formsFailed).to.equal(1);
 
+    expect(queryStub.firstCall.args[0] as string)
+      .to.include("sharinpix__RecordType__c = 'version'")
+      .and.to.include('sharinpix__Active__c = true')
+      .and.to.include('sharinpix__FormTemplateMain__c');
+
     const writtenJson = JSON.parse(writeFileSyncStub.firstCall.args[1] as string) as Record<string, unknown>;
     expect(writtenJson).to.not.have.property('uuid');
     expect(writtenJson).to.deep.equal({
       name: 'Form 1',
       data: 'test',
+      mainId: 'm1',
+    });
+  });
+
+  it('should fall back to the record Id when FormTemplateMain__c is empty', async () => {
+    const mockRecords = [
+      {
+        Id: 'a1',
+        Name: 'Form 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/form1',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormTemplateMain__c: null,
+      },
+    ];
+
+    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
+    const getConnectionStub = $$.SANDBOX.stub().returns({ query: queryStub });
+    const orgStub = { getConnection: getConnectionStub };
+
+    const argv: string[] = [];
+    const config = { bin: 'sf', name: 'test', root: '', version: '1.0.0' } as unknown; // Minimal config stub
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    const pullInstance = new Pull(argv, config as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    $$.SANDBOX.stub(pullInstance as any, 'parse').callsFake(async () => ({ flags: { org: orgStub } }));
+
+    const fetchStub = $$.SANDBOX.stub();
+    fetchStub.onCall(0).resolves({
+      ok: true,
+      json: async () => ({
+        name: 'Form 1',
+        data: 'test',
+      }),
+      status: 200,
+      statusText: 'OK',
+    });
+    global.fetch = fetchStub;
+
+    const writeFileSyncStub = $$.SANDBOX.stub(fs, 'writeFileSync');
+
+    const result = await pullInstance.run();
+
+    expect(result.formsDownloaded).to.equal(1);
+    expect(result.formsFailed).to.equal(0);
+
+    const writtenJson = JSON.parse(writeFileSyncStub.firstCall.args[1] as string) as Record<string, unknown>;
+    expect(writtenJson).to.deep.equal({
+      name: 'Form 1',
+      data: 'test',
+      mainId: 'a1',
     });
   });
 });
