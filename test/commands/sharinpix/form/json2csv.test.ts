@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { TestContext } from '@salesforce/core/testSetup';
@@ -9,6 +8,7 @@ import { parse } from 'csv-parse/sync';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
+import { patchFsWithMemfs } from '../../../helpers/memfs.js';
 
 function schemaHeadersFromKeys(allKeys: Set<string>): string[] {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -25,20 +25,19 @@ function seedFormFiles(files: Record<string, string>): void {
 
 describe('sharinpix form json2csv', () => {
   const $$ = new TestContext();
-  let originalCwd: string;
-  let tmpDir: string;
+  let restoreFs = (): void => {};
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    originalCwd = process.cwd();
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sharinpix-'));
-    process.chdir(tmpDir);
+    restoreFs = patchFsWithMemfs({ sharinpix: null });
   });
 
   afterEach(() => {
-    $$.restore();
-    process.chdir(originalCwd);
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+    try {
+      $$.restore();
+    } finally {
+      restoreFs();
+    }
   });
 
   it('should have command metadata defined', () => {
@@ -311,12 +310,15 @@ describe('sharinpix form json2csv', () => {
     const FIXTURES = fs
       .readdirSync(FIXTURES_DIR)
       .filter((f) => f.endsWith('.json'))
-      .sort();
+      .sort()
+      .map((name) => ({
+        content: fs.readFileSync(path.join(FIXTURES_DIR, name), 'utf8'),
+        name,
+      }));
 
-    for (const fixtureName of FIXTURES) {
+    for (const { content, name: fixtureName } of FIXTURES) {
       it(`should round-trip ${fixtureName} with no changes`, async () => {
-        const fixturePath = path.join(FIXTURES_DIR, fixtureName);
-        const originalJson = JSON.parse(fs.readFileSync(fixturePath, 'utf8')) as unknown;
+        const originalJson = JSON.parse(content) as unknown;
 
         seedFormFiles({
           [fixtureName]: JSON.stringify(originalJson),

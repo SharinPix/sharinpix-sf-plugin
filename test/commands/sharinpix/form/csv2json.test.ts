@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
@@ -7,6 +6,7 @@ import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { parse } from 'csv-parse/sync';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
+import { patchFsWithMemfs } from '../../../helpers/memfs.js';
 
 function seedFormFiles(files: Record<string, string>): void {
   fs.mkdirSync('sharinpix/forms', { recursive: true });
@@ -17,20 +17,19 @@ function seedFormFiles(files: Record<string, string>): void {
 
 describe('sharinpix form csv2json', () => {
   const $$ = new TestContext();
-  let originalCwd: string;
-  let tmpDir: string;
+  let restoreFs = (): void => {};
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    originalCwd = process.cwd();
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sharinpix-'));
-    process.chdir(tmpDir);
+    restoreFs = patchFsWithMemfs({ sharinpix: null });
   });
 
   afterEach(() => {
-    $$.restore();
-    process.chdir(originalCwd);
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+    try {
+      $$.restore();
+    } finally {
+      restoreFs();
+    }
   });
 
   it('should have command metadata defined', () => {

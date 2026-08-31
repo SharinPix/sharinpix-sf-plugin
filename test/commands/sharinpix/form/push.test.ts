@@ -1,28 +1,26 @@
 import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import Push from '../../../../src/commands/sharinpix/form/push.js';
+import { patchFsWithMemfs } from '../../../helpers/memfs.js';
 
 describe('sharinpix form push', () => {
   const $$ = new TestContext();
 
-  let originalCwd: string;
-  let tmpDir: string;
+  let restoreFs = (): void => {};
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    originalCwd = process.cwd();
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sharinpix-'));
-    process.chdir(tmpDir);
+    restoreFs = patchFsWithMemfs({ sharinpix: { forms: null } });
   });
 
   afterEach(() => {
-    $$.restore();
-    process.chdir(originalCwd);
-    fs.rmSync(tmpDir, { recursive: true, force: true });
+    try {
+      $$.restore();
+    } finally {
+      restoreFs();
+    }
   });
 
   it('should have correct command metadata', () => {
