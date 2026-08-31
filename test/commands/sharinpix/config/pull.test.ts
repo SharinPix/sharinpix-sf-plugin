@@ -1,19 +1,27 @@
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import mock from 'mock-fs';
 import Pull from '../../../../src/commands/sharinpix/config/pull.js';
 
 describe('sharinpix config pull', () => {
   const $$ = new TestContext();
+  let originalCwd: string;
+  let tmpDir: string;
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
+    originalCwd = process.cwd();
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sharinpix-'));
+    process.chdir(tmpDir);
   });
 
   afterEach(() => {
     $$.restore();
-    mock.restore();
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
   it('should have correct command metadata', () => {
@@ -41,10 +49,7 @@ describe('sharinpix config pull', () => {
   });
 
   it('should download config successfully', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    mock({
-      sharinpix: {},
-    });
+    fs.mkdirSync('sharinpix', { recursive: true });
 
     const mockConfig = {
       setting1: 'value1',
@@ -82,10 +87,7 @@ describe('sharinpix config pull', () => {
   });
 
   it('should handle API errors gracefully', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    mock({
-      sharinpix: {},
-    });
+    fs.mkdirSync('sharinpix', { recursive: true });
 
     const apexStub = {
       post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }),

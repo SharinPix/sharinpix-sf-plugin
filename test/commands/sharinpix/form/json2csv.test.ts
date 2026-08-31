@@ -1,11 +1,11 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { parse } from 'csv-parse/sync';
-import mock from 'mock-fs';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
@@ -16,20 +16,29 @@ function schemaHeadersFromKeys(allKeys: Set<string>): string[] {
   return schemaOrder.filter((k) => k !== 'index' && allKeys.has(k));
 }
 
+function seedFormFiles(files: Record<string, string>): void {
+  fs.mkdirSync('sharinpix/forms', { recursive: true });
+  for (const [name, content] of Object.entries(files)) {
+    fs.writeFileSync(path.join('sharinpix/forms', name), content);
+  }
+}
+
 describe('sharinpix form json2csv', () => {
   const $$ = new TestContext();
-  let fsMocked = false;
+  let originalCwd: string;
+  let tmpDir: string;
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
+    originalCwd = process.cwd();
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sharinpix-'));
+    process.chdir(tmpDir);
   });
 
   afterEach(() => {
     $$.restore();
-    if (fsMocked) {
-      mock.restore();
-      fsMocked = false;
-    }
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
   it('should have command metadata defined', () => {
@@ -39,25 +48,22 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should generate CSV files from JSON form definitions', async () => {
-    mock({
-      'sharinpix/forms': {
-        'Form1.json': JSON.stringify({
-          elements: [
-            { id: '1', label: 'Question 1', type: 'text' },
-            {
-              id: '2',
-              label: 'Question 2',
-              type: 'select',
-              options: [{ label: 'A,B' }, { label: 'C' }],
-            },
-          ],
-        }),
-        'NoElements.json': JSON.stringify({}),
-        'EmptyElements.json': JSON.stringify({ elements: [] }),
-        'Invalid.json': 'not-json',
-      },
+    seedFormFiles({
+      'Form1.json': JSON.stringify({
+        elements: [
+          { id: '1', label: 'Question 1', type: 'text' },
+          {
+            id: '2',
+            label: 'Question 2',
+            type: 'select',
+            options: [{ label: 'A,B' }, { label: 'C' }],
+          },
+        ],
+      }),
+      'NoElements.json': JSON.stringify({}),
+      'EmptyElements.json': JSON.stringify({ elements: [] }),
+      'Invalid.json': 'not-json',
     });
-    fsMocked = true;
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -113,12 +119,9 @@ describe('sharinpix form json2csv', () => {
       pdfLinkOnSubmit: false,
     };
 
-    mock({
-      'sharinpix/forms': {
-        'RoundTripTest.json': JSON.stringify(originalJson),
-      },
+    seedFormFiles({
+      'RoundTripTest.json': JSON.stringify(originalJson),
     });
-    fsMocked = true;
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -143,19 +146,16 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should skip invalid JSON files, invalid elements shapes, and invalid element values', async () => {
-    mock({
-      'sharinpix/forms': {
-        'Valid.json': JSON.stringify({
-          name: 'Valid',
-          elements: [{ id: '1', required: true, options: [] }],
-        }),
-        'ElementsNotArray.json': JSON.stringify({ elements: { bad: true } }),
-        'ElementsNull.json': JSON.stringify({ elements: null }),
-        'RootArray.json': JSON.stringify([]),
-        'WrongType.json': JSON.stringify({ elements: [{ id: '1', required: 'true' }] }),
-      },
+    seedFormFiles({
+      'Valid.json': JSON.stringify({
+        name: 'Valid',
+        elements: [{ id: '1', required: true, options: [] }],
+      }),
+      'ElementsNotArray.json': JSON.stringify({ elements: { bad: true } }),
+      'ElementsNull.json': JSON.stringify({ elements: null }),
+      'RootArray.json': JSON.stringify([]),
+      'WrongType.json': JSON.stringify({ elements: [{ id: '1', required: 'true' }] }),
     });
-    fsMocked = true;
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -182,12 +182,9 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should ignore unknown keys when generating CSV', async () => {
-    mock({
-      'sharinpix/forms': {
-        'UnknownKey.json': JSON.stringify({ elements: [{ id: '1', customKey: 'x', label: 'Hello' }] }),
-      },
+    seedFormFiles({
+      'UnknownKey.json': JSON.stringify({ elements: [{ id: '1', customKey: 'x', label: 'Hello' }] }),
     });
-    fsMocked = true;
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -207,18 +204,15 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should keep empty-string values in the schema and write explicit "" cells', async () => {
-    mock({
-      'sharinpix/forms': {
-        'EmptyStringMissing.json': JSON.stringify({
-          name: 'EmptyStringMissing',
-          elements: [
-            { id: '1', required: '', placeholder: '' },
-            { id: '2', required: true, placeholder: '' },
-          ],
-        }),
-      },
+    seedFormFiles({
+      'EmptyStringMissing.json': JSON.stringify({
+        name: 'EmptyStringMissing',
+        elements: [
+          { id: '1', required: '', placeholder: '' },
+          { id: '2', required: true, placeholder: '' },
+        ],
+      }),
     });
-    fsMocked = true;
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -286,12 +280,9 @@ describe('sharinpix form json2csv', () => {
       ],
     };
 
-    mock({
-      'sharinpix/forms': {
-        'RoundTripComplex.json': JSON.stringify(originalJson),
-      },
+    seedFormFiles({
+      'RoundTripComplex.json': JSON.stringify(originalJson),
     });
-    fsMocked = true;
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -325,14 +316,11 @@ describe('sharinpix form json2csv', () => {
     for (const fixtureName of FIXTURES) {
       it(`should round-trip ${fixtureName} with no changes`, async () => {
         const fixturePath = path.join(FIXTURES_DIR, fixtureName);
-        const originalJson = JSON.parse(mock.bypass(() => fs.readFileSync(fixturePath, 'utf8'))) as unknown;
+        const originalJson = JSON.parse(fs.readFileSync(fixturePath, 'utf8')) as unknown;
 
-        mock({
-          'sharinpix/forms': {
-            [fixtureName]: JSON.stringify(originalJson),
-          },
+        seedFormFiles({
+          [fixtureName]: JSON.stringify(originalJson),
         });
-        fsMocked = true;
 
         const argv: string[] = [];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

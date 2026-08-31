@@ -1,18 +1,28 @@
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import mock from 'mock-fs';
 import Push from '../../../../src/commands/sharinpix/permission/push.js';
 
 describe('sharinpix permission push', () => {
   const $$ = new TestContext();
 
+  let originalCwd: string;
+  let tmpDir: string;
+
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
+    originalCwd = process.cwd();
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sharinpix-'));
+    process.chdir(tmpDir);
   });
 
   afterEach(() => {
     $$.restore();
+    process.chdir(originalCwd);
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
   it('should have correct command metadata', () => {
@@ -104,13 +114,9 @@ describe('sharinpix permission push', () => {
   });
 
   it('should upload permissions and handle failures', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    mock({
-      'sharinpix/permissions': {
-        'Permission_1-xxxx.json': '{"name":"Permission 1","fieldA":false}',
-        'Invalid_Json-xxxx.json': 'invalid-json',
-      },
-    });
+    fs.mkdirSync('sharinpix/permissions', { recursive: true });
+    fs.writeFileSync('sharinpix/permissions/Permission_1-xxxx.json', '{"name":"Permission 1","fieldA":false}');
+    fs.writeFileSync('sharinpix/permissions/Invalid_Json-xxxx.json', 'invalid-json');
 
     const mockRecords = [
       {
@@ -148,8 +154,5 @@ describe('sharinpix permission push', () => {
     expect(result.failed).to.equal(1);
     expect(result.skipped).to.equal(0);
     expect(result.deleted).to.equal(0);
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    mock.restore();
   });
 });
