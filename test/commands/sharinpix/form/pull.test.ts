@@ -17,7 +17,7 @@ describe('sharinpix form pull', () => {
 
   it('should have correct command metadata', () => {
     expect(Pull.summary).to.include('Pull SharinPix form templates');
-    expect(Pull.description).to.include('Retrieves all SharinPix form templates');
+    expect(Pull.description).to.include('active "version" record-type');
     expect(Pull.flags).to.have.property('org');
     expect(Pull.flags).to.have.property('csv');
   });
@@ -46,6 +46,12 @@ describe('sharinpix form pull', () => {
         sharinpix__FormUrl__c: 'https://example.com/form1',
         // eslint-disable-next-line camelcase
         sharinpix__Description__c: 'desc1',
+        // eslint-disable-next-line camelcase
+        sharinpix__RecordType__c: 'version',
+        // eslint-disable-next-line camelcase
+        sharinpix__Active__c: true,
+        // eslint-disable-next-line camelcase
+        sharinpix__FormTemplateMain__c: 'main-a1',
       },
       {
         Id: 'a2',
@@ -54,6 +60,12 @@ describe('sharinpix form pull', () => {
         sharinpix__FormUrl__c: 'https://example.com/form2',
         // eslint-disable-next-line camelcase
         sharinpix__Description__c: 'desc2',
+        // eslint-disable-next-line camelcase
+        sharinpix__RecordType__c: 'version',
+        // eslint-disable-next-line camelcase
+        sharinpix__Active__c: true,
+        // eslint-disable-next-line camelcase
+        sharinpix__FormTemplateMain__c: 'main-a2',
       },
     ];
 
@@ -93,11 +105,17 @@ describe('sharinpix form pull', () => {
     expect(result.formsDownloaded).to.equal(1);
     expect(result.formsFailed).to.equal(1);
 
+    const soql = queryStub.firstCall.args[0] as string;
+    expect(soql).to.include("sharinpix__RecordType__c = 'version'");
+    expect(soql).to.include('sharinpix__Active__c = true');
+
     const writtenJson = JSON.parse(writeFileSyncStub.firstCall.args[1] as string) as Record<string, unknown>;
     expect(writtenJson).to.not.have.property('uuid');
     expect(writtenJson).to.deep.equal({
       name: 'Form 1',
       data: 'test',
+      // eslint-disable-next-line camelcase
+      sharinpix__FormTemplateMain__c: 'main-a1',
     });
   });
 });

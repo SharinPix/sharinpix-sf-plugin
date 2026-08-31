@@ -344,7 +344,7 @@ GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Retrieves all SharinPix form templates from the connected Salesforce org and saves them as JSON files in the local sharinpix/forms directory. This command fetches the form template metadata and downloads the actual form definition files.
+  Retrieves active "version" record-type SharinPix form templates from the connected Salesforce org and saves them as JSON files in the local sharinpix/forms directory. This command fetches the form template metadata and downloads the actual form definition files.
 
 EXAMPLES
   Pull all form templates from the default org:
