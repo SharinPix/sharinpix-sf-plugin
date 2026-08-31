@@ -1,39 +1,56 @@
 import fs from 'node:fs';
 import { fs as memoryFs, vol } from 'memfs';
 
-const patchedMethods = (Object.keys(memoryFs) as Array<keyof typeof memoryFs>).filter(
-  (method) => Object.getOwnPropertyDescriptor(fs, method)?.configurable !== false,
-);
-
 type NestedJson = Parameters<typeof vol.fromNestedJSON>[0];
+
+function getPatchedMethods(): Array<keyof typeof memoryFs> {
+  return (Object.keys(memoryFs) as Array<keyof typeof memoryFs>).filter((method) => {
+    if (Object.getOwnPropertyDescriptor(fs, method)?.configurable === false) {
+      return false;
+    }
+    if (method === 'promises') {
+      return true;
+    }
+    return typeof memoryFs[method] === 'function' && /^[a-z]/u.test(String(method));
+  });
+}
 
 export function patchFsWithMemfs(tree: NestedJson): () => void {
   vol.reset();
   vol.fromNestedJSON(tree, process.cwd());
 
-  const originalDescriptors = patchedMethods.map((method) => ({
+  const originalDescriptors = getPatchedMethods().map((method) => ({
     descriptor: Object.getOwnPropertyDescriptor(fs, method),
     method,
   }));
 
-  for (const { descriptor, method } of originalDescriptors) {
-    Object.defineProperty(fs, method, {
-      configurable: descriptor?.configurable ?? true,
-      enumerable: descriptor?.enumerable ?? true,
-      value: memoryFs[method],
-      writable: true,
-    });
-  }
-
-  return function restoreFs(): void {
+  const restoreFs = (): void => {
     try {
       for (const { descriptor, method } of originalDescriptors) {
         if (descriptor) {
           Object.defineProperty(fs, method, descriptor);
+        } else {
+          Reflect.deleteProperty(fs, method);
         }
       }
     } finally {
       vol.reset();
     }
   };
+
+  try {
+    for (const { descriptor, method } of originalDescriptors) {
+      Object.defineProperty(fs, method, {
+        configurable: descriptor?.configurable ?? true,
+        enumerable: descriptor?.enumerable ?? true,
+        value: memoryFs[method],
+        writable: descriptor?.writable ?? true,
+      });
+    }
+  } catch (error) {
+    restoreFs();
+    throw error;
+  }
+
+  return restoreFs;
 }
