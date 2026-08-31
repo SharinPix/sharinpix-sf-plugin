@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import { fs as memoryFs, vol } from 'memfs';
 
-const patchedMethods = ['existsSync', 'mkdirSync', 'promises', 'readFileSync', 'readdirSync', 'writeFileSync'] as const;
+const patchedMethods = (Object.keys(memoryFs) as Array<keyof typeof memoryFs>).filter(
+  (method) => Object.getOwnPropertyDescriptor(fs, method)?.configurable !== false,
+);
 
 type NestedJson = Parameters<typeof vol.fromNestedJSON>[0];
 
