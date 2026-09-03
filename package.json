@@ -192,6 +192,7 @@
     "@types/mocha": "^10.0.7",
     "cross-env": "^7.0.3",
     "eslint-plugin-sf-plugin": "^1.20.33",
+    "fs-monkey": "^1.1.0",
     "husky": "^9.1.7",
     "memfs": "^4.68.2",
     "oclif": "^4.23.24",
