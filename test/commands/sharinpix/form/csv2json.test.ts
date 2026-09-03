@@ -5,8 +5,7 @@ import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { parse } from 'csv-parse/sync';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
-import { patchFsWithMemfs } from '../../../helpers/memfs.js';
-import { seedFormFiles } from '../../../helpers/formFiles.js';
+import { patchFsWithMemfs, seedFormFiles } from '../../../helpers/memfs.js';
 
 describe('sharinpix form csv2json', () => {
   const $$ = new TestContext();
