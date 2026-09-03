@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import path from 'node:path';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
@@ -7,13 +6,7 @@ import { parse } from 'csv-parse/sync';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
 import { patchFsWithMemfs } from '../../../helpers/memfs.js';
-
-function seedFormFiles(files: Record<string, string>): void {
-  fs.mkdirSync('sharinpix/forms', { recursive: true });
-  for (const [name, content] of Object.entries(files)) {
-    fs.writeFileSync(path.join('sharinpix/forms', name), content);
-  }
-}
+import { seedFormFiles } from '../../../helpers/formFiles.js';
 
 describe('sharinpix form csv2json', () => {
   const $$ = new TestContext();

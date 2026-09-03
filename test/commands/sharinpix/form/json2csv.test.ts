@@ -9,18 +9,12 @@ import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
 import { patchFsWithMemfs } from '../../../helpers/memfs.js';
+import { seedFormFiles } from '../../../helpers/formFiles.js';
 
 function schemaHeadersFromKeys(allKeys: Set<string>): string[] {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const schemaOrder: readonly string[] = elementKeyOrder as unknown as readonly string[];
   return schemaOrder.filter((k) => k !== 'index' && allKeys.has(k));
-}
-
-function seedFormFiles(files: Record<string, string>): void {
-  fs.mkdirSync('sharinpix/forms', { recursive: true });
-  for (const [name, content] of Object.entries(files)) {
-    fs.writeFileSync(path.join('sharinpix/forms', name), content);
-  }
 }
 
 describe('sharinpix form json2csv', () => {
