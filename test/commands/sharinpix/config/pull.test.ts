@@ -1,7 +1,7 @@
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import mock from 'mock-fs';
+import { mockFs as mock } from '../../../helpers/mockFs.js';
 import Pull from '../../../../src/commands/sharinpix/config/pull.js';
 
 describe('sharinpix config pull', () => {

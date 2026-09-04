@@ -5,7 +5,7 @@ import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { parse } from 'csv-parse/sync';
-import mock from 'mock-fs';
+import { mockFs as mock } from '../../../helpers/mockFs.js';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
