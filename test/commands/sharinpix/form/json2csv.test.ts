@@ -5,12 +5,14 @@ import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { parse } from 'csv-parse/sync';
-import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
-import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
-import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
 import { vol } from 'memfs';
 // @ts-expect-error fs-monkey ships no type declarations
 import { patchFs } from 'fs-monkey';
+import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
+import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
+import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
+
+const patchFsTyped = patchFs as (volume: unknown) => () => void;
 
 function schemaHeadersFromKeys(allKeys: Set<string>): string[] {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -26,7 +28,7 @@ describe('sharinpix form json2csv', () => {
     stubSfCommandUx($$.SANDBOX);
     vol.reset();
     vol.fromNestedJSON({ sharinpix: null }, process.cwd());
-    restoreFs = patchFs(vol);
+    restoreFs = patchFsTyped(vol);
   });
 
   afterEach(() => {

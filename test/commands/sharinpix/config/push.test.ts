@@ -1,11 +1,13 @@
 import fs from 'node:fs';
+import { vol } from 'memfs';
+// @ts-expect-error fs-monkey ships no type declarations
+import { patchFs } from 'fs-monkey';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import Push from '../../../../src/commands/sharinpix/config/push.js';
-import { vol } from 'memfs';
-// @ts-expect-error fs-monkey ships no type declarations
-import { patchFs } from 'fs-monkey';
+
+const patchFsTyped = patchFs as (volume: unknown) => () => void;
 
 describe('sharinpix config push', () => {
   const $$ = new TestContext();
@@ -15,7 +17,7 @@ describe('sharinpix config push', () => {
     stubSfCommandUx($$.SANDBOX);
     vol.reset();
     vol.fromNestedJSON({ sharinpix: null }, process.cwd());
-    restoreFs = patchFs(vol);
+    restoreFs = patchFsTyped(vol);
   });
 
   afterEach(() => {
