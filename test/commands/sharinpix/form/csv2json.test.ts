@@ -5,7 +5,9 @@ import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { parse } from 'csv-parse/sync';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
-import { patchFsWithMemfs, seedFormFiles } from '../../../helpers/memfs.js';
+import { vol } from 'memfs';
+// @ts-expect-error fs-monkey ships no type declarations
+import { patchFs } from 'fs-monkey';
 
 describe('sharinpix form csv2json', () => {
   const $$ = new TestContext();
@@ -13,7 +15,9 @@ describe('sharinpix form csv2json', () => {
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    restoreFs = patchFsWithMemfs({ sharinpix: null });
+    vol.reset();
+    vol.fromNestedJSON({ sharinpix: null }, process.cwd());
+    restoreFs = patchFs(vol);
   });
 
   afterEach(() => {
@@ -45,11 +49,11 @@ describe('sharinpix form csv2json', () => {
       ],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'Form1.csv': csvContent,
       'Form1.json': jsonContent,
       'Empty.csv': 'id,label,type,options\n',
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,10 +96,10 @@ describe('sharinpix form csv2json', () => {
       ],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'FormWithCommas.csv': csvContent,
       'FormWithCommas.json': formWithCommasJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,10 +128,10 @@ describe('sharinpix form csv2json', () => {
       ],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'FormWithQuotes.csv': csvContent,
       'FormWithQuotes.json': formWithQuotesJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -152,10 +156,10 @@ describe('sharinpix form csv2json', () => {
       elements: [{ id: '1', label: 'Question with\nnewline', type: 'text' }],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'FormWithNewline.csv': csvContent,
       'FormWithNewline.json': formWithNewlineJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -178,11 +182,11 @@ describe('sharinpix form csv2json', () => {
       elements: [{ id: '1', label: 'Question 1', type: 'text' }],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'HeaderOnly.csv': 'id,label,type,options\n',
       'Valid.csv': 'id,label,type\n1,Question 1,text\n',
       'Valid.json': validJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -207,10 +211,10 @@ describe('sharinpix form csv2json', () => {
       ],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'FormWithEmpty.csv': csvContent,
       'FormWithEmpty.json': formWithEmptyJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -246,10 +250,10 @@ describe('sharinpix form csv2json', () => {
       ],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'FormBlankRemoves.csv': csvContent,
       'FormBlankRemoves.json': originalJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -281,10 +285,10 @@ describe('sharinpix form csv2json', () => {
       elements: [{ id: '1', label: 'Question 1', type: 'text', options: 'plain-text-option' }],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'FormWithPlainOptions.csv': csvContent,
       'FormWithPlainOptions.json': originalJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -303,7 +307,7 @@ describe('sharinpix form csv2json', () => {
   it('should skip CSV conversion when the target JSON is missing, invalid, or not an object', async () => {
     const goodJson = JSON.stringify({ name: 'Good', elements: [] });
 
-    seedFormFiles({
+    vol.fromJSON({
       'Good.csv': 'id,label,type\n1,Ok,text\n',
       'Good.json': goodJson,
 
@@ -314,7 +318,7 @@ describe('sharinpix form csv2json', () => {
 
       'ArrayRoot.csv': 'id,label,type\n1,Ok,text\n',
       'ArrayRoot.json': '[]',
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -340,10 +344,10 @@ describe('sharinpix form csv2json', () => {
       elements: [{ id: 'pre', label: 'existing', type: 'text' }],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'BadCell.csv': 'id,required\n1,TRUE\n',
       'BadCell.json': originalJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -375,10 +379,10 @@ describe('sharinpix form csv2json', () => {
       elements: [],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'CsvRoundTrip.csv': csvContent,
       'CsvRoundTrip.json': jsonContent,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -441,13 +445,13 @@ describe('sharinpix form csv2json', () => {
       elements: [{ id: '2', label: 'Question 2', type: 'select' }],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'Valid1.csv': 'id,label,type\n1,Question 1,text\n',
       'Valid1.json': valid1Json,
       'Valid2.csv': 'id,label,type\n2,Question 2,select\n',
       'Valid2.json': valid2Json,
       'Empty.csv': 'id,label,type\n',
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -478,10 +482,10 @@ describe('sharinpix form csv2json', () => {
       elements: [{ id: '1', label: 'Question 1', type: 'text' }],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'FormWindows.csv': csvContent,
       'FormWindows.json': formWindowsJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -506,10 +510,10 @@ describe('sharinpix form csv2json', () => {
       elements: [{ id: 'elem1', index: 0, required: true, rows: 3, customKey: '{"a":1}' }],
     });
 
-    seedFormFiles({
+    vol.fromJSON({
       'TypedParsing.csv': csvContent,
       'TypedParsing.json': originalJson,
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

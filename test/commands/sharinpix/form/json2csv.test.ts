@@ -8,7 +8,9 @@ import { parse } from 'csv-parse/sync';
 import Json2Csv from '../../../../src/commands/sharinpix/form/json2csv.js';
 import Csv2Json from '../../../../src/commands/sharinpix/form/csv2json.js';
 import { elementKeyOrder } from '../../../../src/helpers/form/elementKeys.js';
-import { patchFsWithMemfs, seedFormFiles } from '../../../helpers/memfs.js';
+import { vol } from 'memfs';
+// @ts-expect-error fs-monkey ships no type declarations
+import { patchFs } from 'fs-monkey';
 
 function schemaHeadersFromKeys(allKeys: Set<string>): string[] {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -22,7 +24,9 @@ describe('sharinpix form json2csv', () => {
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    restoreFs = patchFsWithMemfs({ sharinpix: null });
+    vol.reset();
+    vol.fromNestedJSON({ sharinpix: null }, process.cwd());
+    restoreFs = patchFs(vol);
   });
 
   afterEach(() => {
@@ -40,7 +44,7 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should generate CSV files from JSON form definitions', async () => {
-    seedFormFiles({
+    vol.fromJSON({
       'Form1.json': JSON.stringify({
         elements: [
           { id: '1', label: 'Question 1', type: 'text' },
@@ -55,7 +59,7 @@ describe('sharinpix form json2csv', () => {
       'NoElements.json': JSON.stringify({}),
       'EmptyElements.json': JSON.stringify({ elements: [] }),
       'Invalid.json': 'not-json',
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -111,9 +115,9 @@ describe('sharinpix form json2csv', () => {
       pdfLinkOnSubmit: false,
     };
 
-    seedFormFiles({
+    vol.fromJSON({
       'RoundTripTest.json': JSON.stringify(originalJson),
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -138,7 +142,7 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should skip invalid JSON files, invalid elements shapes, and invalid element values', async () => {
-    seedFormFiles({
+    vol.fromJSON({
       'Valid.json': JSON.stringify({
         name: 'Valid',
         elements: [{ id: '1', required: true, options: [] }],
@@ -147,7 +151,7 @@ describe('sharinpix form json2csv', () => {
       'ElementsNull.json': JSON.stringify({ elements: null }),
       'RootArray.json': JSON.stringify([]),
       'WrongType.json': JSON.stringify({ elements: [{ id: '1', required: 'true' }] }),
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -174,9 +178,9 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should ignore unknown keys when generating CSV', async () => {
-    seedFormFiles({
+    vol.fromJSON({
       'UnknownKey.json': JSON.stringify({ elements: [{ id: '1', customKey: 'x', label: 'Hello' }] }),
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -196,7 +200,7 @@ describe('sharinpix form json2csv', () => {
   });
 
   it('should keep empty-string values in the schema and write explicit "" cells', async () => {
-    seedFormFiles({
+    vol.fromJSON({
       'EmptyStringMissing.json': JSON.stringify({
         name: 'EmptyStringMissing',
         elements: [
@@ -204,7 +208,7 @@ describe('sharinpix form json2csv', () => {
           { id: '2', required: true, placeholder: '' },
         ],
       }),
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -272,9 +276,9 @@ describe('sharinpix form json2csv', () => {
       ],
     };
 
-    seedFormFiles({
+    vol.fromJSON({
       'RoundTripComplex.json': JSON.stringify(originalJson),
-    });
+    }, 'sharinpix/forms');
 
     const argv: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -313,9 +317,9 @@ describe('sharinpix form json2csv', () => {
       it(`should round-trip ${fixtureName} with no changes`, async () => {
         const originalJson = JSON.parse(content) as unknown;
 
-        seedFormFiles({
+        vol.fromJSON({
           [fixtureName]: JSON.stringify(originalJson),
-        });
+        }, 'sharinpix/forms');
 
         const argv: string[] = [];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -3,7 +3,9 @@ import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import Pull from '../../../../src/commands/sharinpix/config/pull.js';
-import { patchFsWithMemfs } from '../../../helpers/memfs.js';
+import { vol } from 'memfs';
+// @ts-expect-error fs-monkey ships no type declarations
+import { patchFs } from 'fs-monkey';
 
 describe('sharinpix config pull', () => {
   const $$ = new TestContext();
@@ -11,7 +13,9 @@ describe('sharinpix config pull', () => {
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    restoreFs = patchFsWithMemfs({ sharinpix: null });
+    vol.reset();
+    vol.fromNestedJSON({ sharinpix: null }, process.cwd());
+    restoreFs = patchFs(vol);
   });
 
   afterEach(() => {
