@@ -1,31 +1,19 @@
-import fs from 'node:fs';
-import { vol } from 'memfs';
-// @ts-expect-error fs-monkey ships no type declarations
-import { patchFs } from 'fs-monkey';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import { mockFs as mock } from '../../../helpers/mockFs.js';
 import Push from '../../../../src/commands/sharinpix/config/push.js';
-
-const patchFsTyped = patchFs as (volume: unknown) => () => void;
 
 describe('sharinpix config push', () => {
   const $$ = new TestContext();
-  let restoreFs = (): void => {};
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    vol.reset();
-    vol.fromNestedJSON({ sharinpix: null }, process.cwd());
-    restoreFs = patchFsTyped(vol);
   });
 
   afterEach(() => {
-    try {
-      $$.restore();
-    } finally {
-      restoreFs();
-    }
+    $$.restore();
+    mock.restore();
   });
 
   it('should have correct command metadata', () => {
@@ -53,7 +41,10 @@ describe('sharinpix config push', () => {
   });
 
   it('should error when config file does not exist', async () => {
-    fs.mkdirSync('sharinpix', { recursive: true });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      sharinpix: {},
+    });
 
     const apexStub = {
       post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }),
@@ -84,8 +75,12 @@ describe('sharinpix config push', () => {
       setting2: 'value2',
     };
 
-    fs.mkdirSync('sharinpix', { recursive: true });
-    fs.writeFileSync('sharinpix/config.json', JSON.stringify(mockConfig));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      sharinpix: {
+        'config.json': JSON.stringify(mockConfig),
+      },
+    });
 
     const apexStub = {
       post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }),
@@ -124,8 +119,12 @@ describe('sharinpix config push', () => {
       setting2: 'value2',
     };
 
-    fs.mkdirSync('sharinpix', { recursive: true });
-    fs.writeFileSync('sharinpix/config.json', JSON.stringify(mockConfig));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      sharinpix: {
+        'config.json': JSON.stringify(mockConfig),
+      },
+    });
 
     const apexStub = {
       post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }),
@@ -158,8 +157,12 @@ describe('sharinpix config push', () => {
   });
 
   it('should handle invalid JSON in config file', async () => {
-    fs.mkdirSync('sharinpix', { recursive: true });
-    fs.writeFileSync('sharinpix/config.json', 'invalid-json');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      sharinpix: {
+        'config.json': 'invalid-json',
+      },
+    });
 
     const apexStub = {
       post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }),

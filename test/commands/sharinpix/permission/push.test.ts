@@ -1,32 +1,18 @@
-import fs from 'node:fs';
-import { vol } from 'memfs';
-// @ts-expect-error fs-monkey ships no type declarations
-import { patchFs } from 'fs-monkey';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import { mockFs as mock } from '../../../helpers/mockFs.js';
 import Push from '../../../../src/commands/sharinpix/permission/push.js';
-
-const patchFsTyped = patchFs as (volume: unknown) => () => void;
 
 describe('sharinpix permission push', () => {
   const $$ = new TestContext();
 
-  let restoreFs = (): void => {};
-
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    vol.reset();
-    vol.fromNestedJSON({ sharinpix: { permissions: null } }, process.cwd());
-    restoreFs = patchFsTyped(vol);
   });
 
   afterEach(() => {
-    try {
-      $$.restore();
-    } finally {
-      restoreFs();
-    }
+    $$.restore();
   });
 
   it('should have correct command metadata', () => {
@@ -118,9 +104,13 @@ describe('sharinpix permission push', () => {
   });
 
   it('should upload permissions and handle failures', async () => {
-    fs.mkdirSync('sharinpix/permissions', { recursive: true });
-    fs.writeFileSync('sharinpix/permissions/Permission_1-xxxx.json', '{"name":"Permission 1","fieldA":false}');
-    fs.writeFileSync('sharinpix/permissions/Invalid_Json-xxxx.json', 'invalid-json');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/permissions': {
+        'Permission_1-xxxx.json': '{"name":"Permission 1","fieldA":false}',
+        'Invalid_Json-xxxx.json': 'invalid-json',
+      },
+    });
 
     const mockRecords = [
       {
@@ -158,5 +148,8 @@ describe('sharinpix permission push', () => {
     expect(result.failed).to.equal(1);
     expect(result.skipped).to.equal(0);
     expect(result.deleted).to.equal(0);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    mock.restore();
   });
 });

@@ -1,32 +1,18 @@
-import fs from 'node:fs';
-import { vol } from 'memfs';
-// @ts-expect-error fs-monkey ships no type declarations
-import { patchFs } from 'fs-monkey';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import { mockFs as mock } from '../../../helpers/mockFs.js';
 import Push from '../../../../src/commands/sharinpix/form/push.js';
-
-const patchFsTyped = patchFs as (volume: unknown) => () => void;
 
 describe('sharinpix form push', () => {
   const $$ = new TestContext();
 
-  let restoreFs = (): void => {};
-
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    vol.reset();
-    vol.fromNestedJSON({ sharinpix: { forms: null } }, process.cwd());
-    restoreFs = patchFsTyped(vol);
   });
 
   afterEach(() => {
-    try {
-      $$.restore();
-    } finally {
-      restoreFs();
-    }
+    $$.restore();
   });
 
   it('should have correct command metadata', () => {
@@ -97,9 +83,13 @@ describe('sharinpix form push', () => {
   });
 
   it('should upload forms and handle failures', async () => {
-    fs.mkdirSync('sharinpix/forms', { recursive: true });
-    fs.writeFileSync('sharinpix/forms/Form_1-xxxx.json', '{"name":"Form 1","fieldA":true}');
-    fs.writeFileSync('sharinpix/forms/Invalid_Json-xxxx.json', 'invalid-json');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
+        'Invalid_Json-xxxx.json': 'invalid-json',
+      },
+    });
 
     const mockRecords = [
       {
@@ -156,5 +146,7 @@ describe('sharinpix form push', () => {
     expect(result.failed).to.equal(1);
     expect(result.skipped).to.equal(0);
     expect(result.deleted).to.equal(0);
+
+    mock.restore();
   });
 });

@@ -1,31 +1,19 @@
-import fs from 'node:fs';
-import { vol } from 'memfs';
-// @ts-expect-error fs-monkey ships no type declarations
-import { patchFs } from 'fs-monkey';
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import { mockFs as mock } from '../../../helpers/mockFs.js';
 import Pull from '../../../../src/commands/sharinpix/config/pull.js';
-
-const patchFsTyped = patchFs as (volume: unknown) => () => void;
 
 describe('sharinpix config pull', () => {
   const $$ = new TestContext();
-  let restoreFs = (): void => {};
 
   beforeEach(() => {
     stubSfCommandUx($$.SANDBOX);
-    vol.reset();
-    vol.fromNestedJSON({ sharinpix: null }, process.cwd());
-    restoreFs = patchFsTyped(vol);
   });
 
   afterEach(() => {
-    try {
-      $$.restore();
-    } finally {
-      restoreFs();
-    }
+    $$.restore();
+    mock.restore();
   });
 
   it('should have correct command metadata', () => {
@@ -53,7 +41,10 @@ describe('sharinpix config pull', () => {
   });
 
   it('should download config successfully', async () => {
-    fs.mkdirSync('sharinpix', { recursive: true });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      sharinpix: {},
+    });
 
     const mockConfig = {
       setting1: 'value1',
@@ -91,7 +82,10 @@ describe('sharinpix config pull', () => {
   });
 
   it('should handle API errors gracefully', async () => {
-    fs.mkdirSync('sharinpix', { recursive: true });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      sharinpix: {},
+    });
 
     const apexStub = {
       post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }),
