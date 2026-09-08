@@ -1,7 +1,7 @@
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import mock from 'mock-fs';
+import { patchFsWithMemfs as mock } from '../../../helpers/memfs.js';
 import Push from '../../../../src/commands/sharinpix/config/push.js';
 
 describe('sharinpix config push', () => {
