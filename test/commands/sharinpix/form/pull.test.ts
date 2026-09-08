@@ -17,7 +17,7 @@ describe('sharinpix form pull', () => {
 
   it('should have correct command metadata', () => {
     expect(Pull.summary).to.include('Pull SharinPix form templates');
-    expect(Pull.description).to.include('Retrieves all SharinPix form templates');
+    expect(Pull.description).to.include('Retrieves active, version-record SharinPix form templates');
     expect(Pull.flags).to.have.property('org');
     expect(Pull.flags).to.have.property('csv');
   });
