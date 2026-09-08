@@ -5,20 +5,20 @@ import { vol } from 'memfs';
 let restoreFs = (): void => {};
 const patchFsTyped = patchFs as (volume: unknown) => () => void;
 
-export function mockFs(tree: Parameters<typeof vol.fromNestedJSON>[0]): void {
+export function patchFsWithMemfs(tree: Parameters<typeof vol.fromNestedJSON>[0]): void {
   restoreFs();
   vol.reset();
   vol.fromNestedJSON(tree, process.cwd());
   restoreFs = patchFsTyped(vol);
 }
 
-mockFs.restore = (): void => {
+patchFsWithMemfs.restore = (): void => {
   restoreFs();
   restoreFs = (): void => {};
   vol.reset();
 };
 
-mockFs.bypass = <T>(callback: () => T): T => {
-  mockFs.restore();
+patchFsWithMemfs.bypass = <T>(callback: () => T): T => {
+  patchFsWithMemfs.restore();
   return callback();
 };

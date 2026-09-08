@@ -1,7 +1,7 @@
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import { mockFs as mock } from '../../../helpers/mockFs.js';
+import { patchFsWithMemfs as mock } from '../../../helpers/memfs.js';
 import Push from '../../../../src/commands/sharinpix/permission/push.js';
 
 describe('sharinpix permission push', () => {
