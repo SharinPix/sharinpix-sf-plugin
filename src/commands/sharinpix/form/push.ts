@@ -96,6 +96,7 @@ export default class Push extends SfCommand<PushResult> {
         const fileName = getNameFromJson(json);
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
+        const mainId = json.mainId as string | undefined;
 
         if (existingRecord) {
           const existingJson = await fetchJson(existingRecord.sharinpix__FormUrl__c + '.json').catch((error) => {
@@ -138,7 +139,7 @@ export default class Push extends SfCommand<PushResult> {
         });
 
         await connection.apex.post('/sharinpix/FormTemplateImport', {
-          recordId: existingId ?? undefined,
+          recordId: mainId ?? existingId ?? undefined,
           name: fileName,
           url: responseData.url,
           formTemplateJson,
