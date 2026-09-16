@@ -217,6 +217,15 @@ describe('sharinpix form push', () => {
     expect(importCall.args[0]).to.equal('/sharinpix/FormTemplateImport');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(importCall.args[1].recordId).to.equal('main123');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
+    const formTemplateJson = JSON.parse(importCall.args[1].formTemplateJson) as Record<string, unknown>;
+    expect(formTemplateJson).to.not.have.property('mainId');
+
+    const templatesCall = fetchStub.secondCall;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
+    const templatesBody = JSON.parse(templatesCall.args[1].body as string) as { config: Record<string, unknown> };
+    expect(templatesBody.config).to.not.have.property('mainId');
+    expect(templatesBody.config).to.have.property('fieldA');
 
     mock.restore();
   });

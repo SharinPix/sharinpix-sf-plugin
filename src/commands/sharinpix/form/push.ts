@@ -96,7 +96,7 @@ export default class Push extends SfCommand<PushResult> {
         const fileName = getNameFromJson(json);
         const existingRecord = existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
-        const mainId = json.mainId as string | undefined;
+        const { mainId, ...formJson } = json as Record<string, unknown> & { mainId?: string };
 
         if (existingRecord) {
           const existingJson = await fetchJson(existingRecord.sharinpix__FormUrl__c + '.json').catch((error) => {
@@ -117,7 +117,7 @@ export default class Push extends SfCommand<PushResult> {
             sfid: existingId ?? undefined,
             config: {
               name: fileName,
-              ...(json as object),
+              ...formJson,
             },
           }),
           headers: {
@@ -134,7 +134,7 @@ export default class Push extends SfCommand<PushResult> {
         const responseData = (await response.json()) as { url: string };
 
         const formTemplateJson = JSON.stringify({
-          ...(json as object),
+          ...formJson,
           url: responseData.url,
         });
 
