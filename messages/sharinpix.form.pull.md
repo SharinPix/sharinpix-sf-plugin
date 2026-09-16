@@ -4,7 +4,7 @@ Pull SharinPix form templates from Salesforce org.
 
 # description
 
-Retrieves all SharinPix form templates from the connected Salesforce org and saves them as JSON files in the local sharinpix/forms directory. This command fetches the form template metadata and downloads the actual form definition files.
+Retrieves active, version-record SharinPix form templates from the connected Salesforce org and saves them as JSON files in the local sharinpix/forms directory. This command fetches the form template metadata and downloads the actual form definition files.
 
 # flags.org.summary
 
@@ -24,7 +24,7 @@ When enabled, after downloading all form templates as JSON into `sharinpix/forms
 
 # examples
 
-- Pull all form templates from the default org:
+- Pull active form templates from the default org:
 
   <%= config.bin %> <%= command.id %>
 

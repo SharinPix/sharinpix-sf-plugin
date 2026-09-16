@@ -19,6 +19,7 @@ type FormTemplateRecord = {
   Name: string;
   sharinpix__FormUrl__c: string;
   sharinpix__Description__c: string;
+  sharinpix__FormTemplateMain__c: string | null;
 };
 
 export default class Pull extends SfCommand<PullResult> {
@@ -50,7 +51,7 @@ export default class Pull extends SfCommand<PullResult> {
     fs.mkdirSync('sharinpix/forms', { recursive: true });
 
     const result = await connection.query<FormTemplateRecord>(
-      'SELECT Id, sharinpix__FormUrl__c, Name, sharinpix__Description__c FROM sharinpix__FormTemplate__c order by LastModifiedDate desc'
+      "SELECT Id, sharinpix__FormUrl__c, Name, sharinpix__Description__c, sharinpix__FormTemplateMain__c FROM sharinpix__FormTemplate__c WHERE sharinpix__RecordType__c = 'version' AND sharinpix__Active__c = true order by LastModifiedDate desc"
     );
     const records = result.records;
 
@@ -70,13 +71,15 @@ export default class Pull extends SfCommand<PullResult> {
         }
 
         const form: unknown = await response.json();
+        const mainId = record.sharinpix__FormTemplateMain__c ?? record.Id;
+        const formWithMainId = { ...(form as Record<string, unknown>), mainId };
         const safeFilename = createSafeFilename(record.Name);
         fs.writeFileSync(
           `sharinpix/forms/${safeFilename}.json`,
           JSON.stringify(
-            form,
+            formWithMainId,
             function (key: string, value: unknown): unknown {
-              return key === 'uuid' && this === form ? undefined : value;
+              return key === 'uuid' && this === formWithMainId ? undefined : value;
             },
             2
           )
