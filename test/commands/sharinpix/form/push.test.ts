@@ -21,6 +21,7 @@ describe('sharinpix form push', () => {
     expect(Push.flags).to.have.property('org');
     expect(Push.flags).to.have.property('delete');
     expect(Push.flags).to.have.property('csv');
+    expect(Push.flags).to.have.property('activate');
   });
 
   it('should define the correct result type', () => {
@@ -43,6 +44,8 @@ describe('sharinpix form push', () => {
     expect(Push.flags.delete.default).to.be.false;
     expect(Push.flags.csv.char).to.equal('c');
     expect(Push.flags.csv.default).to.be.false;
+    expect(Push.flags.activate.char).to.equal('a');
+    expect(Push.flags.activate.default).to.be.false;
   });
 
   describe('delete flag functionality', () => {
@@ -138,7 +141,7 @@ describe('sharinpix form push', () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const pushInstance = new Push(argv, config);
     // @ts-expect-error stub CLI parse
-    pushInstance['parse'] = async () => ({ flags: { org: orgStub } });
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub, activate: false } });
 
     const result = await pushInstance.run();
 
@@ -146,6 +149,142 @@ describe('sharinpix form push', () => {
     expect(result.failed).to.equal(1);
     expect(result.skipped).to.equal(0);
     expect(result.deleted).to.equal(0);
+
+    mock.restore();
+  });
+
+  it('should send activate: false on FormTemplateImport when activate flag is not set', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'f1',
+        Name: 'Form 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/form1',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc1',
+      },
+    ];
+
+    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
+    const sobjectStub = $$.SANDBOX.stub().returns({
+      update: $$.SANDBOX.stub().resolves(),
+      create: $$.SANDBOX.stub().resolves(),
+    });
+    const apexPostStub = $$.SANDBOX.stub();
+    apexPostStub.onFirstCall().resolves({ host: 'https://example.com', token: 'fake-token' });
+    apexPostStub.onSecondCall().resolves({});
+    const apexStub = { post: apexPostStub };
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: queryStub,
+      sobject: sobjectStub,
+      apex: apexStub,
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    const fetchStub = $$.SANDBOX.stub();
+    fetchStub.onFirstCall().resolves({
+      ok: true,
+      json: async () => ({ name: 'Form 1', fieldA: false }),
+      status: 200,
+      statusText: 'OK',
+    });
+    fetchStub.onSecondCall().resolves({
+      ok: true,
+      json: async () => ({ url: 'https://example.com/form1-new' }),
+      status: 200,
+      statusText: 'OK',
+    });
+    global.fetch = fetchStub;
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error stub CLI parse
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub } });
+
+    await pushInstance.run();
+
+    const importCall = apexPostStub.secondCall;
+    expect(importCall.args[0]).to.equal('/sharinpix/FormTemplateImport');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(importCall.args[1].activate).to.equal(false);
+
+    mock.restore();
+  });
+
+  it('should send activate: true on FormTemplateImport when activate flag is set', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'f1',
+        Name: 'Form 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/form1',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc1',
+      },
+    ];
+
+    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
+    const sobjectStub = $$.SANDBOX.stub().returns({
+      update: $$.SANDBOX.stub().resolves(),
+      create: $$.SANDBOX.stub().resolves(),
+    });
+    const apexPostStub = $$.SANDBOX.stub();
+    apexPostStub.onFirstCall().resolves({ host: 'https://example.com', token: 'fake-token' });
+    apexPostStub.onSecondCall().resolves({});
+    const apexStub = { post: apexPostStub };
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: queryStub,
+      sobject: sobjectStub,
+      apex: apexStub,
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    const fetchStub = $$.SANDBOX.stub();
+    fetchStub.onFirstCall().resolves({
+      ok: true,
+      json: async () => ({ name: 'Form 1', fieldA: false }),
+      status: 200,
+      statusText: 'OK',
+    });
+    fetchStub.onSecondCall().resolves({
+      ok: true,
+      json: async () => ({ url: 'https://example.com/form1-new' }),
+      status: 200,
+      statusText: 'OK',
+    });
+    global.fetch = fetchStub;
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error stub CLI parse
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub, activate: true } });
+
+    await pushInstance.run();
+
+    const importCall = apexPostStub.secondCall;
+    expect(importCall.args[0]).to.equal('/sharinpix/FormTemplateImport');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(importCall.args[1].activate).to.equal(true);
 
     mock.restore();
   });
