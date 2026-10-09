@@ -52,6 +52,12 @@ export default class Push extends SfCommand<PushResult> {
       description: messages.getMessage('flags.csv.description'),
       default: false,
     }),
+    activate: Flags.boolean({
+      char: 'a',
+      summary: messages.getMessage('flags.activate.summary'),
+      description: messages.getMessage('flags.activate.description'),
+      default: false,
+    }),
   };
 
   public async run(): Promise<PushResult> {
@@ -59,7 +65,7 @@ export default class Push extends SfCommand<PushResult> {
     return this.runWithFlags(flags);
   }
 
-  public async runWithFlags(flags: { org: Org; delete: boolean; csv?: boolean }): Promise<PushResult> {
+  public async runWithFlags(flags: { org: Org; delete: boolean; csv?: boolean; activate?: boolean }): Promise<PushResult> {
     const connection = flags.org.getConnection('63.0');
 
     if (flags.csv) {
@@ -143,6 +149,7 @@ export default class Push extends SfCommand<PushResult> {
           name: fileName,
           url: responseData.url,
           formTemplateJson,
+          activate: flags.activate === true,
         });
 
         this.log(messages.getMessage(existingId ? 'info.updated' : 'info.created', [fileName]));
