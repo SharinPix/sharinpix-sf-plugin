@@ -65,7 +65,12 @@ export default class Push extends SfCommand<PushResult> {
     return this.runWithFlags(flags);
   }
 
-  public async runWithFlags(flags: { org: Org; delete: boolean; csv?: boolean; activate?: boolean }): Promise<PushResult> {
+  public async runWithFlags(flags: {
+    org: Org;
+    delete: boolean;
+    csv?: boolean;
+    activate?: boolean;
+  }): Promise<PushResult> {
     const connection = flags.org.getConnection('63.0');
 
     if (flags.csv) {
@@ -85,11 +90,12 @@ export default class Push extends SfCommand<PushResult> {
 
     const existingRecords = (
       await connection.query<FormTemplateRecord>(
-        'SELECT Id, Name, sharinpix__FormUrl__c, sharinpix__Description__c FROM sharinpix__FormTemplate__c'
+        'SELECT Id, Name, sharinpix__FormUrl__c, sharinpix__Description__c FROM sharinpix__FormTemplate__c WHERE sharinpix__FormTemplateMain__c = null'
       )
     ).records;
 
     const existingMap = new Map(existingRecords.map((record) => [record.Name, record]));
+    const existingById = new Map(existingRecords.map((record) => [record.Id, record]));
 
     let uploaded = 0;
     let failed = 0;
@@ -100,9 +106,9 @@ export default class Push extends SfCommand<PushResult> {
       const processFile = async (): Promise<void> => {
         const json = readJsonFile(file);
         const fileName = getNameFromJson(json);
-        const existingRecord = existingMap.get(fileName);
-        const existingId = existingRecord?.Id ?? null;
         const { mainId, ...formJson } = json as Record<string, unknown> & { mainId?: string };
+        const existingRecord = (mainId ? existingById.get(mainId) : undefined) ?? existingMap.get(fileName);
+        const existingId = existingRecord?.Id ?? null;
 
         if (existingRecord) {
           const existingJson = await fetchJson(existingRecord.sharinpix__FormUrl__c + '.json').catch((error) => {
@@ -145,7 +151,7 @@ export default class Push extends SfCommand<PushResult> {
         });
 
         await connection.apex.post('/sharinpix/FormTemplateImport', {
-          recordId: mainId ?? existingId ?? undefined,
+          recordId: existingId ?? undefined,
           name: fileName,
           url: responseData.url,
           formTemplateJson,
