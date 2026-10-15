@@ -417,6 +417,58 @@ describe('sharinpix form push', () => {
     });
   });
 
+  it('should skip a pulled file pushed back unchanged, ignoring uuid and mainId', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true,"mainId":"f1"}',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'f1',
+        Name: 'Form 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/form1',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc1',
+      },
+    ];
+
+    const apexPostStub = $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' });
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: $$.SANDBOX.stub().resolves({ records: mockRecords }),
+      apex: { post: apexPostStub },
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    const fetchStub = $$.SANDBOX.stub().resolves({
+      ok: true,
+      json: async () => ({ uuid: 'abc-123', name: 'Form 1', fieldA: true }),
+      status: 200,
+      statusText: 'OK',
+    });
+    global.fetch = fetchStub;
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error stub CLI parse
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub } });
+
+    const result = await pushInstance.run();
+
+    expect(result.skipped).to.equal(1);
+    expect(result.uploaded).to.equal(0);
+    expect(fetchStub.callCount).to.equal(1);
+    expect(apexPostStub.callCount).to.equal(1);
+
+    mock.restore();
+  });
+
   it('should push a brand-new file with no matching existing record and no recordId', async () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     mock({
