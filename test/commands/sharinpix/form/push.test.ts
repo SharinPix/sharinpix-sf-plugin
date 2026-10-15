@@ -154,160 +154,6 @@ describe('sharinpix form push', () => {
     mock.restore();
   });
 
-  it('should send activate: false on FormTemplateImport when activate flag is not set', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    mock({
-      'sharinpix/forms': {
-        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
-      },
-    });
-
-    const mockRecords = [
-      {
-        Id: 'f1',
-        Name: 'Form 1',
-        // eslint-disable-next-line camelcase
-        sharinpix__FormUrl__c: 'https://example.com/form1',
-        // eslint-disable-next-line camelcase
-        sharinpix__Description__c: 'desc1',
-      },
-    ];
-
-    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
-    const sobjectStub = $$.SANDBOX.stub().returns({
-      update: $$.SANDBOX.stub().resolves(),
-      create: $$.SANDBOX.stub().resolves(),
-    });
-    const apexPostStub = $$.SANDBOX.stub();
-    apexPostStub.onFirstCall().resolves({ host: 'https://example.com', token: 'fake-token' });
-    apexPostStub.onSecondCall().resolves({});
-    const apexStub = { post: apexPostStub };
-    const getConnectionStub = $$.SANDBOX.stub().returns({
-      query: queryStub,
-      sobject: sobjectStub,
-      apex: apexStub,
-    });
-    const orgStub = { getConnection: getConnectionStub };
-
-    const fetchStub = $$.SANDBOX.stub();
-    fetchStub.onFirstCall().resolves({
-      ok: true,
-      json: async () => ({ name: 'Form 1', fieldA: false }),
-      status: 200,
-      statusText: 'OK',
-    });
-    fetchStub.onSecondCall().resolves({
-      ok: true,
-      json: async () => ({ url: 'https://example.com/form1-new' }),
-      status: 200,
-      statusText: 'OK',
-    });
-    global.fetch = fetchStub;
-
-    const argv: string[] = [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const pushInstance = new Push(argv, config);
-    // @ts-expect-error stub CLI parse
-    pushInstance['parse'] = async () => ({ flags: { org: orgStub } });
-
-    await pushInstance.run();
-
-    expect(fetchStub.callCount).to.equal(2);
-    const importCall = apexPostStub.secondCall;
-    expect(importCall.args[0]).to.equal('/sharinpix/FormTemplateImport');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(importCall.args[1].activate).to.equal(false);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(importCall.args[1].lastActivatedAt).to.equal(undefined);
-
-    mock.restore();
-  });
-
-  it('should send activate: true on FormTemplateImport when activate flag is set', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    mock({
-      'sharinpix/forms': {
-        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
-      },
-    });
-
-    const mockRecords = [
-      {
-        Id: 'f1',
-        Name: 'Form 1',
-        // eslint-disable-next-line camelcase
-        sharinpix__FormUrl__c: 'https://example.com/form1',
-        // eslint-disable-next-line camelcase
-        sharinpix__Description__c: 'desc1',
-      },
-    ];
-
-    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
-    const sobjectStub = $$.SANDBOX.stub().returns({
-      update: $$.SANDBOX.stub().resolves(),
-      create: $$.SANDBOX.stub().resolves(),
-    });
-    const apexPostStub = $$.SANDBOX.stub();
-    apexPostStub.onFirstCall().resolves({ host: 'https://example.com', token: 'fake-token' });
-    apexPostStub.onSecondCall().resolves({});
-    const apexStub = { post: apexPostStub };
-    const getConnectionStub = $$.SANDBOX.stub().returns({
-      query: queryStub,
-      sobject: sobjectStub,
-      apex: apexStub,
-    });
-    const orgStub = { getConnection: getConnectionStub };
-
-    const fetchStub = $$.SANDBOX.stub();
-    fetchStub.onFirstCall().resolves({
-      ok: true,
-      json: async () => ({ name: 'Form 1', fieldA: false }),
-      status: 200,
-      statusText: 'OK',
-    });
-    fetchStub.onSecondCall().resolves({
-      ok: true,
-      json: async () => ({ id: 'rails1', url: 'https://example.com/form1-new' }),
-      status: 200,
-      statusText: 'OK',
-    });
-    fetchStub.onThirdCall().resolves({
-      ok: true,
-      // eslint-disable-next-line camelcase
-      json: async () => ({ last_activated_at: '2026-10-15T10:00:00.000Z' }),
-      status: 200,
-      statusText: 'OK',
-    });
-    global.fetch = fetchStub;
-
-    const argv: string[] = [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const pushInstance = new Push(argv, config);
-    // @ts-expect-error stub CLI parse
-    pushInstance['parse'] = async () => ({ flags: { org: orgStub, activate: true } });
-
-    await pushInstance.run();
-
-    expect(fetchStub.thirdCall.args[0]).to.equal('https://example.com/api/v1/form/templates/rails1/activate');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(fetchStub.thirdCall.args[1].method).to.equal('POST');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(fetchStub.thirdCall.args[1].headers.Authorization).to.equal('Bearer fake-token');
-
-    const importCall = apexPostStub.secondCall;
-    expect(importCall.args[0]).to.equal('/sharinpix/FormTemplateImport');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(importCall.args[1].activate).to.equal(true);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(importCall.args[1].lastActivatedAt).to.equal('2026-10-15T10:00:00.000Z');
-
-    mock.restore();
-  });
-
   describe('mainId resolution', () => {
     const record = (Id: string, Name: string): Record<string, string> => ({
       Id,
@@ -319,7 +165,8 @@ describe('sharinpix form push', () => {
     });
 
     const pushWithMainId = async (
-      mockRecords: Array<Record<string, string>>
+      mockRecords: Array<Record<string, string>>,
+      activate = false
     ): Promise<{ queryStub: SinonStub; fetchStub: SinonStub; apexPostStub: SinonStub }> => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       mock({
@@ -341,7 +188,12 @@ describe('sharinpix form push', () => {
       const fetchStub = $$.SANDBOX.stub().callsFake(async (url: string) => ({
         ok: true,
         json: async () =>
-          url.endsWith('.json') ? { name: 'Form 1', fieldA: false } : { url: 'https://example.com/form1-new' },
+          url.endsWith('.json')
+            ? { name: 'Form 1', fieldA: false }
+            : url.endsWith('/activate')
+            ? // eslint-disable-next-line camelcase
+              { last_activated_at: '2026-10-15T10:00:00.000Z' }
+            : { id: 'rails1', url: 'https://example.com/form1-new' },
         status: 200,
         statusText: 'OK',
       }));
@@ -353,7 +205,7 @@ describe('sharinpix form push', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const pushInstance = new Push(argv, config);
       // @ts-expect-error stub CLI parse
-      pushInstance['parse'] = async () => ({ flags: { org: orgStub } });
+      pushInstance['parse'] = async () => ({ flags: { org: orgStub, activate } });
 
       const result = await pushInstance.run();
       mock.restore();
@@ -394,6 +246,30 @@ describe('sharinpix form push', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
       const formTemplateJson = JSON.parse(apexPostStub.secondCall.args[1].formTemplateJson) as Record<string, unknown>;
       expect(formTemplateJson).to.not.have.property('mainId');
+
+      expect(fetchStub.getCalls().some((call) => (call.args[0] as string).endsWith('/activate'))).to.be.false;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(apexPostStub.secondCall.args[1].activate).to.equal(false);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(apexPostStub.secondCall.args[1].lastActivatedAt).to.equal(undefined);
+    });
+
+    it('should activate on Rails and forward lastActivatedAt when activate flag is set', async () => {
+      const { fetchStub, apexPostStub } = await pushWithMainId([record('main123', 'Form 1')], true);
+
+      const activateCall = fetchStub
+        .getCalls()
+        .find((call) => call.args[0] === 'https://example.com/api/v1/form/templates/rails1/activate');
+      expect(activateCall).to.not.be.undefined;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(activateCall?.args[1].method).to.equal('POST');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(activateCall?.args[1].headers.Authorization).to.equal('Bearer fake-token');
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(apexPostStub.secondCall.args[1].activate).to.equal(true);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(apexPostStub.secondCall.args[1].lastActivatedAt).to.equal('2026-10-15T10:00:00.000Z');
     });
 
     it('should fall back to the Name-matched record when the file mainId is not in the org', async () => {
