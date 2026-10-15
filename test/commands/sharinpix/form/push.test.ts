@@ -214,10 +214,13 @@ describe('sharinpix form push', () => {
 
     await pushInstance.run();
 
+    expect(fetchStub.callCount).to.equal(2);
     const importCall = apexPostStub.secondCall;
     expect(importCall.args[0]).to.equal('/sharinpix/FormTemplateImport');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(importCall.args[1].activate).to.equal(false);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(importCall.args[1].lastActivatedAt).to.equal(undefined);
 
     mock.restore();
   });
@@ -266,7 +269,14 @@ describe('sharinpix form push', () => {
     });
     fetchStub.onSecondCall().resolves({
       ok: true,
-      json: async () => ({ url: 'https://example.com/form1-new' }),
+      json: async () => ({ id: 'rails1', url: 'https://example.com/form1-new' }),
+      status: 200,
+      statusText: 'OK',
+    });
+    fetchStub.onThirdCall().resolves({
+      ok: true,
+      // eslint-disable-next-line camelcase
+      json: async () => ({ last_activated_at: '2026-10-15T10:00:00.000Z' }),
       status: 200,
       statusText: 'OK',
     });
@@ -282,10 +292,18 @@ describe('sharinpix form push', () => {
 
     await pushInstance.run();
 
+    expect(fetchStub.thirdCall.args[0]).to.equal('https://example.com/api/v1/form/templates/rails1/activate');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(fetchStub.thirdCall.args[1].method).to.equal('POST');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(fetchStub.thirdCall.args[1].headers.Authorization).to.equal('Bearer fake-token');
+
     const importCall = apexPostStub.secondCall;
     expect(importCall.args[0]).to.equal('/sharinpix/FormTemplateImport');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(importCall.args[1].activate).to.equal(true);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(importCall.args[1].lastActivatedAt).to.equal('2026-10-15T10:00:00.000Z');
 
     mock.restore();
   });
