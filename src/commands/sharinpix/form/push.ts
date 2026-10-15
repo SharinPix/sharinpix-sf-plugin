@@ -143,7 +143,27 @@ export default class Push extends SfCommand<PushResult> {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const responseData = (await response.json()) as { url: string };
+        const responseData = (await response.json()) as { id: string; url: string };
+
+        let lastActivatedAt: string | undefined;
+        if (flags.activate) {
+          const activateResponse = await fetch(
+            `${responseToken.host}/api/v1/form/templates/${responseData.id}/activate`,
+            {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${responseToken.token}`,
+              },
+            }
+          );
+
+          if (!activateResponse.ok) {
+            throw new Error(`HTTP ${activateResponse.status}: ${activateResponse.statusText}`);
+          }
+
+          lastActivatedAt = ((await activateResponse.json()) as { last_activated_at: string }).last_activated_at;
+        }
 
         const formTemplateJson = JSON.stringify({
           ...formJson,
@@ -156,6 +176,7 @@ export default class Push extends SfCommand<PushResult> {
           url: responseData.url,
           formTemplateJson,
           activate: flags.activate === true,
+          lastActivatedAt,
         });
 
         this.log(messages.getMessage(existingId ? 'info.updated' : 'info.created', [fileName]));
