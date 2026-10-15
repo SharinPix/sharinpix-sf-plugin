@@ -29,6 +29,9 @@ type FormTemplateRecord = {
   sharinpix__Description__c: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const stripIds = ({ uuid, mainId, ...rest }: Record<string, unknown>): Record<string, unknown> => rest;
+
 export default class Push extends SfCommand<PushResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
@@ -116,7 +119,7 @@ export default class Push extends SfCommand<PushResult> {
             return null;
           });
 
-          if (existingJson && isJsonEqual(json, existingJson)) {
+          if (existingJson && isJsonEqual(stripIds(json), stripIds(existingJson as Record<string, unknown>))) {
             this.log(messages.getMessage('info.skipped', [fileName]));
             skipped++;
             return;
