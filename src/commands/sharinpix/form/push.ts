@@ -181,7 +181,7 @@ export default class Push extends SfCommand<PushResult> {
           name: fileName,
           url: responseData.url,
           formTemplateJson,
-          activate: flags.activate === true,
+          shouldActivate: flags.activate === true,
           lastActivatedAt,
         });
 
