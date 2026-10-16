@@ -100,8 +100,6 @@ export default class Push extends SfCommand<PushResult> {
     const existingMap = new Map(existingRecords.map((record) => [record.Name, record]));
     const existingById = new Map(existingRecords.map((record) => [record.Id, record]));
 
-    const touchedIds = new Set<string>();
-
     let uploaded = 0;
     let failed = 0;
     let skipped = 0;
@@ -114,7 +112,6 @@ export default class Push extends SfCommand<PushResult> {
         const { mainId, ...formJson } = json as Record<string, unknown> & { mainId?: string };
         const existingRecord = (mainId ? existingById.get(mainId) : undefined) ?? existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
-        if (existingId) touchedIds.add(existingId);
 
         if (existingRecord) {
           const existingJson = await fetchJson(existingRecord.sharinpix__FormUrl__c + '.json').catch((error) => {
@@ -210,7 +207,7 @@ export default class Push extends SfCommand<PushResult> {
       );
 
       for (const [recordName, record] of existingMap) {
-        if (!localFileNames.has(recordName) && !touchedIds.has(record.Id)) {
+        if (!localFileNames.has(recordName)) {
           await (connection.sobject('sharinpix__FormTemplate__c').delete(record.Id) as Promise<unknown>)
             .then(() => {
               this.log(messages.getMessage('info.deleted', [recordName]));

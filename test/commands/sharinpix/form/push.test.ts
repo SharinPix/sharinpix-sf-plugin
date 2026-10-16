@@ -345,63 +345,6 @@ describe('sharinpix form push', () => {
     mock.restore();
   });
 
-  it('should not delete a main renamed via mainId when --delete is set', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    mock({
-      'sharinpix/forms': {
-        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true,"mainId":"X"}',
-      },
-    });
-
-    const mockRecords = [
-      {
-        Id: 'X',
-        Name: 'Old Name',
-        // eslint-disable-next-line camelcase
-        sharinpix__FormUrl__c: 'https://example.com/X',
-        // eslint-disable-next-line camelcase
-        sharinpix__Description__c: 'desc',
-      },
-    ];
-
-    const deleteStub = $$.SANDBOX.stub().resolves();
-    const apexPostStub = $$.SANDBOX.stub();
-    apexPostStub.onFirstCall().resolves({ host: 'https://example.com', token: 'fake-token' });
-    apexPostStub.onSecondCall().resolves({});
-    const getConnectionStub = $$.SANDBOX.stub().returns({
-      query: $$.SANDBOX.stub().resolves({ records: mockRecords }),
-      sobject: $$.SANDBOX.stub().returns({ delete: deleteStub }),
-      apex: { post: apexPostStub },
-    });
-    const orgStub = { getConnection: getConnectionStub };
-
-    global.fetch = $$.SANDBOX.stub().callsFake(async (url: string) => ({
-      ok: true,
-      json: async () =>
-        url.endsWith('.json') ? { name: 'Old Name', fieldA: true } : { url: 'https://example.com/X-new' },
-      status: 200,
-      statusText: 'OK',
-    }));
-
-    const argv: string[] = [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const pushInstance = new Push(argv, config);
-    // @ts-expect-error stub CLI parse
-    pushInstance['parse'] = async () => ({ flags: { org: orgStub, delete: true } });
-
-    const result = await pushInstance.run();
-
-    expect(result.uploaded).to.equal(1);
-    expect(result.deleted).to.equal(0);
-    expect(deleteStub.called).to.be.false;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    expect(apexPostStub.secondCall.args[1].recordId).to.equal('X');
-
-    mock.restore();
-  });
-
   it('should push a brand-new file with no matching existing record and no recordId', async () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     mock({
