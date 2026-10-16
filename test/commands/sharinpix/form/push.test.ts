@@ -398,4 +398,159 @@ describe('sharinpix form push', () => {
 
     mock.restore();
   });
+
+  it('should not delete a renamed main whose Id is the file mainId', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true,"mainId":"X"}',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'X',
+        Name: 'Old Name',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/X',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc',
+      },
+    ];
+
+    const deleteStub = $$.SANDBOX.stub().resolves();
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: $$.SANDBOX.stub().resolves({ records: mockRecords }),
+      sobject: $$.SANDBOX.stub().returns({ delete: deleteStub }),
+      apex: { post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }) },
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    global.fetch = $$.SANDBOX.stub().resolves({
+      ok: true,
+      json: async () => ({ name: 'Form 1', fieldA: true }),
+      status: 200,
+      statusText: 'OK',
+    });
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error stub CLI parse
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub, delete: true } });
+
+    const result = await pushInstance.run();
+
+    expect(deleteStub.called).to.be.false;
+    expect(result.deleted).to.equal(0);
+    expect(result.failed).to.equal(0);
+
+    mock.restore();
+  });
+
+  it('should delete a main whose Id is not the file mainId even when the Name matches', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true,"mainId":"X"}',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'Y',
+        Name: 'Form 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/Y',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc',
+      },
+    ];
+
+    const deleteStub = $$.SANDBOX.stub().resolves();
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: $$.SANDBOX.stub().resolves({ records: mockRecords }),
+      sobject: $$.SANDBOX.stub().returns({ delete: deleteStub }),
+      apex: { post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }) },
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    global.fetch = $$.SANDBOX.stub().resolves({
+      ok: true,
+      json: async () => ({ name: 'Form 1', fieldA: true }),
+      status: 200,
+      statusText: 'OK',
+    });
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error stub CLI parse
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub, delete: true } });
+
+    const result = await pushInstance.run();
+
+    expect(deleteStub.calledOnce).to.be.true;
+    expect(deleteStub.firstCall.args[0]).to.equal('Y');
+    expect(result.deleted).to.equal(1);
+    expect(result.failed).to.equal(0);
+
+    mock.restore();
+  });
+
+  it('should delete a name-matched main when the file has no mainId', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    mock({
+      'sharinpix/forms': {
+        'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true}',
+      },
+    });
+
+    const mockRecords = [
+      {
+        Id: 'Y',
+        Name: 'Form 1',
+        // eslint-disable-next-line camelcase
+        sharinpix__FormUrl__c: 'https://example.com/Y',
+        // eslint-disable-next-line camelcase
+        sharinpix__Description__c: 'desc',
+      },
+    ];
+
+    const deleteStub = $$.SANDBOX.stub().resolves();
+    const getConnectionStub = $$.SANDBOX.stub().returns({
+      query: $$.SANDBOX.stub().resolves({ records: mockRecords }),
+      sobject: $$.SANDBOX.stub().returns({ delete: deleteStub }),
+      apex: { post: $$.SANDBOX.stub().resolves({ host: 'https://example.com', token: 'fake-token' }) },
+    });
+    const orgStub = { getConnection: getConnectionStub };
+
+    global.fetch = $$.SANDBOX.stub().resolves({
+      ok: true,
+      json: async () => ({ name: 'Form 1', fieldA: true }),
+      status: 200,
+      statusText: 'OK',
+    });
+
+    const argv: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const config: any = { bin: 'sf', name: 'test', root: '', version: '1.0.0' };
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const pushInstance = new Push(argv, config);
+    // @ts-expect-error stub CLI parse
+    pushInstance['parse'] = async () => ({ flags: { org: orgStub, delete: true } });
+
+    const result = await pushInstance.run();
+
+    expect(deleteStub.calledOnce).to.be.true;
+    expect(deleteStub.firstCall.args[0]).to.equal('Y');
+    expect(result.deleted).to.equal(1);
+    expect(result.failed).to.equal(0);
+
+    mock.restore();
+  });
 });

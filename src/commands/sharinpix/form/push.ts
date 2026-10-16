@@ -199,22 +199,21 @@ export default class Push extends SfCommand<PushResult> {
     }
 
     if (flags.delete) {
-      const localFileNames = new Set(
-        files.map((file) => {
-          const json = readJsonFile(file);
-          return getNameFromJson(json);
-        })
+      const localMainIds = new Set(
+        files
+          .map((file) => readJsonFile(file).mainId)
+          .filter((mainId): mainId is string => typeof mainId === 'string')
       );
 
-      for (const [recordName, record] of existingMap) {
-        if (!localFileNames.has(recordName)) {
+      for (const record of existingRecords) {
+        if (!localMainIds.has(record.Id)) {
           await (connection.sobject('sharinpix__FormTemplate__c').delete(record.Id) as Promise<unknown>)
             .then(() => {
-              this.log(messages.getMessage('info.deleted', [recordName]));
+              this.log(messages.getMessage('info.deleted', [record.Name]));
               deleted++;
             })
             .catch((error: Error) => {
-              this.warn(`Failed to delete form template ${recordName}: ${formatErrorMessage(error)}`);
+              this.warn(`Failed to delete form template ${record.Name}: ${formatErrorMessage(error)}`);
               failed++;
             });
         }

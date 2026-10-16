@@ -16,11 +16,11 @@ The target Salesforce org where the SharinPix form templates will be uploaded an
 
 # flags.delete.summary
 
-Delete form templates from org that no longer have corresponding local files.
+Delete main form templates whose Id is not the mainId of any local file.
 
 # flags.delete.description
 
-When enabled, this flag will delete form template records from the Salesforce org if their corresponding local JSON files are missing. Use with caution as this operation cannot be undone.
+When enabled, delete main form template records whose Id is not the mainId of any local file, including after a rename. A file with no mainId protects nothing. This operation cannot be undone.
 
 # flags.csv.summary
 
