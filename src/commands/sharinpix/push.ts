@@ -31,6 +31,12 @@ export default class Push extends SfCommand<PushResult> {
       description: messages.getMessage('flags.delete.description'),
       default: false,
     }),
+    activate: Flags.boolean({
+      char: 'a',
+      summary: messages.getMessage('flags.activate.summary'),
+      description: messages.getMessage('flags.activate.description'),
+      default: false,
+    }),
   };
 
   public async run(): Promise<PushResult> {

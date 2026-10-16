@@ -29,6 +29,9 @@ type FormTemplateRecord = {
   sharinpix__Description__c: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const stripIds = ({ uuid, mainId, ...rest }: Record<string, unknown>): Record<string, unknown> => rest;
+
 export default class Push extends SfCommand<PushResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
@@ -52,6 +55,12 @@ export default class Push extends SfCommand<PushResult> {
       description: messages.getMessage('flags.csv.description'),
       default: false,
     }),
+    activate: Flags.boolean({
+      char: 'a',
+      summary: messages.getMessage('flags.activate.summary'),
+      description: messages.getMessage('flags.activate.description'),
+      default: false,
+    }),
   };
 
   public async run(): Promise<PushResult> {
@@ -59,7 +68,12 @@ export default class Push extends SfCommand<PushResult> {
     return this.runWithFlags(flags);
   }
 
-  public async runWithFlags(flags: { org: Org; delete: boolean; csv?: boolean }): Promise<PushResult> {
+  public async runWithFlags(flags: {
+    org: Org;
+    delete: boolean;
+    csv?: boolean;
+    activate?: boolean;
+  }): Promise<PushResult> {
     const connection = flags.org.getConnection('63.0');
 
     if (flags.csv) {
@@ -79,11 +93,12 @@ export default class Push extends SfCommand<PushResult> {
 
     const existingRecords = (
       await connection.query<FormTemplateRecord>(
-        'SELECT Id, Name, sharinpix__FormUrl__c, sharinpix__Description__c FROM sharinpix__FormTemplate__c'
+        'SELECT Id, Name, sharinpix__FormUrl__c, sharinpix__Description__c FROM sharinpix__FormTemplate__c WHERE sharinpix__FormTemplateMain__c = null'
       )
     ).records;
 
     const existingMap = new Map(existingRecords.map((record) => [record.Name, record]));
+    const existingById = new Map(existingRecords.map((record) => [record.Id, record]));
 
     let uploaded = 0;
     let failed = 0;
@@ -94,7 +109,8 @@ export default class Push extends SfCommand<PushResult> {
       const processFile = async (): Promise<void> => {
         const json = readJsonFile(file);
         const fileName = getNameFromJson(json);
-        const existingRecord = existingMap.get(fileName);
+        const { mainId, ...formJson } = json as Record<string, unknown> & { mainId?: string };
+        const existingRecord = (mainId ? existingById.get(mainId) : undefined) ?? existingMap.get(fileName);
         const existingId = existingRecord?.Id ?? null;
 
         if (existingRecord) {
@@ -103,7 +119,7 @@ export default class Push extends SfCommand<PushResult> {
             return null;
           });
 
-          if (existingJson && isJsonEqual(json, existingJson)) {
+          if (existingJson && isJsonEqual(stripIds(json), stripIds(existingJson as Record<string, unknown>))) {
             this.log(messages.getMessage('info.skipped', [fileName]));
             skipped++;
             return;
@@ -116,7 +132,7 @@ export default class Push extends SfCommand<PushResult> {
             sfid: existingId ?? undefined,
             config: {
               name: fileName,
-              ...(json as object),
+              ...formJson,
             },
           }),
           headers: {
@@ -130,10 +146,30 @@ export default class Push extends SfCommand<PushResult> {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const responseData = (await response.json()) as { url: string };
+        const responseData = (await response.json()) as { id: string; url: string };
+
+        let lastActivatedAt: string | undefined;
+        if (flags.activate) {
+          const activateResponse = await fetch(
+            `${responseToken.host}/api/v1/form/templates/${responseData.id}/activate`,
+            {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${responseToken.token}`,
+              },
+            }
+          );
+
+          if (!activateResponse.ok) {
+            throw new Error(`HTTP ${activateResponse.status}: ${activateResponse.statusText}`);
+          }
+
+          lastActivatedAt = ((await activateResponse.json()) as { last_activated_at: string }).last_activated_at;
+        }
 
         const formTemplateJson = JSON.stringify({
-          ...(json as object),
+          ...formJson,
           url: responseData.url,
         });
 
@@ -142,6 +178,8 @@ export default class Push extends SfCommand<PushResult> {
           name: fileName,
           url: responseData.url,
           formTemplateJson,
+          shouldActivate: flags.activate === true,
+          lastActivatedAt,
         });
 
         this.log(messages.getMessage(existingId ? 'info.updated' : 'info.created', [fileName]));
