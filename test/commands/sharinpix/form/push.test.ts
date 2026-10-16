@@ -249,7 +249,7 @@ describe('sharinpix form push', () => {
 
       expect(fetchStub.getCalls().some((call) => (call.args[0] as string).endsWith('/activate'))).to.be.false;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(apexPostStub.secondCall.args[1].activate).to.equal(false);
+      expect(apexPostStub.secondCall.args[1].shouldActivate).to.equal(false);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(apexPostStub.secondCall.args[1].lastActivatedAt).to.equal(undefined);
     });
@@ -267,7 +267,7 @@ describe('sharinpix form push', () => {
       expect(activateCall?.args[1].headers.Authorization).to.equal('Bearer fake-token');
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(apexPostStub.secondCall.args[1].activate).to.equal(true);
+      expect(apexPostStub.secondCall.args[1].shouldActivate).to.equal(true);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(apexPostStub.secondCall.args[1].lastActivatedAt).to.equal('2026-10-15T10:00:00.000Z');
     });
