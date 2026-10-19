@@ -183,7 +183,7 @@
   },
   "overrides": {
     "@types/node": "^20.5.1",
-    "@oclif/core": "4.11.11"
+    "@oclif/core": "$@oclif/core"
   },
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^5.3.10",
