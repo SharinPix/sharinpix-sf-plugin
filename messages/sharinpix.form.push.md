@@ -30,6 +30,14 @@ Convert local CSV files to JSON before pushing.
 
 When enabled, the command first runs the CSV-to-JSON conversion (same as `sharinpix:form:csv2json`) on files in `sharinpix/forms`, then proceeds to push the resulting JSON files.
 
+# flags.activate.summary
+
+Activate the pushed form template version.
+
+# flags.activate.description
+
+When enabled, the newly pushed form template version is set as the active version in Salesforce. Without this flag, the version is created but not activated.
+
 # examples
 
 - Push all form templates to the default org:
@@ -47,6 +55,10 @@ When enabled, the command first runs the CSV-to-JSON conversion (same as `sharin
 - Convert CSV to JSON, then push:
 
   <%= config.bin %> <%= command.id %> --csv
+
+- Push form templates and activate the new versions:
+
+  <%= config.bin %> <%= command.id %> --activate
 
 # info.created
 
