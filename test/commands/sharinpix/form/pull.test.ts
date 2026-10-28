@@ -162,4 +162,43 @@ describe('sharinpix form pull', () => {
       mainId: 'a1',
     });
   });
+
+  it('should write same-name forms with different mainIds to different files', async () => {
+    const mockRecords = ['m1', 'm2'].map((mainId, index) => ({
+      Id: `a${index + 1}`,
+      Name: 'Inspection',
+      // eslint-disable-next-line camelcase
+      sharinpix__FormUrl__c: `https://example.com/form${index + 1}`,
+      // eslint-disable-next-line camelcase
+      sharinpix__Description__c: '',
+      // eslint-disable-next-line camelcase
+      sharinpix__FormTemplateMain__c: mainId,
+    }));
+
+    const queryStub = $$.SANDBOX.stub().resolves({ records: mockRecords });
+    const getConnectionStub = $$.SANDBOX.stub().returns({ query: queryStub });
+    const orgStub = { getConnection: getConnectionStub };
+
+    const argv: string[] = [];
+    const config = { bin: 'sf', name: 'test', root: '', version: '1.0.0' } as unknown; // Minimal config stub
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+    const pullInstance = new Pull(argv, config as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    $$.SANDBOX.stub(pullInstance as any, 'parse').callsFake(async () => ({ flags: { org: orgStub } }));
+
+    global.fetch = $$.SANDBOX.stub().resolves({
+      ok: true,
+      json: async () => ({ name: 'Inspection' }),
+      status: 200,
+      statusText: 'OK',
+    });
+
+    const writeFileSyncStub = $$.SANDBOX.stub(fs, 'writeFileSync');
+
+    const result = await pullInstance.run();
+
+    expect(result.formsDownloaded).to.equal(2);
+    const paths = writeFileSyncStub.getCalls().map((call) => call.args[0] as string);
+    expect(paths).to.deep.equal(['sharinpix/forms/Inspection-m1.json', 'sharinpix/forms/Inspection-m2.json']);
+  });
 });
