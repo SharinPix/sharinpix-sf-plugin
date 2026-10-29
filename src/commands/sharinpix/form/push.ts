@@ -110,7 +110,7 @@ export default class Push extends SfCommand<PushResult> {
         const json = readJsonFile(file);
         const fileName = getNameFromJson(json);
         const { mainId, ...formJson } = json as Record<string, unknown> & { mainId?: string };
-        const existingRecord = (mainId ? existingById.get(mainId) : undefined) ?? existingMap.get(fileName);
+        const existingRecord = mainId ? existingById.get(mainId) : undefined;
         const existingId = existingRecord?.Id ?? null;
 
         if (existingRecord) {

@@ -4,7 +4,7 @@ Push SharinPix form templates to Salesforce org.
 
 # description
 
-Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Existing forms will be updated unless the force flag is used to skip them.
+Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Each file is matched to an existing form template only by its `mainId`; if the file has no `mainId` or it is not found in the target org, a new form template is created. Pushing to a different org is therefore a one-time copy.
 
 # flags.org.summary
 

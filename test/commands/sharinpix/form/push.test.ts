@@ -166,12 +166,13 @@ describe('sharinpix form push', () => {
 
     const pushWithMainId = async (
       mockRecords: Array<Record<string, string>>,
-      activate = false
+      activate = false,
+      fileContent = '{"name":"Form 1","fieldA":true,"mainId":"main123"}'
     ): Promise<{ queryStub: SinonStub; fetchStub: SinonStub; apexPostStub: SinonStub }> => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       mock({
         'sharinpix/forms': {
-          'Form_1-xxxx.json': '{"name":"Form 1","fieldA":true,"mainId":"main123"}',
+          'Form_1-xxxx.json': fileContent,
         },
       });
 
@@ -272,14 +273,28 @@ describe('sharinpix form push', () => {
       expect(apexPostStub.secondCall.args[1].lastActivatedAt).to.equal('2026-10-15T10:00:00.000Z');
     });
 
-    it('should fall back to the Name-matched record when the file mainId is not in the org', async () => {
+    it('should create a new main when the file mainId is not in the org, even if a Name matches', async () => {
       const { fetchStub, apexPostStub } = await pushWithMainId([record('other456', 'Form 1')]);
 
-      expect(fetchStub.firstCall.args[0]).to.equal('https://example.com/other456.json');
+      expect(fetchStub.callCount).to.equal(1);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
-      expect((JSON.parse(fetchStub.secondCall.args[1].body as string) as { sfid: string }).sfid).to.equal('other456');
+      expect(JSON.parse(fetchStub.firstCall.args[1].body as string)).to.not.have.property('sfid');
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(apexPostStub.secondCall.args[1].recordId).to.equal('other456');
+      expect(apexPostStub.secondCall.args[1].recordId).to.equal(undefined);
+    });
+
+    it('should create a new main when the file has no mainId, even if a Name matches', async () => {
+      const { fetchStub, apexPostStub } = await pushWithMainId(
+        [record('other456', 'Form 1')],
+        false,
+        '{"name":"Form 1","fieldA":true}'
+      );
+
+      expect(fetchStub.callCount).to.equal(1);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
+      expect(JSON.parse(fetchStub.firstCall.args[1].body as string)).to.not.have.property('sfid');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(apexPostStub.secondCall.args[1].recordId).to.equal(undefined);
     });
 
     it('should send no recordId when the file mainId is not in the org and no Name matches', async () => {
