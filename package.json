@@ -207,12 +207,8 @@
         {
           "releaseRules": [
             {
-              "breaking": true,
-              "release": "major"
-            },
-            {
               "header": "**",
-              "release": "minor"
+              "release": "major"
             }
           ]
         }
