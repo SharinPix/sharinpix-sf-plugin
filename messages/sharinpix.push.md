@@ -22,6 +22,14 @@ Delete assets in the org that do not exist locally.
 
 If specified, any form templates or permissions that exist in the org but not in the local project will be deleted.
 
+# flags.activate.summary
+
+Activate the pushed form template version.
+
+# flags.activate.description
+
+When enabled, newly pushed form template versions are set as active in Salesforce. Without this flag, versions are created but not activated. Forwarded to form push only.
+
 # examples
 
 - Push all assets to the default org:
@@ -35,3 +43,7 @@ If specified, any form templates or permissions that exist in the org but not in
 - Push all assets and delete missing ones from the org:
 
   <%= config.bin %> <%= command.id %> --delete
+
+- Push all assets and activate new form versions:
+
+  <%= config.bin %> <%= command.id %> --activate

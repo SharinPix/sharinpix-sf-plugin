@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages, Org } from '@salesforce/core';
-import { createSafeFilename } from '../../../helpers/utils.js';
+import { sanitizeFilename } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.pull');
@@ -73,7 +73,7 @@ export default class Pull extends SfCommand<PullResult> {
         const form: unknown = await response.json();
         const mainId = record.sharinpix__FormTemplateMain__c ?? record.Id;
         const formWithMainId = { ...(form as Record<string, unknown>), mainId };
-        const safeFilename = createSafeFilename(record.Name);
+        const safeFilename = `${sanitizeFilename(record.Name)}-${mainId}`;
         fs.writeFileSync(
           `sharinpix/forms/${safeFilename}.json`,
           JSON.stringify(

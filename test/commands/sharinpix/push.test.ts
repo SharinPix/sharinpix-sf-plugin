@@ -22,6 +22,9 @@ describe('sharinpix push', () => {
     expect(Push.description).to.include('Uploads all local SharinPix form templates and permissions');
     expect(Push.flags).to.have.property('org');
     expect(Push.flags).to.have.property('delete');
+    expect(Push.flags).to.have.property('activate');
+    expect(Push.flags.activate.char).to.equal('a');
+    expect(Push.flags.activate.default).to.be.false;
   });
 
   it('should require org flag', async () => {
@@ -62,7 +65,9 @@ describe('sharinpix push', () => {
       getUsername: () => 'test-org',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    $$.SANDBOX.stub(pushInstance as any, 'parse').callsFake(async () => ({ flags: { org: orgStub, delete: false } }));
+    $$.SANDBOX.stub(pushInstance as any, 'parse').callsFake(async () => ({
+      flags: { org: orgStub, delete: false, activate: false },
+    }));
 
     const result = await pushInstance.run();
 
@@ -103,7 +108,9 @@ describe('sharinpix push', () => {
       getUsername: () => 'test-org',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    $$.SANDBOX.stub(pushInstance as any, 'parse').callsFake(async () => ({ flags: { org: orgStub, delete: true } }));
+    $$.SANDBOX.stub(pushInstance as any, 'parse').callsFake(async () => ({
+      flags: { org: orgStub, delete: true, activate: false },
+    }));
 
     await pushInstance.run();
 

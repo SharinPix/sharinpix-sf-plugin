@@ -372,7 +372,7 @@ GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Existing forms will be updated unless the force flag is used to skip them.
+  Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Each file is matched to an existing form template only by its `mainId`; if the file has no `mainId` or it is not found in the target org, a new form template is created. Pushing to a different org is therefore a one-time copy.
 
   When the --delete flag is used, the command will also delete form template records from Salesforce that no longer have corresponding local JSON files. Use this flag with caution as deletions cannot be undone.
 
