@@ -211,12 +211,8 @@
               "release": "major"
             },
             {
-              "type": "feat",
-              "release": "minor"
-            },
-            {
               "header": "**",
-              "release": "patch"
+              "release": "minor"
             }
           ]
         }
