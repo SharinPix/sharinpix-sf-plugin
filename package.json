@@ -202,17 +202,7 @@
   },
   "release": {
     "plugins": [
-      [
-        "@semantic-release/commit-analyzer",
-        {
-          "releaseRules": [
-            {
-              "header": "**",
-              "release": "major"
-            }
-          ]
-        }
-      ],
+      "./release-analyzer.cjs",
       "@semantic-release/release-notes-generator",
       "@semantic-release/npm",
       "@semantic-release/github"
