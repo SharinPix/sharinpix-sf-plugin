@@ -4,7 +4,7 @@ Push SharinPix form templates to Salesforce org.
 
 # description
 
-Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Existing forms will be updated unless the force flag is used to skip them.
+Uploads SharinPix form templates from local JSON files to the connected Salesforce org. This command reads form templates from the local directory and creates or updates corresponding records in Salesforce. Each file is matched to an existing form template only by its `mainId`; if the file has no `mainId` or it is not found in the target org, a new form template is created. Pushing to a different org is therefore a one-time copy.
 
 # flags.org.summary
 
@@ -30,6 +30,14 @@ Convert local CSV files to JSON before pushing.
 
 When enabled, the command first runs the CSV-to-JSON conversion (same as `sharinpix:form:csv2json`) on files in `sharinpix/forms`, then proceeds to push the resulting JSON files.
 
+# flags.activate.summary
+
+Activate the pushed form template version.
+
+# flags.activate.description
+
+When enabled, the newly pushed form template version is set as the active version in Salesforce. Without this flag, the version is created but not activated.
+
 # examples
 
 - Push all form templates to the default org:
@@ -47,6 +55,10 @@ When enabled, the command first runs the CSV-to-JSON conversion (same as `sharin
 - Convert CSV to JSON, then push:
 
   <%= config.bin %> <%= command.id %> --csv
+
+- Push form templates and activate the new versions:
+
+  <%= config.bin %> <%= command.id %> --activate
 
 # info.created
 
