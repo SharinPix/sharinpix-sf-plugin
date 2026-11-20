@@ -6,10 +6,11 @@ import { elementKeyOrder } from './form/elementKeys.js';
 const SHARINPIX_DIR = 'sharinpix';
 
 // Splits a path under ./sharinpix into its segments, starting with 'sharinpix'.
-// Throws if the path resolves outside ./sharinpix.
+// Throws if the path could resolve outside ./sharinpix. Any '..' segment in the raw input is
+// refused, so the path that is checked is the same path that gets written.
 function getSharinpixSegments(targetPath: string): string[] {
   const rel = path.relative(SHARINPIX_DIR, path.normalize(targetPath));
-  if (path.isAbsolute(rel) || rel.split(path.sep)[0] === '..') {
+  if (path.isAbsolute(rel) || rel.split(path.sep)[0] === '..' || /(^|[\\/])\.\.([\\/]|$)/.test(targetPath)) {
     throw new Error(`Refusing to write outside ${SHARINPIX_DIR}/: ${targetPath}`);
   }
   return rel === '' ? [SHARINPIX_DIR] : [SHARINPIX_DIR, ...rel.split(path.sep)];
@@ -43,20 +44,18 @@ export function ensureSharinpixDirectory(dirPath: string): void {
  * destination must not be a symlink. Both checks run right before the write.
  */
 export function writeSharinpixFile(filePath: string, content: string): void {
-  // Check and write the same normalized path, so nothing is validated under one name and written under another.
-  const target = path.normalize(filePath);
-  const segments = getSharinpixSegments(target);
+  const segments = getSharinpixSegments(filePath);
   ensureSegments(segments.slice(0, -1));
   let existing: fs.Stats | undefined;
   try {
-    existing = fs.lstatSync(target);
+    existing = fs.lstatSync(filePath);
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
   }
   if (existing?.isSymbolicLink()) {
     throw new Error(`Refusing to write through symlink: ${filePath}`);
   }
-  fs.writeFileSync(target, content);
+  fs.writeFileSync(filePath, content);
 }
 
 export function isJsonEqual(obj1: unknown, obj2: unknown): boolean {
