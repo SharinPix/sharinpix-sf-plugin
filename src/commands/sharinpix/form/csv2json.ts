@@ -3,8 +3,13 @@ import path from 'node:path';
 import { parse } from 'csv-parse/sync';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { getCsvFiles, formatErrorMessage, orderElementKeys } from '../../../helpers/utils.js';
-import { parseCell } from '../../../helpers/form/elementKeys.js';
+import {
+  assertWithinLocalRoot,
+  getCsvFiles,
+  formatErrorMessage,
+  orderElementKeys,
+} from '../../../helpers/utils.js';
+import { elementKeyOrder, parseCell } from '../../../helpers/form/elementKeys.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.csv2json');
@@ -27,7 +32,13 @@ type FormElement = Record<string, unknown>;
 type ProcessResult = { success: true; fileName: string } | { success: false; fileName: string; reason: string };
 
 function parseCsvRows(content: string): string[][] {
-  return parse(content, CSV_PARSE_OPTIONS);
+  try {
+    return parse(content, CSV_PARSE_OPTIONS);
+  } catch (error) {
+    // csv-parse messages can echo file content; report only the error code.
+    const code = (error as { code?: string }).code ?? 'PARSE_ERROR';
+    throw new Error(`Invalid CSV (${code})`, { cause: error });
+  }
 }
 
 function mergeElementsIntoJson(
@@ -72,9 +83,9 @@ function parseRowValues(
     try {
       values.set(header, parseCell(header, rawValue));
     } catch (error) {
-      const errorMsg = `Failed to parse value for key "${header}" at row ${rowNumber}, column ${index + 1}: ${
-        error instanceof Error ? error.message : String(error)
-      }`;
+      // Cell and header text come from the file; omit them, keeping only known key names.
+      const keyLabel = elementKeyOrder.includes(header) ? ` for key "${header}"` : '';
+      const errorMsg = `Failed to parse value${keyLabel} at row ${rowNumber}, column ${index + 1}`;
       throw new Error(errorMsg, { cause: error });
     }
   }
@@ -85,6 +96,7 @@ async function loadAndValidateJson(jsonPath: string): Promise<Record<string, unk
   const jsonFileName = path.basename(jsonPath);
   let content: string;
   try {
+    assertWithinLocalRoot(jsonPath);
     content = await fs.promises.readFile(jsonPath, 'utf8');
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT')
@@ -95,8 +107,9 @@ async function loadAndValidateJson(jsonPath: string): Promise<Record<string, unk
   let existingJson: Record<string, unknown>;
   try {
     existingJson = JSON.parse(content) as Record<string, unknown>;
-  } catch (error) {
-    throw new Error(messages.getMessage('error.jsonInvalid', [jsonFileName, formatErrorMessage(error)]));
+  } catch {
+    // JSON.parse errors echo file content; report a fixed reason instead.
+    throw new Error(messages.getMessage('error.jsonInvalid', [jsonFileName, 'syntax error']));
   }
 
   if (typeof existingJson !== 'object' || existingJson === null || Array.isArray(existingJson))
@@ -109,6 +122,7 @@ async function processCsvFile(filePath: string): Promise<ProcessResult> {
   const fileName = path.basename(filePath);
 
   try {
+    assertWithinLocalRoot(filePath);
     const content = await fs.promises.readFile(filePath, 'utf8');
     const rows = parseCsvRows(content);
 
@@ -147,6 +161,7 @@ async function processCsvFile(filePath: string): Promise<ProcessResult> {
 
     const mergedJson = mergeElementsIntoJson(existingJson, elements);
 
+    assertWithinLocalRoot(jsonPath);
     await fs.promises.writeFile(jsonPath, JSON.stringify(mergedJson, null, 2), 'utf8');
     return { success: true, fileName };
   } catch (error) {
