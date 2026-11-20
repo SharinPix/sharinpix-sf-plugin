@@ -1,6 +1,62 @@
 import * as crypto from 'node:crypto';
 import fs from 'node:fs';
+import path from 'node:path';
 import { elementKeyOrder } from './form/elementKeys.js';
+
+const SHARINPIX_DIR = 'sharinpix';
+
+// Splits a path under ./sharinpix into its segments, starting with 'sharinpix'.
+// Throws if the path could resolve outside ./sharinpix. Any '..' segment in the raw input is
+// refused, so the path that is checked is the same path that gets written.
+function getSharinpixSegments(targetPath: string): string[] {
+  const rel = path.relative(SHARINPIX_DIR, path.normalize(targetPath));
+  if (path.isAbsolute(rel) || rel.split(path.sep)[0] === '..' || /(^|[\\/])\.\.([\\/]|$)/.test(targetPath)) {
+    throw new Error(`Refusing to write outside ${SHARINPIX_DIR}/: ${targetPath}`);
+  }
+  return rel === '' ? [SHARINPIX_DIR] : [SHARINPIX_DIR, ...rel.split(path.sep)];
+}
+
+// Creates each directory segment and refuses any that is a symlink or not a directory.
+// lstat is used so a link is never followed, including the 'sharinpix' root itself.
+function ensureSegments(segments: string[]): void {
+  let current = '';
+  for (const segment of segments) {
+    current = current ? path.join(current, segment) : segment;
+    try {
+      fs.mkdirSync(current);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
+    }
+    const stat = fs.lstatSync(current);
+    if (stat.isSymbolicLink() || !stat.isDirectory()) {
+      throw new Error(`Refusing to use ${current}: not a regular directory`);
+    }
+  }
+}
+
+/** Creates a directory under ./sharinpix, refusing symlinks at or below it. */
+export function ensureSharinpixDirectory(dirPath: string): void {
+  ensureSegments(getSharinpixSegments(dirPath));
+}
+
+/**
+ * Writes a file under ./sharinpix. Every parent directory must be a real directory, and the
+ * destination must not be a symlink. Both checks run right before the write.
+ */
+export function writeSharinpixFile(filePath: string, content: string): void {
+  const segments = getSharinpixSegments(filePath);
+  ensureSegments(segments.slice(0, -1));
+  let existing: fs.Stats | undefined;
+  try {
+    existing = fs.lstatSync(filePath);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+  }
+  if (existing?.isSymbolicLink()) {
+    throw new Error(`Refusing to write through symlink: ${filePath}`);
+  }
+  fs.writeFileSync(filePath, content);
+}
 
 export function isJsonEqual(obj1: unknown, obj2: unknown): boolean {
   return JSON.stringify(obj1) === JSON.stringify(obj2);

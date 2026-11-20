@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import fs from 'node:fs';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages, Org } from '@salesforce/core';
-import { sanitizeFilename } from '../../../helpers/utils.js';
+import { ensureSharinpixDirectory, sanitizeFilename, writeSharinpixFile } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.form.pull');
@@ -48,7 +47,7 @@ export default class Pull extends SfCommand<PullResult> {
 
   public async runWithFlags(flags: { org: Org; csv?: boolean }): Promise<PullResult> {
     const connection = flags.org.getConnection('63.0');
-    fs.mkdirSync('sharinpix/forms', { recursive: true });
+    ensureSharinpixDirectory('sharinpix/forms');
 
     const result = await connection.query<FormTemplateRecord>(
       "SELECT Id, sharinpix__FormUrl__c, Name, sharinpix__Description__c, sharinpix__FormTemplateMain__c FROM sharinpix__FormTemplate__c WHERE sharinpix__RecordType__c = 'version' AND sharinpix__Active__c = true order by LastModifiedDate desc"
@@ -74,7 +73,7 @@ export default class Pull extends SfCommand<PullResult> {
         const mainId = record.sharinpix__FormTemplateMain__c ?? record.Id;
         const formWithMainId = { ...(form as Record<string, unknown>), mainId };
         const safeFilename = `${sanitizeFilename(record.Name)}-${mainId}`;
-        fs.writeFileSync(
+        writeSharinpixFile(
           `sharinpix/forms/${safeFilename}.json`,
           JSON.stringify(
             formWithMainId,

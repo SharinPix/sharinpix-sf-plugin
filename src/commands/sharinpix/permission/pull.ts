@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import fs from 'node:fs';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages, Org } from '@salesforce/core';
-import { createSafeFilename } from '../../../helpers/utils.js';
+import { createSafeFilename, ensureSharinpixDirectory, writeSharinpixFile } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.permission.pull');
@@ -41,7 +40,7 @@ export default class Pull extends SfCommand<PullResult> {
 
   public async runWithFlags(flags: { org: Org }): Promise<PullResult> {
     const connection = flags.org.getConnection('63.0');
-    fs.mkdirSync('sharinpix/permissions', { recursive: true });
+    ensureSharinpixDirectory('sharinpix/permissions');
 
     const result = await connection.query<SharinPixPermissionRecord>(
       'SELECT Id, Name, sharinpix__Description__c, sharinpix__Json__c FROM sharinpix__SharinPixPermission__c order by LastModifiedDate desc'
@@ -60,7 +59,7 @@ export default class Pull extends SfCommand<PullResult> {
         };
 
         const safeFilename = createSafeFilename(record.Name);
-        fs.writeFileSync(`sharinpix/permissions/${safeFilename}.json`, JSON.stringify(permissionData, null, 2));
+        writeSharinpixFile(`sharinpix/permissions/${safeFilename}.json`, JSON.stringify(permissionData, null, 2));
         this.log(
           messages.getMessage('info.hello', [record.Name, record.sharinpix__Description__c || 'No description'])
         );
