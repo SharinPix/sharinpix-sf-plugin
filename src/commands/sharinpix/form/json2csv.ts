@@ -3,7 +3,12 @@ import path from 'node:path';
 import { stringify } from 'csv-stringify/sync';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { getJsonFiles, formatErrorMessage } from '../../../helpers/utils.js';
+import {
+  assertNotSymbolicLink,
+  assertWithinLocalRoot,
+  getJsonFiles,
+  formatErrorMessage,
+} from '../../../helpers/utils.js';
 import { elementKeyOrder, serializeCell } from '../../../helpers/form/elementKeys.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -59,12 +64,21 @@ function extractElements(parsed: Record<string, unknown>): FormElement[] {
 async function processJsonFile(filePath: string): Promise<ProcessResult> {
   const fileName = path.basename(filePath);
   try {
+    assertWithinLocalRoot(filePath);
     const content = await fs.promises.readFile(filePath, 'utf8');
-    const parsed = JSON.parse(content) as Record<string, unknown>;
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(content) as Record<string, unknown>;
+    } catch {
+      // JSON.parse errors echo file content; report a fixed reason instead.
+      throw new Error(`Invalid JSON in file ${fileName}`);
+    }
     const elements = extractElements(parsed);
     const headers = buildHeaders(elements);
     const csvContent = generateCsvContent(headers, elements);
     const csvPath = filePath.replace(/\.json$/i, '.csv');
+    assertWithinLocalRoot(path.dirname(csvPath));
+    assertNotSymbolicLink(csvPath);
     await fs.promises.writeFile(csvPath, csvContent, 'utf8');
     return { success: true, fileName };
   } catch (error) {
