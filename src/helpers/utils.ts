@@ -12,7 +12,9 @@ export function assertWithinLocalRoot(targetPath: string): void {
     throw new Error(`Refusing to follow symbolic link "${path.basename(targetPath)}"`);
   const rootReal = fs.realpathSync(LOCAL_ROOT);
   const targetReal = fs.realpathSync(targetPath);
-  if (targetReal !== rootReal && !targetReal.startsWith(rootReal + path.sep))
+  // path.relative normalizes separators, so a '/'-separated realpath (e.g. memfs on Windows) still compares correctly.
+  const rel = path.relative(rootReal, targetReal);
+  if (path.isAbsolute(rel) || rel === '..' || rel.startsWith(`..${path.sep}`))
     throw new Error(`"${path.basename(targetPath)}" resolves outside "${LOCAL_ROOT}"`);
 }
 
