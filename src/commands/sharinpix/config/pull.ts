@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
-import fs from 'node:fs';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages, Org } from '@salesforce/core';
-import { formatErrorMessage } from '../../../helpers/utils.js';
+import { ensureSharinpixDirectory, formatErrorMessage, writeSharinpixFile } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.config.pull');
@@ -32,7 +31,7 @@ export default class Pull extends SfCommand<PullResult> {
 
   public async runWithFlags(flags: { org: Org }): Promise<PullResult> {
     const connection = flags.org.getConnection('63.0');
-    fs.mkdirSync('sharinpix/configs', { recursive: true });
+    ensureSharinpixDirectory('sharinpix/configs');
 
     try {
       // Get authentication token
@@ -61,7 +60,7 @@ export default class Pull extends SfCommand<PullResult> {
       const config: unknown = await response.json();
 
       // Save to local file
-      fs.writeFileSync('sharinpix/config.json', JSON.stringify(config, null, 2));
+      writeSharinpixFile('sharinpix/config.json', JSON.stringify(config, null, 2));
       this.log(messages.getMessage('info.success'));
 
       return {
