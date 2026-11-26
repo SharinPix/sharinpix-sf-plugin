@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages, Org } from '@salesforce/core';
-import { formatErrorMessage } from '../../../helpers/utils.js';
+import { assertWithinLocalRoot, formatErrorMessage } from '../../../helpers/utils.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@sharinpix/sharinpix-sf-cli', 'sharinpix.config.push');
@@ -39,8 +39,15 @@ export default class Push extends SfCommand<PushResult> {
         this.error(messages.getMessage('error.notFound'));
       }
 
+      assertWithinLocalRoot('sharinpix/config.json');
       const configContent = fs.readFileSync('sharinpix/config.json', 'utf-8');
-      const config: unknown = JSON.parse(configContent);
+      let config: unknown;
+      try {
+        config = JSON.parse(configContent);
+      } catch {
+        // JSON.parse errors echo file content; report a fixed reason instead.
+        throw new Error('Invalid JSON in file config.json');
+      }
 
       const responseToken: { host: string; token: string } = await connection.apex.post('/sharinpix/Token', {
         payload: JSON.stringify({}),
